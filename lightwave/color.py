@@ -47,9 +47,9 @@ from math import sqrt, atan2, degrees, radians, sin, cos, exp
 from fractions import Fraction
 from collections import namedtuple
 
-from .attr import Red, Green, Blue, Hue, Lightness, Saturation
-from .convert import convert
 from .names import NAMED_COLORS
+from .attr import Red, Green, Blue, Hue, Lightness, Saturation
+from .convert import get_converter
 
 
 clamp_float = lambda v: max(0.0, min(1.0, v))
