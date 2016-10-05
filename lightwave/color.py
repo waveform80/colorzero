@@ -341,7 +341,11 @@ class Color(RGB):
         return '#%02x%02x%02x' % self.rgb_bytes
 
     def __repr__(self):
-        return '<Color html=%r rgb=%r>' % (self.html, self.rgb)
+        return '<Color html=%r rgb=(r=%g, g=%g, b=%g)' % (self.html, self.r, self.g, self.b)
+
+    @property
+    def rgb(self):
+        return RGB(*self)
 
     @property
     def red(self):
