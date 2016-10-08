@@ -47,32 +47,30 @@ from math import sqrt, atan2, degrees, radians, sin, cos, exp
 from fractions import Fraction
 from collections import namedtuple
 
-from .attr import Red, Green, Blue, Hue, Lightness, Saturation
-from .types import RGB
+from .types import RGB, HLS, HSV
 
 
 class Color(RGB):
     """
-    The Color class is a tuple which represents a color as red, green, and
-    blue components.
+    The Color class is a tuple which represents a color as linear red, green,
+    and blue components.
 
     The class has a flexible constructor which allows you to create an instance
-    from a variety of color systems including `RGB`_, `Y'UV`_, `Y'IQ`_, `HLS`_,
-    and `HSV`_.  There are also explicit constructors for each of these systems
-    to allow you to force the use of a system in your code. For example, an
-    instance of :class:`Color` can be constructed in any of the following
-    ways::
+    from any registered color system (see :func:`color_conversion`). There are
+    also explicit constructors for every registered system that can convert
+    (directly or indirectly) to linear RGB. For example, an instance of
+    :class:`Color` can be constructed in any of the following ways::
 
         >>> Color('#f00')
-        <Color "#ff0000">
+        <Color html="#ff0000" rgb=(1.0, 0.0, 0.0)>
         >>> Color('green')
-        <Color "#008000">
+        <Color html="#008000" rgb=(0.0, XXX, 0.0)>
         >>> Color(0, 0, 1)
-        <Color "#0000ff">
-        >>> Color(hue=0, saturation=1, value=0.5)
-        <Color "#7f0000">
+        <Color html="#0000ff" rgb=(0.0, 0.0, 1.0)>
+        >>> Color(h=0, s=1, v=0.5)
+        <Color html="#7f0000">
         >>> Color(y=0.4, u=-0.05, v=0.615)
-        <Color "#ff0f4c">
+        <Color html="#ff0f4c">
 
     The specific forms that the default constructor will accept are enumerated
     below:
@@ -255,90 +253,85 @@ class Color(RGB):
             raise ValueError('Unrecognized color name "%s"' % s)
 
     def __add__(self, other):
-        if isinstance(other, Red):
-            return Color(clamp_float(self.red + other), self.green, self.blue)
-        elif isinstance(other, Green):
-            return Color(self.red, clamp_float(self.green + other), self.blue)
-        elif isinstance(other, Blue):
-            return Color(self.red, self.green, clamp_float(self.blue + other))
-        elif isinstance(other, Hue):
-            h, l, s = self.hls
-            return Color.from_hls((h + other) % 1.0, l, s)
-        elif isinstance(other, Lightness):
-            h, l, s = self.hls
-            return Color.from_hls(h, clamp_float(l + other), s)
-        elif isinstance(other, Saturation):
-            h, l, s = self.hls
-            return Color.from_hls(h, l, clamp_float(s + other))
-        return NotImplemented
+        if isinstance(other, RGB):
+            return Color(
+                clamp_float(self.r + other.r),
+                clamp_float(self.g + other.g),
+                clamp_float(self.b + other.b))
+        elif isinstance(other, HLS):
+            self = self.hls
+            return Color.from_hls(
+                (self.h + other.h) % 1.0,
+                clamp_float(self.l + other.l),
+                clamp_float(self.s + other.s))
+        elif isinstance(other, HSV):
+            self = self.hsv
+            return Color.from_hsv(
+                (self.h + other.h) % 1.0,
+                clamp_float(self.s + other.s),
+                clamp_float(self.v + other.v))
+        else:
+            return NotImplemented
 
     def __radd__(self, other):
         # Addition is commutative
-        if isinstance(other, (Red, Green, Blue, Hue, Lightness, Saturation)):
+        if isinstance(other, (RGB, HLS, HSV)):
             return self.__add__(other)
-        return NotImplemented
+        else:
+            return NotImplemented
 
     def __sub__(self, other):
-        if isinstance(other, Red):
-            return Color(clamp_float(self.red - other), self.green, self.blue)
-        elif isinstance(other, Green):
-            return Color(self.red, clamp_float(self.green - other), self.blue)
-        elif isinstance(other, Blue):
-            return Color(self.red, self.green, clamp_float(self.blue - other))
-        elif isinstance(other, Hue):
-            h, l, s = self.hls
-            return Color.from_hls((h - other) % 1.0, l, s)
-        elif isinstance(other, Lightness):
-            h, l, s = self.hls
-            return Color.from_hls(h, clamp_float(l - other), s)
-        elif isinstance(other, Saturation):
-            h, l, s = self.hls
-            return Color.from_hls(h, l, clamp_float(s - other))
-        return NotImplemented
+        if isinstance(other, RGB):
+            return Color(
+                clamp_float(self.r - other.r),
+                clamp_float(self.g - other.g),
+                clamp_float(self.b - other.b))
+        elif isinstance(other, HLS):
+            self = self.hls
+            return Color.from_hls(
+                (self.h - other.h) % 1.0,
+                clamp_float(self.l - other.l),
+                clamp_float(self.s - other.s))
+        elif isinstance(other, HSV):
+            self = self.hsv
+            return Color.from_hsv(
+                (self.h - other.h) % 1.0,
+                clamp_float(self.s - other.s),
+                clamp_float(self.v - other.v))
+        else:
+            return NotImplemented
 
     def __rsub__(self, other):
-        if isinstance(other, Red):
-            return Color(clamp_float(other - self.red), self.green, self.blue)
-        elif isinstance(other, Green):
-            return Color(self.red, clamp_float(other - self.green), self.blue)
-        elif isinstance(other, Blue):
-            return Color(self.red, self.green, clamp_float(other - self.blue))
-        elif isinstance(other, Hue):
-            h, l, s = self.hls
-            return Color.from_hls((other - h) % 1.0, l, s)
-        elif isinstance(other, Lightness):
-            h, l, s = self.hls
-            return Color.from_hls(h, clamp_float(other - l), s)
-        elif isinstance(other, Saturation):
-            h, l, s = self.hls
-            return Color.from_hls(h, l, clamp_float(other - s))
-        return NotImplemented
+        if isinstance(other, RGB):
+            return Color(other.r - self.r, other.g - self.g, other.b - self.b)
+        elif isinstance(other, HLS):
+            self = self.hls
+            return Color.from_hls((other.h - self.h) % 1.0, other.l - self.l, other.s - self.s)
+        elif isinstance(other, HSV):
+            self = self.hsv
+            return Color.from_hsv((other.h - self.h) % 1.0, other.s - self.s, other.v - self.v)
+        else:
+            return NotImplemented
 
     def __mul__(self, other):
-        if isinstance(other, Red):
-            return Color(clamp_float(self.red * other), self.green, self.blue)
-        elif isinstance(other, Green):
-            return Color(self.red, clamp_float(self.green * other), self.blue)
-        elif isinstance(other, Blue):
-            return Color(self.red, self.green, clamp_float(self.blue * other))
-        elif isinstance(other, Hue):
-            h, l, s = self.hls
-            return Color.from_hls((h * other) % 1.0, l, s)
-        elif isinstance(other, Lightness):
-            h, l, s = self.hls
-            return Color.from_hls(h, clamp_float(l * other), s)
-        elif isinstance(other, Saturation):
-            h, l, s = self.hls
-            return Color.from_hls(h, l, clamp_float(s * other))
-        return NotImplemented
+        if isinstance(other, RGB):
+            return Color(self.r * other.r, self.g * other.g, self.b * other.b)
+        elif isinstance(other, HLS):
+            self = self.hls
+            return Color.from_hls((self.h * other.h) % 1.0, self.l * other.l, self.s * other.s)
+        elif isinstance(other, HSV):
+            self = self.hsv
+            return Color.from_hsv((self.h * other.h) % 1.0, self.s * other.s, self.v * other.v)
+        else:
+            return NotImplemented
 
     def __rmul__(self, other):
         # Multiplication is commutative
-        if isinstance(other, (Red, Green, Blue, Hue, Lightness, Saturation)):
+        if isinstance(other, (RGB, HLS, HSV)):
             return self.__mul__(other)
 
     def __str__(self):
-        return '#%02x%02x%02x' % self.rgb_bytes
+        return self.html
 
     def __repr__(self):
         return '<Color html=%r rgb=(r=%g, g=%g, b=%g)' % (self.html, self.r, self.g, self.b)
@@ -346,55 +339,6 @@ class Color(RGB):
     @property
     def rgb(self):
         return RGB(*self)
-
-    @property
-    def red(self):
-        """
-        Returns the red component of the color as a :class:`Red` instance which
-        can be used in operations with other :class:`Color` instances.
-        """
-        # super() calls needed here to avoid recursion
-        return Red(super(Color, self).red)
-
-    @property
-    def green(self):
-        """
-        Returns the green component of the color as a :class:`Green` instance
-        which can be used in operations with other :class:`Color` instances.
-        """
-        return Green(super(Color, self).green)
-
-    @property
-    def blue(self):
-        """
-        Returns the blue component of the color as a :class:`Blue` instance
-        which can be used in operations with other :class:`Color` instances.
-        """
-        return Blue(super(Color, self).blue)
-
-    @property
-    def hue(self):
-        """
-        Returns the hue of the color as a :class:`Hue` instance which can be
-        used in operations with other :class:`Color` instances.
-        """
-        return Hue(self.hls[0])
-
-    @property
-    def lightness(self):
-        """
-        Returns the lightness of the color as a :class:`Lightness` instance
-        which can be used in operations with other :class:`Color` instances.
-        """
-        return Lightness(self.hls[1])
-
-    @property
-    def saturation(self):
-        """
-        Returns the saturation of the color as a :class:`Saturation` instance
-        which can be used in operations with other :class:`Color` instances.
-        """
-        return Saturation(self.hls[2])
 
     def difference(self, other, method='euclid'):
         """

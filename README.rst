@@ -7,12 +7,13 @@ lightwave
 Lightwave is a color manipulation library for Python (yes, *another* one) which
 aims to be reasonably simple to use and "pythonic" in nature.
 
-It does *not* aim to be as comprehensive or powerful as, say, `colormath`_.
-Lightwave originally grew out of work on my `picamera`_ project, hence it's
-intended to be sufficiently simple that school children can use it without
-having to explain color spaces and illuminants. However, it does aim to be
-useful to a wide range of skills, hence it does include basic facilities for
-`CIE Lab`_ representations, and `Delta-E`_ calculations should you need them.
+It does *not* aim to be as comprehensive, powerful, or that matter as *correct*
+as, say, `colormath`_.  Lightwave originally grew out of work on my `picamera`_
+project, hence it's intended to be sufficiently simple that school children can
+use it without having to explain color spaces and illuminants. However, it does
+aim to be useful to a wide range of skills, hence it does include basic
+facilities for `CIE Lab`_ representations, and `Delta-E`_ calculations should
+you need them.
 
 The major difference between lightwave and other libraries (`grapefruit`_,
 `colormath`_, etc.) is that its ``Color`` class is a ``namedtuple`` descendent.

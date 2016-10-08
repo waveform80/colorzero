@@ -47,6 +47,7 @@ from fractions import Fraction
 
 from .names import NAMED_COLORS
 from .types import RGB, YIQ, YUV, CMY, CMYK, HLS, HSV, XYZ, Luv, Lab
+from .decorator import color_conversion
 
 
 # Don't export anything
@@ -74,6 +75,18 @@ matrix_mult = lambda m, n: (
         sum(mval * nval for mval, nval in zip(mrow, n))
         for mrow in m
         )
+
+
+# Sources used in the production of the following conversions include:
+#
+# https://en.wikipedia.org/wiki/RGB_color_space
+# https://en.wikipedia.org/wiki/SRGB
+# https://en.wikipedia.org/wiki/YUV
+# https://en.wikipedia.org/wiki/YIQ
+# https://en.wikipedia.org/wiki/HSL_and_HSV
+# https://en.wikipedia.org/wiki/CIE_1931_color_space
+# http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html
+
 
 
 @color_conversion(returns=YIQ)
@@ -112,11 +125,22 @@ def _rgb_bytes_to_rgb(r, g, b):
 def _rgb_bytes_to_html(r, g, b):
     return '#%02x%02x%02x' % (r, g, b)
 
+@color_conversion(returns=int)
+def _rgb_bytes_to_rgb24(r, g, b):
+    return (b << 16) | (g << 8) | r
+
+@color_conversion(returns=RGB)
+def _rgb24_to_rgb_bytes(n):
+    return RGB(n & 0xFF, (n >> 8) & 0xFF, (n >> 16) & 0xFF)
+
 @color_conversion(returns=RGB)
 def _html_to_rgb_bytes(html):
-    if not html.startswith('#') and len(html) != 7:
+    if not html.startswith('#') and len(html) not in (4, 7):
         raise ValueError('%s is not a valid HTML color specification')
-    return RGB(int(html[1:3], base=16), int(html[3:5], base=16), int(html[5:7], base=16))
+    if len(html) == 7:
+        return RGB(int(html[1:3], base=16), int(html[3:5], base=16), int(html[5:7], base=16))
+    else:
+        return RGB(int(html[1] * 2, base=16), int(html[2] * 2, base=16), int(html[3] * 2, base=16))
 
 @color_conversion(returns=str)
 def _name_to_html(name):
