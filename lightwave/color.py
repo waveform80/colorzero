@@ -48,6 +48,7 @@ from fractions import Fraction
 from collections import namedtuple
 
 from .types import RGB, HLS, HSV
+from .names import NAMED_COLORS
 
 
 class Color(RGB):
