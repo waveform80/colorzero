@@ -48,6 +48,7 @@ from fractions import Fraction
 from collections import namedtuple
 
 from .types import RGB, HLS, HSV
+from .names import NAMED_COLORS
 
 
 class Color(RGB):
@@ -216,41 +217,28 @@ class Color(RGB):
                 pass
         else:
             if len(args) == 1:
-                return cls.from_string(args[0])
+                if isinstance(args[0], bytes):
+                    c = args[0].decode('ascii')
+                else:
+                    c = args[0]
+                if isinstance(c, str):
+                    if c.startswith('#'):
+                        return cls.from_html(c)
+                    else:
+                        return cls.from_name(c)
+                else:
+                    return cls.from_rgb24(c)
             elif len(args) == 3:
                 return from_rgb(*args)
         raise ValueError('Unable to construct Color from provided arguments')
 
     @classmethod
-    def from_string(cls, s):
+    def from_rgb(cls, r, g, b):
         """
-        Construct a :class:`Color` from a 4 or 7 character CSS-like
-        representation (e.g. "#f00" or "#ff0000" for red), or from one of the
-        named colors (e.g. "green" or "wheat") from the `CSS standard`_. Any
-        other string format will result in a :exc:`ValueError`.
-
-        .. _CSS standard: http://www.w3.org/TR/css3-color/#svg-color
+        Construct a :class:`Color` from three `RGB`_ float values between 0.0
+        and 1.0.
         """
-        if isinstance(s, bytes):
-            s = s.decode('ascii')
-        if s.startswith('#'):
-            if len(s) == 7:
-                return cls.from_rgb_bytes(
-                    int(s[1:3], base=16),
-                    int(s[3:5], base=16),
-                    int(s[5:7], base=16)
-                    )
-            elif len(s) == 4:
-                return cls.from_rgb_bytes(
-                    int(s[1:2], base=16) * 0x11,
-                    int(s[2:3], base=16) * 0x11,
-                    int(s[3:4], base=16) * 0x11
-                    )
-            raise ValueError('Unrecognized color format "%s"' % s)
-        try:
-            return cls.from_string(NAMED_COLORS[s.lower()])
-        except KeyError:
-            raise ValueError('Unrecognized color name "%s"' % s)
+        return super(Color, cls).__new__(cls, r, g, b)
 
     def __add__(self, other):
         if isinstance(other, RGB):

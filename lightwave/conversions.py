@@ -88,14 +88,13 @@ matrix_mult = lambda m, n: (
 # http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html
 
 
-
 @color_conversion(returns=YIQ)
 def _rgb_to_yiq(r, g, b):
-    return YIQ(colorsys.rgb_to_yiq(r, g, b))
+    return YIQ(*colorsys.rgb_to_yiq(r, g, b))
 
 @color_conversion(returns=RGB)
 def _yiq_to_rgb(y, i, q):
-    return RGB(colorsys.yiq_to_rgb(y, i, q))
+    return RGB(*colorsys.yiq_to_rgb(y, i, q))
 
 @color_conversion(returns=HLS)
 def _rgb_to_hls(r, g, b):
@@ -103,7 +102,7 @@ def _rgb_to_hls(r, g, b):
 
 @color_conversion(returns=RGB)
 def _hls_to_rgb(h, l, s):
-    return RGB(colorsys.hls_to_rgb(h, l, s))
+    return RGB(*colorsys.hls_to_rgb(h, l, s))
 
 @color_conversion(returns=HSV)
 def _rgb_to_hsv(r, g, b):
@@ -111,7 +110,7 @@ def _rgb_to_hsv(r, g, b):
 
 @color_conversion(returns=RGB)
 def _hsv_to_rgb(h, s, v):
-    return RGB(colorsys.hsv_to_rgb(h, s, v))
+    return RGB(*colorsys.hsv_to_rgb(h, s, v))
 
 @color_conversion(returns=RGB)
 def _rgb_to_rgb_bytes(r, g, b):
@@ -135,16 +134,30 @@ def _rgb24_to_rgb_bytes(n):
 
 @color_conversion(returns=RGB)
 def _html_to_rgb_bytes(html):
-    if not html.startswith('#') and len(html) not in (4, 7):
-        raise ValueError('%s is not a valid HTML color specification')
-    if len(html) == 7:
-        return RGB(int(html[1:3], base=16), int(html[3:5], base=16), int(html[5:7], base=16))
-    else:
-        return RGB(int(html[1] * 2, base=16), int(html[2] * 2, base=16), int(html[3] * 2, base=16))
+    if html.startswith('#'):
+        try:
+            if len(html) == 7:
+                return RGB(
+                    int(html[1:3], base=16),
+                    int(html[3:5], base=16),
+                    int(html[5:7], base=16)
+                    )
+            elif len(html) == 4:
+                return RGB(
+                    int(html[1:2], base=16) * 0x11,
+                    int(html[2:3], base=16) * 0x11,
+                    int(html[3:4], base=16) * 0x11
+                    )
+        except ValueError:
+            pass
+    raise ValueError('%s is not a valid HTML color specification' % html)
 
 @color_conversion(returns=str)
 def _name_to_html(name):
-    return NAMED_COLORS[name]
+    try:
+        return NAMED_COLORS[name]
+    except KeyError:
+        raise ValueError('invalid color name %s' % name)
 
 @color_conversion(returns=int)
 def _rgb_to_rgb565(r, g, b):
@@ -155,10 +168,10 @@ def _rgb_to_rgb565(r, g, b):
         )
 
 @color_conversion(returns=RGB)
-def _rgb565_to_rgb(n):
-    r = (n & 0xF800) / 0xF800
-    g = (n & 0x07E0) / 0x07E0
-    b = (n & 0x001F) / 0x001F
+def _rgb565_to_rgb(rgb565):
+    r = (rgb565 & 0xF800) / 0xF800
+    g = (rgb565 & 0x07E0) / 0x07E0
+    b = (rgb565 & 0x001F) / 0x001F
     return RGB(r, g, b)
 
 @color_conversion(returns=YUV)
