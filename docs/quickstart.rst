@@ -86,9 +86,4 @@ Equivalent constructors exist for all these systems::
     >>> Color.from_cie_lab(*c.cie_lab)
     <Color html="#7f3f00" rgb=(0.5, 0.25, 0.0)>
 
-Finally, color differences can be examined by simple subtraction:
-
-XXX TBC
-
 .. _extended color keywords: https://www.w3.org/TR/css3-color/#svg-color
-

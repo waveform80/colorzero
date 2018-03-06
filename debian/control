@@ -5,19 +5,22 @@ Section: python
 Priority: extra
 Build-Depends:
  debhelper (>= 8),
+ dh-python,
  python-all (>= 2.7),
  python-setuptools,
  python3-all,
  python3-setuptools,
- python-docutils,
- python-sphinx (>= 1.0.7+dfsg-1~)
-Standards-Version: 3.9.3
+ python3-sphinx
+Standards-Version: 3.9.6
+Vcs-Git: https://github.com/waveform80/colorzero.git
+Vcs-Browser: https://github.com/waveform80/colorzero
 X-Python-Version: >= 2.7
 X-Python3-Version: >= 3.2
 
 Package: python-colorzero
 Architecture: all
-Depends: ${misc:Depends}, ${python:Depends}
+Section: python
+Depends: ${misc:Depends}, ${python:Depends}, python-pkg-resources
 Description: Construct, convert, and manipulate colors in a Pythonic manner.
  Colorzero is a library for working with colors in Python. It is not intended
  to be as comprehensive as colormath, but is intended to be a little easier
@@ -31,7 +34,8 @@ Description: Construct, convert, and manipulate colors in a Pythonic manner.
 
 Package: python3-colorzero
 Architecture: all
-Depends: ${misc:Depends}, ${python3:Depends}
+Section: python
+Depends: ${misc:Depends}, ${python3:Depends}, python3-pkg-resources
 Description: Construct, convert, and manipulate colors in a Pythonic manner.
  Colorzero is a library for working with colors in Python. It is not intended
  to be as comprehensive as colormath, but is intended to be a little easier
@@ -43,7 +47,7 @@ Description: Construct, convert, and manipulate colors in a Pythonic manner.
  .
  This is the Python 3 version of the package.
 
-Package: python-colorzero-docs
+Package: python-colorzero-doc
 Architecture: all
 Section: doc
 Depends: ${sphinxdoc:Depends}, ${misc:Depends}
