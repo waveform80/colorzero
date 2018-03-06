@@ -1,9 +1,9 @@
 Format: http://dep.debian.net/deps/dep5
-Upstream-Name: lightwave
-Source: http://pypi.python.org/pypi/lightwave
+Upstream-Name: colorzero
+Source: http://pypi.python.org/pypi/colorzero
 
 Files: *
-Copyright: 2016 Dave Jones <dave@waveform.org.uk>
+Copyright: 2016-2018 Dave Jones <dave@waveform.org.uk>
 License: BSD-3-Clause
 
 License: BSD-3-Clause

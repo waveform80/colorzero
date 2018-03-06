@@ -1,20 +1,27 @@
-Source: lightwave
+Source: colorzero
 Maintainer: Dave Jones <dave@waveform.org.uk>
-Homepage: http://pypi.python.org/pypi/lightwave
+Homepage: http://pypi.python.org/pypi/colorzero
 Section: python
 Priority: extra
-Build-Depends: debhelper (>= 8), python-all (>= 2.7), python-setuptools, python3-all, python3-setuptools, python-docutils, python-sphinx (>= 1.0.7+dfsg-1~)
+Build-Depends:
+ debhelper (>= 8),
+ python-all (>= 2.7),
+ python-setuptools,
+ python3-all,
+ python3-setuptools,
+ python-docutils,
+ python-sphinx (>= 1.0.7+dfsg-1~)
 Standards-Version: 3.9.3
 X-Python-Version: >= 2.7
 X-Python3-Version: >= 3.2
 
-Package: python-lightwave
+Package: python-colorzero
 Architecture: all
 Depends: ${misc:Depends}, ${python:Depends}
 Description: Construct, convert, and manipulate colors in a Pythonic manner.
- Lightwave is a library for working with colors in Python. It is not intended
+ Colorzero is a library for working with colors in Python. It is not intended
  to be as comprehensive as colormath, but is intended to be a little easier
- to use, particularly for beginners. The major difference with lightwave is
+ to use, particularly for beginners. The major difference with colorzero is
  that colors are tuples and thus immutable. Standard mathematical operators
  (addition, subtraction, multiplication, etc.) are used to generate new
  colors. Conversions are provided for a wide variety of systems including
@@ -22,13 +29,13 @@ Description: Construct, convert, and manipulate colors in a Pythonic manner.
  .
  This is the Python 2 version of the package.
 
-Package: python3-lightwave
+Package: python3-colorzero
 Architecture: all
 Depends: ${misc:Depends}, ${python3:Depends}
 Description: Construct, convert, and manipulate colors in a Pythonic manner.
- Lightwave is a library for working with colors in Python. It is not intended
+ Colorzero is a library for working with colors in Python. It is not intended
  to be as comprehensive as colormath, but is intended to be a little easier
- to use, particularly for beginners. The major difference with lightwave is
+ to use, particularly for beginners. The major difference with colorzero is
  that colors are tuples and thus immutable. Standard mathematical operators
  (addition, subtraction, multiplication, etc.) are used to generate new
  colors. Conversions are provided for a wide variety of systems including
@@ -36,14 +43,14 @@ Description: Construct, convert, and manipulate colors in a Pythonic manner.
  .
  This is the Python 3 version of the package.
 
-Package: python-lightwave-docs
+Package: python-colorzero-docs
 Architecture: all
 Section: doc
 Depends: ${sphinxdoc:Depends}, ${misc:Depends}
 Description: Construct, convert, and manipulate colors in a Pythonic manner.
- Lightwave is a library for working with colors in Python. It is not intended
+ Colorzero is a library for working with colors in Python. It is not intended
  to be as comprehensive as colormath, but is intended to be a little easier
- to use, particularly for beginners. The major difference with lightwave is
+ to use, particularly for beginners. The major difference with colorzero is
  that colors are tuples and thus immutable. Standard mathematical operators
  (addition, subtraction, multiplication, etc.) are used to generate new
  colors. Conversions are provided for a wide variety of systems including

@@ -51,11 +51,11 @@ try:
 except ImportError:
     pass
 
-__project__      = 'lightwave'
+__project__      = 'colorzero'
 __version__      = '1.0'
 __author__       = 'Dave Jones'
 __author_email__ = 'dave@waveform.org.uk'
-__url__          = 'http://lightwave.readthedocs.io/'
+__url__          = 'http://colorzero.readthedocs.io/'
 __platforms__    = 'ALL'
 
 __classifiers__ = [

@@ -1,7 +1,7 @@
 # vim: set et sw=4 sts=4 fileencoding=utf-8:
 #
-# The lightwave color library
-# Copyright (c) 2016 Dave Jones <dave@waveform.org.uk>
+# The colorzero color library
+# Copyright (c) 2016-2018 Dave Jones <dave@waveform.org.uk>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -34,10 +34,86 @@ from __future__ import (
     absolute_import,
     )
 
-from .decorator import color_conversion, get_converter
-from .color import Color
-from .attr import Red, Green, Blue, Hue, Lightness, Saturation
-# This won't actually pull in anything; just cause all conversions to be
-# registered on the Color class by the color_conversion decorator
-from .conversions import *
+from collections import namedtuple
+
+
+YUV = namedtuple('YUV', ('y', 'u', 'v'))
+YIQ = namedtuple('YIQ', ('y', 'i', 'q'))
+XYZ = namedtuple('XYZ', ('X', 'Y', 'Z'))
+Luv = namedtuple('Luv', ('L', 'u', 'v'))
+Lab = namedtuple('Lab', ('L', 'a', 'b'))
+
+
+class RGB(namedtuple('RGB', ('r', 'g', 'b'))):
+    @property
+    def red(self):
+        return self.r
+
+    @property
+    def green(self):
+        return self.g
+
+    @property
+    def blue(self):
+        return self.b
+
+
+class HLS(namedtuple('HLS', ('h', 'l', 's'))):
+    @property
+    def hue(self):
+        return self.h
+
+    @property
+    def lightness(self):
+        return self.l
+
+    @property
+    def saturation(self):
+        return self.s
+
+
+class HSV(namedtuple('HSV', ('h', 's', 'v'))):
+    @property
+    def hue(self):
+        return self.h
+
+    @property
+    def saturation(self):
+        return self.s
+
+    @property
+    def value(self):
+        return self.v
+
+
+class CMY(namedtuple('CMY', ('c', 'm', 'y'))):
+    @property
+    def cyan(self):
+        return self.c
+
+    @property
+    def magenta(self):
+        return self.m
+
+    @property
+    def yellow(self):
+        return self.y
+
+
+class CMYK(namedtuple('CMYK', ('c', 'm', 'y', 'k'))):
+    @property
+    def cyan(self):
+        return self.c
+
+    @property
+    def magenta(self):
+        return self.m
+
+    @property
+    def yellow(self):
+        return self.y
+
+    @property
+    def black(self):
+        return self.k
 

@@ -1,21 +1,21 @@
 .. -*- rst -*-
 
 =========
-lightwave
+colorzero
 =========
 
-Lightwave is a color manipulation library for Python (yes, *another* one) which
+colorzero is a color manipulation library for Python (yes, *another* one) which
 aims to be reasonably simple to use and "pythonic" in nature.
 
 It does *not* aim to be as comprehensive, powerful, or that matter as *correct*
-as, say, `colormath`_.  Lightwave originally grew out of work on my `picamera`_
+as, say, `colormath`_.  colorzero originally grew out of work on my `picamera`_
 project, hence it's intended to be sufficiently simple that school children can
 use it without having to explain color spaces and illuminants. However, it does
 aim to be useful to a wide range of skills, hence it does include basic
 facilities for `CIE Lab`_ representations, and `Delta-E`_ calculations should
 you need them.
 
-The major difference between lightwave and other libraries (`grapefruit`_,
+The major difference between colorzero and other libraries (`grapefruit`_,
 `colormath`_, etc.) is that its ``Color`` class is a ``namedtuple`` descendent.
 This means it is immutable; you cannot *directly* change the attributes of a
 ``Color`` instance. The major advantage of this is that instances can be used
@@ -24,7 +24,7 @@ as keys in dictionaries, or placed in sets.
 Manipulation of ``Color`` instances is done by typical operations with other
 classes the result of which is a new ``Color`` instance. For example::
 
-    >>> from lightwave import Color, Red
+    >>> from colorzero import Color, Red
     >>> c = Color('green')
     >>> c
     <Color html="#008000" rgb=(0.0, 0.5, 0.5)>
@@ -55,9 +55,9 @@ Links
 .. _grapefruit: https://grapefruit.readthedocs.io/
 .. _CIE Lab: https://en.wikipedia.org/wiki/Lab_color_space
 .. _Delta-E: https://en.wikipedia.org/wiki/Color_difference
-.. _PyPI: http://pypi.python.org/pypi/lightwave/
-.. _documentation: http://lightwave.readthedocs.io/
-.. _source code: https://github.com/waveform80/lightwave
-.. _bug tracker: https://github.com/waveform80/lightwave/issues
+.. _PyPI: http://pypi.python.org/pypi/colorzero/
+.. _documentation: http://colorzero.readthedocs.io/
+.. _source code: https://github.com/waveform80/colorzero
+.. _bug tracker: https://github.com/waveform80/colorzero/issues
 .. _BSD license: http://opensource.org/licenses/BSD-3-Clause
 

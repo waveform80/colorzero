@@ -4,9 +4,9 @@
 API
 ===
 
-.. currentmodule:: lightwave
+.. currentmodule:: colorzero
 
-The lightwave library includes a comprehensive :class:`Color` class which
+The colorzero library includes a comprehensive :class:`Color` class which
 is capable of converting between numerous color representations and calculating
 color differences. Various ancillary classes can be used to manipulate aspects
 of a color.

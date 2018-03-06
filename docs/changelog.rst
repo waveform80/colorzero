@@ -4,7 +4,7 @@
 Change log
 ==========
 
-.. currentmodule:: lightwave
+.. currentmodule:: colorzero
 
 
 Release 1.0 (2016-10-01)

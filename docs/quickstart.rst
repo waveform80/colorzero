@@ -4,15 +4,15 @@
 Getting started
 ===============
 
-.. currentmodule:: lightwave
+.. currentmodule:: colorzero
 
-The :class:`Color` class is the main interface provided by Lightwave. It can be
+The :class:`Color` class is the main interface provided by colorzero. It can be
 constructed in a large variety of ways including with red, green, and blue
 components, "well known" color names (taken from CSS 3's `extended color
 keywords`_), HTML color specifications, and more. A selection of valid
 constructors is shown below::
 
-    >>> from lightwave import *
+    >>> from colorzero import *
     >>> Color('red')
     <Color html="#ff0000" rgb=(1.0, 0.0, 0.0)>
     >>> Color(1.0, 0.0, 0.0)
@@ -24,7 +24,7 @@ constructors is shown below::
     >>> Color('#f00')
     <Color html="#ff0000" rgb=(1.0, 0.0, 0.0)>
 
-Internally, Lightwave always represents colors as red, green, and blue values
+Internally, colorzero always represents colors as red, green, and blue values
 between 0.0 and 1.0. :class:`Color` objects are tuple descendents. Crucially,
 this means they are *immutable*. Attempting to change the red, green, or blue
 attributes will fail::
@@ -37,7 +37,7 @@ attributes will fail::
       File "<stdin>", line 1, in <module>
     AttributeError: can't set attribute
 
-In order to manipulate a color, Lightwave provides a simple series of classes
+In order to manipulate a color, colorzero provides a simple series of classes
 which represent attributes of a color: :class:`Red`, :class:`Green`,
 :class:`Blue`, :class:`Hue`, :class:`Lightness`, :class:`Saturation` and so on.
 You can use these classes in combination with Python's usual mathematical

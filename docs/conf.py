@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # vim: set et sw=4 sts=4 fileencoding=utf-8:
 #
-# Python camera library for the Rasperry-Pi camera module
-# Copyright (c) 2013-2015 Dave Jones <dave@waveform.org.uk>
+# The colorzero color library
+# Copyright (c) 2016-2018 Dave Jones <dave@waveform.org.uk>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:

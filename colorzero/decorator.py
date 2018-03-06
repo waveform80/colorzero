@@ -1,7 +1,7 @@
 # vim: set et sw=4 sts=4 fileencoding=utf-8:
 #
-# The lightwave color library
-# Copyright (c) 2016 Dave Jones <dave@waveform.org.uk>
+# The colorzero color library
+# Copyright (c) 2016-2018 Dave Jones <dave@waveform.org.uk>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -70,7 +70,7 @@ def color_conversion(returns):
                 all_args = ', '.join(spec.args)
                 unpack = '*' if issubclass(function.returns, tuple) else ''
                 namespace = {
-                    '__name__':        'lightwave',
+                    '__name__':        'colorzero',
                     function.__name__: function,
                     Color.__name__:    Color,
                     }
@@ -103,7 +103,7 @@ def color_conversion(returns):
                 spec = inspect.getargspec(function)
                 unpack = '*' if len(spec.args) > 1 else ''
                 namespace = {
-                    '__name__':        'lightwave',
+                    '__name__':        'colorzero',
                     function.__name__: function,
                     }
                 code = code.format(**locals())
@@ -221,7 +221,7 @@ def get_converter(source, target):
         f.__name__: f
         for f in _CONVERTERS.values()
         }
-    namespace['__name__'] = 'lightwave'
+    namespace['__name__'] = 'colorzero'
     exec(code, namespace)
     result = namespace[name]
     result._source = code
