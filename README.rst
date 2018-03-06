@@ -27,7 +27,7 @@ classes the result of which is a new ``Color`` instance. For example::
     >>> from lightwave import Color, Red
     >>> c = Color('green')
     >>> c
-    <Color html="#008000" rgb=(0.0, 0.5, 0.5)>
+    <Color html="#008000" rgb=(0.0, 0.5, 0.0)>
     >>> c + Red(0.1)
     <Color html="#198000" rgb=(0.1, 0.5, 0.0)>
     >>> c += Red(0.1)
