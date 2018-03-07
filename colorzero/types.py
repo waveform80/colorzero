@@ -39,9 +39,9 @@ from collections import namedtuple
 
 YUV = namedtuple('YUV', ('y', 'u', 'v'))
 YIQ = namedtuple('YIQ', ('y', 'i', 'q'))
-XYZ = namedtuple('XYZ', ('X', 'Y', 'Z'))
-Luv = namedtuple('Luv', ('L', 'u', 'v'))
-Lab = namedtuple('Lab', ('L', 'a', 'b'))
+XYZ = namedtuple('XYZ', ('x', 'y', 'z'))
+Luv = namedtuple('Luv', ('l', 'u', 'v'))
+Lab = namedtuple('Lab', ('l', 'a', 'b'))
 
 
 class RGB(namedtuple('RGB', ('r', 'g', 'b'))):
@@ -116,4 +116,3 @@ class CMYK(namedtuple('CMYK', ('c', 'm', 'y', 'k'))):
     @property
     def black(self):
         return self.k
-

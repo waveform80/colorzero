@@ -33,3 +33,4 @@ Manipulation Classes
 
 .. autoclass:: Lightness
 
+.. autoclass:: Luma

@@ -190,3 +190,16 @@ class Saturation(float):
     def __repr__(self):
         return "Saturation(%s)" % self
 
+
+class Luma(float):
+    """
+    Represents the luma of a :class:`Color` for use in transformations.
+    Instances of this class can be constructed directly with a float value, or
+    by querying the :attr:`Color.yuv.y` attribute. Addition, subtraction, and
+    multiplication are supported with :class:`Color` instances. For example::
+
+        >>> Color(0, 0, 0) + Luma(0.1)
+    """
+
+    def __repr__(self):
+        return "Luma(%s)" % self

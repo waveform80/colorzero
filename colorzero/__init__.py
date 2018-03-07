@@ -34,10 +34,6 @@ from __future__ import (
     absolute_import,
     )
 
-from .decorator import color_conversion, get_converter
 from .color import Color
-from .attr import Red, Green, Blue, Hue, Lightness, Saturation
-# This won't actually pull in anything; just cause all conversions to be
-# registered on the Color class by the color_conversion decorator
-from .conversions import *
-
+from .attr import Red, Green, Blue, Hue, Lightness, Saturation, Luma
+from .types import RGB, HLS, HSV, CMY, CMYK, YUV, YIQ, XYZ, Luv, Lab
