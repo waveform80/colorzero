@@ -27,22 +27,22 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+"Tests for the colorzero.color module"
+
 from __future__ import (
     unicode_literals,
     print_function,
     division,
     absolute_import,
-    )
+)
 
-# Make Py2's str equivalent to Py3's
-str = type('')
-
-import math
-import pytest
 try:
-    from math import isclose
+    from math import sqrt, isclose
 except ImportError:
+    from math import sqrt
     from compat import isclose
+
+import pytest
 from colorzero import *
 
 
@@ -296,7 +296,7 @@ def test_color_attr():
 
 def test_color_diff():
     assert Color('black').difference(Color('black')) == 0.0
-    assert Color('white').difference(Color('black')) == math.sqrt(3)
+    assert Color('white').difference(Color('black')) == sqrt(3)
     assert Color('red').difference(Color('black')) == 1.0
     with pytest.raises(ValueError):
         Color('red').difference(Color('black'), method='foo')
