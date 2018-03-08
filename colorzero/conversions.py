@@ -74,8 +74,6 @@ from .types import RGB, YIQ, YUV, CMY, CMYK, HLS, HSV, XYZ, Luv, Lab
 # referenced sources
 # pylint: disable=invalid-name
 
-str = type('')  # pylint: disable=redefined-builtin
-
 
 # Utility functions and constants ############################################
 
@@ -123,7 +121,8 @@ class YUVCoefficients(namedtuple('YUVCoefficients', (
             Wr = kwargs['Wr']
             Wb = kwargs['Wb']
         except KeyError as e:
-            raise TypeError('BT() missing required keyword argument: %s' % str(e))  # noqa: E501
+            raise TypeError('BT() missing required keyword '
+                            'argument: %s' % str(e))
         Wg = (1 - Wr - Wb)
         U = Umax / (1 - Wb)
         V = Vmax / (1 - Wr)
@@ -351,13 +350,16 @@ def luv_to_xyz(l, u, v, white=D65):
     if l == 0:
         return XYZ(0, 0, 0)
     uw, vw = xyz_to_uv(*white)
-    uʹ = u / (13 * l) + uw
-    vʹ = v / (13 * l) + vw
-    y = white.y * (l * Fraction(3, 29) ** 3 if l <= 8 else ((l + 16) / 116) ** 3)
+    u_prime = u / (13 * l) + uw
+    v_prime = v / (13 * l) + vw
+    y = white.y * (
+        l * Fraction(3, 29) ** 3 if l <= 8 else
+        ((l + 16) / 116) ** 3
+    )
     return XYZ(
-        y * (9 * uʹ) / (4 * vʹ),
+        y * (9 * u_prime) / (4 * v_prime),
         y,
-        y * (12 - 3 * uʹ - 20 * vʹ) / (4 * vʹ),
+        y * (12 - 3 * u_prime - 20 * v_prime) / (4 * v_prime),
     )
 
 
@@ -366,9 +368,9 @@ def xyz_to_luv(x, y, z, white=D65):
     uw, vw = xyz_to_uv(*white)
     u, v = xyz_to_uv(x, y, z)
     K = Fraction(29, 3) ** 3
-    ε = Fraction(6, 29) ** 3
-    yʹ = y / white.y
-    L = 116 * yʹ ** Fraction(1, 3) - 16 if yʹ > ε else K * yʹ
+    e = Fraction(6, 29) ** 3
+    y_prime = y / white.y
+    L = 116 * y_prime ** Fraction(1, 3) - 16 if y_prime > e else K * y_prime
     return Luv(
         L,
         13 * L * (u - uw),
@@ -378,12 +380,12 @@ def xyz_to_luv(x, y, z, white=D65):
 
 def lab_to_xyz(l, a, b, white=D65):
     "Convert CIE L*a*b* to CIE XYZ representation"
-    δ = Fraction(6, 29)
+    theta = Fraction(6, 29)
     fy = (l + 16) / 116
     fx = fy + a / 500
     fz = fy - b / 200
     xyz = (
-        n ** 3 if n > δ else 3 * δ ** 2 * (n - Fraction(4, 29))
+        n ** 3 if n > theta else 3 * theta ** 2 * (n - Fraction(4, 29))
         for n in (fx, fy, fz)
     )
     return XYZ(*(n * m for n, m in zip(xyz, white)))
@@ -391,10 +393,11 @@ def lab_to_xyz(l, a, b, white=D65):
 
 def xyz_to_lab(x, y, z, white=D65):
     "Convert CIE XYZ to CIE L*a*b* representation"
-    δ = Fraction(6, 29)
+    theta = Fraction(6, 29)
     x, y, z = (n / m for n, m in zip((x, y, z), white))
     fx, fy, fz = (
-        t ** Fraction(1, 3) if t > δ ** 3 else t / (3 * δ ** 2) + Fraction(4, 29)
+        t ** Fraction(1, 3) if t > theta ** 3 else
+        t / (3 * theta ** 2) + Fraction(4, 29)
         for t in (x, y, z)
     )
     return Lab(116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz))

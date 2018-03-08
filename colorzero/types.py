@@ -27,12 +27,14 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+"Define the tuples used to represent various color systems."
+
 from __future__ import (
     unicode_literals,
     print_function,
     division,
     absolute_import,
-    )
+)
 
 from collections import namedtuple
 
@@ -45,74 +47,100 @@ Lab = namedtuple('Lab', ('l', 'a', 'b'))
 
 
 class RGB(namedtuple('RGB', ('r', 'g', 'b'))):
+    "Named tuple representing red, green, and blue."
+
     @property
     def red(self):
+        # pylint: disable=missing-docstring
         return self.r
 
     @property
     def green(self):
+        # pylint: disable=missing-docstring
         return self.g
 
     @property
     def blue(self):
+        # pylint: disable=missing-docstring
         return self.b
 
 
 class HLS(namedtuple('HLS', ('h', 'l', 's'))):
+    "Named tuple representing hue, lightness, and saturation."
+
     @property
     def hue(self):
+        # pylint: disable=missing-docstring
         return self.h
 
     @property
     def lightness(self):
+        # pylint: disable=missing-docstring
         return self.l
 
     @property
     def saturation(self):
+        # pylint: disable=missing-docstring
         return self.s
 
 
 class HSV(namedtuple('HSV', ('h', 's', 'v'))):
+    'Named tuple representing hue, saturation, and value ("brightness").'
+
     @property
     def hue(self):
+        # pylint: disable=missing-docstring
         return self.h
 
     @property
     def saturation(self):
+        # pylint: disable=missing-docstring
         return self.s
 
     @property
     def value(self):
+        # pylint: disable=missing-docstring
         return self.v
 
 
 class CMY(namedtuple('CMY', ('c', 'm', 'y'))):
+    "Named tuple representing cyan, magenta, and yellow."
+
     @property
     def cyan(self):
+        # pylint: disable=missing-docstring
         return self.c
 
     @property
     def magenta(self):
+        # pylint: disable=missing-docstring
         return self.m
 
     @property
     def yellow(self):
+        # pylint: disable=missing-docstring
         return self.y
 
 
 class CMYK(namedtuple('CMYK', ('c', 'm', 'y', 'k'))):
+    "Named tuple representing cyan, magenta, yellow, and black."
+
     @property
     def cyan(self):
+        # pylint: disable=missing-docstring
         return self.c
 
     @property
     def magenta(self):
+        # pylint: disable=missing-docstring
         return self.m
 
     @property
     def yellow(self):
+        # pylint: disable=missing-docstring
         return self.y
 
     @property
     def black(self):
+        # pylint: disable=missing-docstring
         return self.k

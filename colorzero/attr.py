@@ -27,12 +27,17 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+"""
+Defines the classes for manipulating the attributes of the :class:`Color`
+class through the standard binary operators.
+"""
+
 from __future__ import (
     unicode_literals,
     print_function,
     division,
     absolute_import,
-    )
+)
 
 from math import pi
 
@@ -144,10 +149,16 @@ class Hue(float):
 
     @property
     def deg(self):
+        """
+        Returns the hue as a value in degrees with the range 0.0 <= n < 360.0.
+        """
         return self * 360.0
 
     @property
     def rad(self):
+        """
+        Returns the hue as a value in radians with the range 0.0 <= n < 2π.
+        """
         return self * 2 * pi
 
 

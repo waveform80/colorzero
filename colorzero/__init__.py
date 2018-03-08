@@ -27,12 +27,27 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+"""
+The colorzero package defines a number of classes for representation and
+manipulation of colors. The primary class of interest to users is
+:class:`Color`.  The other classes are used for manipulation of the attributes
+on this class and are:
+
+* :class:`Red`
+* :class:`Green`
+* :class:`Blue`
+* :class:`Hue`
+* :class:`Lightness`
+* :class:`Saturation`
+* :class:`Luma`
+"""
+
 from __future__ import (
     unicode_literals,
     print_function,
     division,
     absolute_import,
-    )
+)
 
 from .color import Color
 from .attr import Red, Green, Blue, Hue, Lightness, Saturation, Luma

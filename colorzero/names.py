@@ -27,15 +27,21 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+"""
+Defines the available color names, derived from the `CSS Color Module`_ Level 3
+Specification, section 4.3.
+
+.. _CSS Color Module: http://www.w3.org/TR/css3-color/#svg-color
+"""
+
 from __future__ import (
     unicode_literals,
     print_function,
     division,
     absolute_import,
-    )
+)
 
-# From the CSS Color Module Level 3 specification, section 4.3
-# <http://www.w3.org/TR/css3-color/#svg-color>
+
 NAMED_COLORS = {
     'aliceblue':             '#f0f8ff',
     'antiquewhite':          '#faebd7',
@@ -184,5 +190,4 @@ NAMED_COLORS = {
     'whitesmoke':            '#f5f5f5',
     'yellow':                '#ffff00',
     'yellowgreen':           '#9acd32',
-    }
-
+}

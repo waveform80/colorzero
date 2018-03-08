@@ -27,18 +27,24 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+"Defines the main :class:`Color` class of the package."
+
 from __future__ import (
     unicode_literals,
     print_function,
     division,
     absolute_import,
-    )
-
-# Make Py2's str and range equivalent to Py3's
-str = type('')
-
+)
 
 from . import conversions as cv, types, attr, deltae
+
+# Make Py2's str and range equivalent to Py3's
+str = type('')  # pylint: disable=redefined-builtin,invalid-name
+
+# Lots of the methods below use single character parameter names (r for red, y
+# for luma, etc.); this is is normal and in keeping with most of the referenced
+# sources
+# pylint: disable=invalid-name
 
 
 class Color(types.RGB):
@@ -171,15 +177,18 @@ class Color(types.RGB):
     .. _HLS: https://en.wikipedia.org/wiki/HSL_and_HSV
     .. _HSV: https://en.wikipedia.org/wiki/HSL_and_HSV
     """
+    # pylint: disable=too-many-public-methods
 
     def __new__(cls, *args, **kwargs):
         def from_rgb(r, g, b):
+            "Determine whether bytes or floats are being passed for RGB"
             if 0.0 <= r <= 1.0 and 0.0 <= g <= 1.0 and 0.0 <= b <= 1.0:
                 return cls.from_rgb(r, g, b)
             else:
                 return cls.from_rgb_bytes(r, g, b)
 
         def from_yuv(y, u, v):
+            "Determine whether bytes or floats are being passed for YUV"
             if 0.0 <= y <= 1.0 and abs(u) <= cv.BT601.Umax and abs(v) <= cv.BT601.Vmax:
                 return cls.from_yuv(y, u, v)
             else:
@@ -187,6 +196,8 @@ class Color(types.RGB):
 
         if kwargs:
             try:
+                # Yes, lambdas are fine here
+                # pylint: disable=unnecessary-lambda
                 return {
                     frozenset('rgb'): from_rgb,
                     frozenset('yuv'): from_yuv,
@@ -199,36 +210,42 @@ class Color(types.RGB):
                     frozenset('cmy'): cls.from_cmy,
                     frozenset('cmyk'): cls.from_cmyk,
                     frozenset(('red', 'green', 'blue')):
-                        lambda red, green, blue: from_rgb(red, green, blue),
+                        lambda red, green, blue:
+                        from_rgb(red, green, blue),
                     frozenset(('cyan', 'magenta', 'yellow')):
-                        lambda cyan, magenta, yellow: cls.from_cmy(cyan, magenta, yellow),
+                        lambda cyan, magenta, yellow:
+                        cls.from_cmy(cyan, magenta, yellow),
                     frozenset(('cyan', 'magenta', 'yellow', 'black')):
-                        lambda cyan, magenta, yellow, black: cls.from_cmyk(cyan, magenta, yellow, black),
+                        lambda cyan, magenta, yellow, black:
+                        cls.from_cmyk(cyan, magenta, yellow, black),
                     frozenset(('hue', 'lightness', 'saturation')):
-                        lambda hue, lightness, saturation: cls.from_hls(hue, lightness, saturation),
+                        lambda hue, lightness, saturation:
+                        cls.from_hls(hue, lightness, saturation),
                     frozenset(('hue', 'saturation', 'value')):
-                        lambda hue, saturation, value: cls.from_hsv(hue, saturation, value),
+                        lambda hue, saturation, value:
+                        cls.from_hsv(hue, saturation, value),
                     }[frozenset(kwargs.keys())](**kwargs)
             except KeyError:
                 pass
         else:
             if len(args) == 1:
                 if isinstance(args[0], bytes):
-                    c = args[0].decode('ascii')
+                    spec = args[0].decode('ascii')
                 else:
-                    c = args[0]
-                if isinstance(c, str):
-                    return cls.from_string(c)
-                elif isinstance(c, tuple):
+                    spec = args[0]
+                if isinstance(spec, str):
+                    return cls.from_string(spec)
+                elif isinstance(spec, tuple):
                     try:
-                        return cls(**c._asdict())
+                        return cls(**spec._asdict())
                     except AttributeError:
-                        if len(c) == 3:
-                            return from_rgb(*c)
-                elif isinstance(c, int):
-                    return cls.from_rgb24(c)
+                        if len(spec) == 3:
+                            return from_rgb(*spec)
+                elif isinstance(spec, int):
+                    return cls.from_rgb24(spec)
             elif len(args) == 3:
-                return from_rgb(*args)
+                r, g, b = args
+                return from_rgb(r, g, b)
         raise ValueError('Unable to construct Color from provided arguments')
 
     @classmethod
@@ -403,25 +420,24 @@ class Color(types.RGB):
         return cls.from_xyz(*cv.luv_to_xyz(l, u, v))
 
     def __add__(self, other):
-        if isinstance(other, Color):
-            return Color.from_rgb(self.red + other.red,
-                                  self.green + other.green,
-                                  self.blue + other.blue)
-        elif isinstance(other, attr.Red):
-            return Color.from_rgb(self.red + other, self.green, self.blue)
-        elif isinstance(other, attr.Green):
-            return Color.from_rgb(self.red, self.green + other, self.blue)
-        elif isinstance(other, attr.Blue):
-            return Color.from_rgb(self.red, self.green, self.blue + other)
-        elif isinstance(other, attr.Hue):
+        if isinstance(other, types.RGB):
+            return Color.from_rgb(self.r + other.r,
+                                  self.g + other.g,
+                                  self.b + other.b)
+        elif isinstance(other, (attr.Red, attr.Green, attr.Blue)):
+            r, g, b = self
+            return Color.from_rgb(
+                r + other if isinstance(other, attr.Red) else r,
+                g + other if isinstance(other, attr.Green) else g,
+                b + other if isinstance(other, attr.Blue) else b,
+            )
+        elif isinstance(other, (attr.Hue, attr.Lightness, attr.Saturation)):
             h, l, s = self.hls
-            return Color.from_hls((h + other) % 1.0, l, s)
-        elif isinstance(other, attr.Lightness):
-            h, l, s = self.hls
-            return Color.from_hls(h, l + other, s)
-        elif isinstance(other, attr.Saturation):
-            h, l, s = self.hls
-            return Color.from_hls(h, l, s + other)
+            return Color.from_hls(
+                h + other if isinstance(other, attr.Hue) else h,
+                l + other if isinstance(other, attr.Lightness) else l,
+                s + other if isinstance(other, attr.Saturation) else s,
+            )
         elif isinstance(other, attr.Luma):
             y, u, v = self.yuv
             return Color.from_yuv(y + other, u, v)
@@ -429,7 +445,7 @@ class Color(types.RGB):
 
     def __radd__(self, other):
         # Addition is commutative
-        if isinstance(other, (Color,
+        if isinstance(other, (types.RGB,
                               attr.Red, attr.Green, attr.Blue,
                               attr.Hue, attr.Lightness, attr.Saturation,
                               attr.Luma)):
@@ -437,59 +453,58 @@ class Color(types.RGB):
         return NotImplemented
 
     def __sub__(self, other):
-        if isinstance(other, Color):
-            return Color.from_rgb(self.red - other.red,
-                                  self.green - other.green,
-                                  self.blue - other.blue)
-        elif isinstance(other, attr.Red):
-            return Color.from_rgb(self.red - other, self.green, self.blue)
-        elif isinstance(other, attr.Green):
-            return Color.from_rgb(self.red, self.green - other, self.blue)
-        elif isinstance(other, attr.Blue):
-            return Color.from_rgb(self.red, self.green, self.blue - other)
-        elif isinstance(other, attr.Hue):
+        if isinstance(other, types.RGB):
+            return Color.from_rgb(self.r - other.r,
+                                  self.g - other.g,
+                                  self.b - other.b)
+        elif isinstance(other, (attr.Red, attr.Green, attr.Blue)):
+            r, g, b = self.rgb
+            return Color.from_rgb(
+                r - other if isinstance(other, attr.Red) else r,
+                g - other if isinstance(other, attr.Green) else g,
+                b - other if isinstance(other, attr.Blue) else b,
+            )
+        elif isinstance(other, (attr.Hue, attr.Lightness, attr.Saturation)):
             h, l, s = self.hls
-            return Color.from_hls((h - other) % 1.0, l, s)
-        elif isinstance(other, attr.Lightness):
-            h, l, s = self.hls
-            return Color.from_hls(h, l - other, s)
-        elif isinstance(other, attr.Saturation):
-            h, l, s = self.hls
-            return Color.from_hls(h, l, s - other)
+            return Color.from_hls(
+                h - other if isinstance(other, attr.Hue) else h,
+                l - other if isinstance(other, attr.Lightness) else l,
+                s - other if isinstance(other, attr.Saturation) else s,
+            )
         elif isinstance(other, attr.Luma):
             y, u, v = self.yuv
             return Color.from_yuv(y - other, u, v)
         return NotImplemented
 
     def __rsub__(self, other):
-        if isinstance(other, attr.Red):
-            return Color.from_rgb(other - self.red, -self.green, -self.blue)
-        elif isinstance(other, attr.Green):
-            return Color.from_rgb(-self.red, other - self.green, -self.blue)
-        elif isinstance(other, attr.Blue):
-            return Color.from_rgb(-self.red, -self.green, other - self.blue)
+        if isinstance(other, (attr.Red, attr.Green, attr.Blue)):
+            r, g, b = self.rgb
+            return Color.from_rgb(
+                other - r if isinstance(other, attr.Red) else r,
+                other - g if isinstance(other, attr.Green) else g,
+                other - b if isinstance(other, attr.Blue) else b,
+            )
         return NotImplemented
 
     def __mul__(self, other):
-        if isinstance(other, Color):
+        if isinstance(other, types.RGB):
             return Color.from_rgb(self.red * other.red,
                                   self.green * other.green,
                                   self.blue * other.blue)
-        elif isinstance(other, attr.Red):
-            return Color.from_rgb(self.red * other, self.green, self.blue)
-        elif isinstance(other, attr.Green):
-            return Color.from_rgb(self.red, self.green * other, self.blue)
-        elif isinstance(other, attr.Blue):
-            return Color.from_rgb(self.red, self.green, self.blue * other)
-        elif isinstance(other, attr.Hue):
+        elif isinstance(other, (attr.Red, attr.Green, attr.Blue)):
+            r, g, b = self
+            return Color.from_rgb(
+                r * other if isinstance(other, attr.Red) else r,
+                g * other if isinstance(other, attr.Green) else g,
+                b * other if isinstance(other, attr.Blue) else b,
+            )
+        elif isinstance(other, (attr.Hue, attr.Lightness, attr.Saturation)):
             h, l, s = self.hls
-            return Color.from_hls((h * other) % 1.0, l, s)
-        elif isinstance(other, attr.Lightness):
-            h, l, s = self.hls
-            return Color.from_hls(h, l * other, s)
-        elif isinstance(other, attr.Saturation):
-            h, l, s = self.hls
-            return Color.from_hls(h, l, s * other)
+            return Color.from_hls(
+                h * other if isinstance(other, attr.Hue) else h,
+                l * other if isinstance(other, attr.Lightness) else l,
+                s * other if isinstance(other, attr.Saturation) else s,
+            )
         elif isinstance(other, attr.Luma):
             y, u, v = self.yuv
             return Color.from_yuv(y * other, u, v)
@@ -497,7 +512,7 @@ class Color(types.RGB):
 
     def __rmul__(self, other):
         # Multiplication is commutative
-        if isinstance(other, (Color,
+        if isinstance(other, (types.RGB,
                               attr.Red, attr.Green, attr.Blue,
                               attr.Hue, attr.Lightness, attr.Saturation,
                               attr.Luma)):
@@ -511,10 +526,23 @@ class Color(types.RGB):
 
     @property
     def html(self):
+        """
+        Returns the color as a string in HTML #RRGGBB format.
+        """
         return cv.rgb_bytes_to_html(*self.rgb_bytes)
 
     @property
     def rgb(self):
+        """
+        Return a simple 3-tuple of (r, g, b) float values in the range 0.0 <= n
+        <= 1.0.
+
+        .. note::
+
+            The :class:`Color` class can already be treated as such a 3-tuple
+            but for the cases where you want a straight
+            :func:`~collections.namedtuple` this property is available.
+        """
         return types.RGB(*self)
 
     @property

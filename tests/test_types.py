@@ -27,7 +27,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"Tests for the colorzero.types module"
+"Tests for the colorzero.types module."
 
 from __future__ import (
     unicode_literals,
@@ -36,8 +36,9 @@ from __future__ import (
     absolute_import,
 )
 
-import pytest
-from colorzero import *
+# pylint: disable=import-error,missing-docstring
+from colorzero import RGB, HLS, HSV, CMY, CMYK
+
 
 def test_rgb():
     v = RGB(1, 0.5, 0)
@@ -45,11 +46,13 @@ def test_rgb():
     assert v.green == 0.5
     assert v.blue == 0
 
+
 def test_hls():
     v = HLS(0, 0.5, 1)
     assert v.hue == 0
     assert v.lightness == 0.5
     assert v.saturation == 1
+
 
 def test_hsv():
     v = HSV(0, 0.5, 1)
@@ -57,11 +60,13 @@ def test_hsv():
     assert v.saturation == 0.5
     assert v.value == 1
 
+
 def test_cmy():
     v = CMY(0, 0.5, 1)
     assert v.cyan == 0
     assert v.magenta == 0.5
     assert v.yellow == 1
+
 
 def test_cmyk():
     v = CMYK(0, 0.5, 1, 0.2)

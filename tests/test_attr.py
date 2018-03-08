@@ -38,8 +38,10 @@ from __future__ import (
 
 from math import pi
 
+# pylint: disable=import-error,missing-docstring
 import pytest
-from colorzero import *
+from colorzero import Hue
+
 
 def test_hue_init():
     assert Hue(0.0) == 0.0
@@ -51,14 +53,15 @@ def test_hue_init():
     assert Hue(deg=180) == 0.5
     assert Hue(rad=0) == 0.0
     assert Hue(rad=pi) == 0.5
-    assert Hue(rad=2*pi) == 0.0
+    assert Hue(rad=2 * pi) == 0.0
     with pytest.raises(ValueError):
         Hue()
+
 
 def test_hue_attr():
     assert Hue(0).deg == 0
     assert Hue(0.5).deg == 180
-    assert Hue(1/3).deg == 120
+    assert Hue(1 / 3).deg == 120
     assert Hue(0).rad == 0
     assert Hue(0.5).rad == pi
-    assert Hue(1/3).rad == (2/3) * pi
+    assert Hue(1 / 3).rad == (2 / 3) * pi
