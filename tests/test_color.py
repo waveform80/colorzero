@@ -50,9 +50,9 @@ from colorzero import (
 )
 
 
-def verify_color(color1, color2, rel_tol=1e-9, abs_tol=1e-15):
+def verify_color(color1, color2, abs_tol=1e-7):
     for elem1, elem2 in zip(color1, color2):
-        assert isclose(elem1, elem2, rel_tol=rel_tol, abs_tol=abs_tol)
+        assert isclose(elem1, elem2, abs_tol=abs_tol)
 
 
 def test_color_new():
@@ -72,8 +72,8 @@ def test_color_new():
     verify_color(Color(0), (0.0, 0.0, 0.0))
     verify_color(Color(0xff), (1.0, 0.0, 0.0))
     verify_color(Color(0xff0000), (0.0, 0.0, 1.0))
-    verify_color(Color(l=100, a=0, b=0), (1.0, 1.0, 1.0), abs_tol=1e-7)
-    verify_color(Color(l=100, u=0, v=0), (1.0, 1.0, 1.0), abs_tol=1e-7)
+    verify_color(Color(l=100, a=0, b=0), (1.0, 1.0, 1.0))
+    verify_color(Color(l=100, u=0, v=0), (1.0, 1.0, 1.0))
     verify_color(Color(h=0, l=1, s=0), (1.0, 1.0, 1.0))
     verify_color(Color(hue=0, lightness=1, saturation=0), (1.0, 1.0, 1.0))
     verify_color(Color(h=0, s=0, v=1), (1.0, 1.0, 1.0))
@@ -137,22 +137,21 @@ def test_color_from_yiq():
 
 def test_color_from_xyz():
     verify_color(Color.from_xyz(0, 0, 0), (0.0, 0.0, 0.0))
-    verify_color(Color.from_xyz(0.95047, 1, 1.08883),
-                 (1.0, 1.0, 1.0), abs_tol=1e-7)
+    verify_color(Color.from_xyz(0.95047, 1, 1.08883), (1.0, 1.0, 1.0))
     verify_color(Color.from_xyz(0.4124564, 0.2126729, 0.0193339),
                  (1.0, 0.0, 0.0), abs_tol=1e-5)
 
 
 def test_color_from_lab():
     verify_color(Color.from_lab(0, 0, 0), (0.0, 0.0, 0.0))
-    verify_color(Color.from_lab(100, 0, 0), (1.0, 1.0, 1.0), abs_tol=1e-7)
+    verify_color(Color.from_lab(100, 0, 0), (1.0, 1.0, 1.0))
     verify_color(Color.from_lab(53.24, 80.1, 67.2), (1.0, 0.0, 0.0),
                  abs_tol=1e-4)
 
 
 def test_color_from_luv():
     verify_color(Color.from_luv(0, 0, 0), (0.0, 0.0, 0.0))
-    verify_color(Color.from_luv(100, 0, 0), (1.0, 1.0, 1.0), abs_tol=1e-7)
+    verify_color(Color.from_luv(100, 0, 0), (1.0, 1.0, 1.0))
     verify_color(Color.from_luv(53.24079, 175.01503, 37.75643),
                  (1.0, 0.0, 0.0), abs_tol=1e-5)
 

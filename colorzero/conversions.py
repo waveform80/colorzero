@@ -121,7 +121,7 @@ class YUVCoefficients(namedtuple('YUVCoefficients', (
             Wr = kwargs['Wr']
             Wb = kwargs['Wb']
         except KeyError as e:
-            raise TypeError('BT() missing required keyword '
+            raise TypeError('YUVCoefficients() missing required keyword '
                             'argument: %s' % str(e))
         Wg = (1 - Wr - Wb)
         U = Umax / (1 - Wb)
@@ -139,10 +139,14 @@ class YUVCoefficients(namedtuple('YUVCoefficients', (
 BT601 = YUVCoefficients(Wr=0.299, Wb=0.114)
 BT709 = YUVCoefficients(Wr=0.2126, Wb=0.0722)
 SMPTE240M = YUVCoefficients(Wr=0.212, Wb=0.087)
+# TODO define some API to use these in Color
 
 
-# The standard D65 illuminant in the CIE XYZ space
+# The standard illuminants in the CIE XYZ space
+D50 = XYZ(0.966797, 1.0, 0.825188)
 D65 = XYZ(0.95047, 1.0, 1.08883)
+# TODO define some more of these and figure out some API to use them in Color
+# TODO what about standard observers? color temperature?
 
 
 # Conversion functions #######################################################

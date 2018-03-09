@@ -189,7 +189,10 @@ class Color(types.RGB):
 
         def from_yuv(y, u, v):
             "Determine whether bytes or floats are being passed for YUV"
-            if 0.0 <= y <= 1.0 and abs(u) <= cv.BT601.Umax and abs(v) <= cv.BT601.Vmax:
+            if (
+                    0.0 <= y <= 1.0 and
+                    abs(u) <= cv.BT601.Umax and
+                    abs(v) <= cv.BT601.Vmax):
                 return cls.from_yuv(y, u, v)
             else:
                 return cls.from_yuv_bytes(y, u, v)
@@ -480,17 +483,17 @@ class Color(types.RGB):
         if isinstance(other, (attr.Red, attr.Green, attr.Blue)):
             r, g, b = self.rgb
             return Color.from_rgb(
-                other - r if isinstance(other, attr.Red) else r,
-                other - g if isinstance(other, attr.Green) else g,
-                other - b if isinstance(other, attr.Blue) else b,
+                other - r if isinstance(other, attr.Red) else 0.0,
+                other - g if isinstance(other, attr.Green) else 0.0,
+                other - b if isinstance(other, attr.Blue) else 0.0,
             )
         return NotImplemented
 
     def __mul__(self, other):
         if isinstance(other, types.RGB):
-            return Color.from_rgb(self.red * other.red,
-                                  self.green * other.green,
-                                  self.blue * other.blue)
+            return Color.from_rgb(self.r * other.r,
+                                  self.g * other.g,
+                                  self.b * other.b)
         elif isinstance(other, (attr.Red, attr.Green, attr.Blue)):
             r, g, b = self
             return Color.from_rgb(
@@ -522,7 +525,8 @@ class Color(types.RGB):
         return self.html
 
     def __repr__(self):
-        return '<Color html=%r rgb=(r=%g, g=%g, b=%g)' % (self.html, self.r, self.g, self.b)
+        return '<Color html=%r rgb=(r=%g, g=%g, b=%g)' % (
+            self.html, self.r, self.g, self.b)
 
     @property
     def html(self):
