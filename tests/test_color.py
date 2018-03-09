@@ -344,6 +344,8 @@ def test_color_diff():
     assert Color('black').difference(Color('black')) == 0.0
     assert Color('white').difference(Color('black')) == sqrt(3)
     assert Color('red').difference(Color('black')) == 1.0
+    assert Color('black').difference(Color('black'), 'cie1976') == 0.0
+    assert Color('black').difference(Color('black'), 'ciede2000') == 0.0
     with pytest.raises(ValueError):
         Color('red').difference(Color('black'), method='foo')
     with pytest.raises(ValueError):

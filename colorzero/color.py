@@ -671,30 +671,6 @@ class Color(types.RGB):
         return cv.cmy_to_cmyk(*self.cmy)
 
     @property
-    def red(self):
-        """
-        Returns the red component of the color as a :class:`Red` instance which
-        can be used in operations with other :class:`Color` instances.
-        """
-        return attr.Red(self[0])
-
-    @property
-    def green(self):
-        """
-        Returns the green component of the color as a :class:`Green` instance
-        which can be used in operations with other :class:`Color` instances.
-        """
-        return attr.Green(self[1])
-
-    @property
-    def blue(self):
-        """
-        Returns the blue component of the color as a :class:`Blue` instance
-        which can be used in operations with other :class:`Color` instances.
-        """
-        return attr.Blue(self[2])
-
-    @property
     def hue(self):
         """
         Returns the hue of the color as a :class:`Hue` instance which can be
@@ -761,8 +737,11 @@ class Color(types.RGB):
         if isinstance(method, bytes):
             method = method.decode('ascii')
         try:
-            method = getattr(deltae, method)
+            fn = getattr(deltae, method)
         except AttributeError:
             raise ValueError('invalid method: %s' % method)
         else:
-            return method(self, other)
+            if method.startswith('cie'):
+                return fn(self.lab, other.lab)
+            else:
+                return fn(self, other)

@@ -62,10 +62,7 @@ def cie1976(c1, c2):
 
     .. _CIE 1976: https://en.wikipedia.org/wiki/Color_difference#CIE76
     """
-    return sqrt(sum(
-        (e1 - e2) ** 2
-        for e1, e2 in zip(c1.cie_lab, c2.cie_lab)
-    ))
+    return sqrt(sum((e1 - e2) ** 2 for e1, e2 in zip(c1, c2)))
 
 
 def cie1994(color1, color2, method):
@@ -77,16 +74,17 @@ def cie1994(color1, color2, method):
 
     .. _CIE 1994: https://en.wikipedia.org/wiki/Color_difference#CIE94
     """
-    color1 = color1.cie_lab
-    color2 = color2.cie_lab
     C1 = sqrt(color1.a ** 2 + color1.b ** 2)
     C2 = sqrt(color2.a ** 2 + color2.b ** 2)
-    dC = C1 - C2
+
     dL = color1.l - color2.l
+    dC = C1 - C2
     # Don't bother with the sqrt here as due to limited float precision
     # we can wind up with a domain error (because the value is ever so
-    # slightly negative - try it with black'n'white for an example)
+    # slightly negative - try it with black'n'white for an example), and we're
+    # just going to square the result in the final equation anyway
     dH2 = (color1.a - color2.a) ** 2 + (color1.b - color2.b) ** 2 - dC ** 2
+
     kL, K1, K2 = {
         'cie1994g': (1, 0.045, 0.015),
         'cie1994t': (2, 0.048, 0.014),
@@ -94,9 +92,9 @@ def cie1994(color1, color2, method):
     SC = 1 + K1 * C1
     SH = 1 + K2 * C1
     return sqrt(
-        (dL ** 2 / kL) +
-        (dC ** 2 / SC) +
-        (dH2 / SH)
+        (dL / kL) ** 2 +
+        (dC / SC) ** 2 +
+        (dH2 / SH ** 2)
     )
 
 
@@ -131,38 +129,48 @@ def ciede2000(color1, color2):
     # Yes, there's lots of locals; but this is easiest to understand as it's a
     # near straight translation of the math
     # pylint: disable=too-many-locals
-    color1 = color1.cie_lab
-    color2 = color2.cie_lab
 
-    C1 = sqrt(color1.a ** 2 + color1.b ** 2)
-    C2 = sqrt(color2.a ** 2 + color2.b ** 2)
-    L_ = (color1.l + color2.l) / 2
-    C_ = (C1 + C2) / 2
+    C_ = (
+        sqrt(color1.a ** 2 + color1.b ** 2) +
+        sqrt(color2.a ** 2 + color2.b ** 2)
+    ) / 2
 
     G = (1 - sqrt(C_ ** 7 / (C_ ** 7 + 25 ** 7))) / 2
-    a1 = (1 + G) * color1.a
-    a2 = (1 + G) * color2.a
-    h1 = 0.0 if color1.b == a1 == 0 else degrees(atan2(color1.b, a1)) % 360
-    h2 = 0.0 if color2.b == a2 == 0 else degrees(atan2(color2.b, a2)) % 360
-    if C1 * C2 == 0.0:
+    a1_prime = (1 + G) * color1.a
+    a2_prime = (1 + G) * color2.a
+
+    C1_prime = sqrt(a1_prime ** 2 + color1.b ** 2)
+    C2_prime = sqrt(a2_prime ** 2 + color2.b ** 2)
+    L_ = (color1.l + color2.l) / 2
+    C_ = (C1_prime + C2_prime) / 2
+
+    h1 = (
+        0.0 if color1.b == a1_prime == 0 else
+        degrees(atan2(color1.b, a1_prime)) % 360
+    )
+    h2 = (
+        0.0 if color2.b == a2_prime == 0 else
+        degrees(atan2(color2.b, a2_prime)) % 360
+    )
+    if C1_prime * C2_prime == 0.0:
         dh = 0.0
         h_ = h1 + h2
     elif abs(h1 - h2) <= 180:
         dh = h2 - h1
         h_ = (h1 + h2) / 2
     else:
-        if h2 <= h1:
-            dh = h2 - h1 + 360
-        else:
+        if h2 > h1:
             dh = h2 - h1 - 360
-        if h1 + h2 >= 360:
-            h_ = (h1 + h2 + 360) / 2
         else:
+            dh = h2 - h1 + 360
+        if h1 + h2 >= 360:
             h_ = (h1 + h2 - 360) / 2
+        else:
+            h_ = (h1 + h2 + 360) / 2
 
     dL = color2.l - color1.l
-    dC = C2 - C1
-    dH = 2 * sqrt(C1 * C2) * sin(radians(dh / 2))
+    dC = C2_prime - C1_prime
+    dH = 2 * sqrt(C1_prime * C2_prime) * sin(radians(dh / 2))
 
     T = (
         1 -
