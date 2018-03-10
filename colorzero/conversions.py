@@ -63,7 +63,11 @@ from collections import namedtuple
 from fractions import Fraction
 try:
     from itertools import izip as zip  # pylint: disable=redefined-builtin
-    from .compat import round  # pylint: disable=redefined-builtin
+    def round(number, ndigits=0, _round=round):
+        # Ensure round returns an int when ndigits is 0; back-ported behaviour
+        # for python 2.x
+        # pylint: disable=redefined-builtin,missing-docstring
+        return _round(number, ndigits) if ndigits else int(_round(number))
 except ImportError:
     pass
 

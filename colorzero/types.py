@@ -54,6 +54,7 @@ class RGB(tuple):
 
     def _replace(self, **kw):
         "Return a new RGB object replacing specified fields with new values"
+        # pylint: disable=bad-builtin
         result = tuple.__new__(RGB, map(kw.pop, 'rgb', self))
         if kw:
             raise ValueError('Got unexpected field names: %r' % list(kw))
@@ -74,6 +75,7 @@ class RGB(tuple):
     @property
     def r(self):
         "Return the red value"
+        # pylint: disable=invalid-name
         return Red(self[0])
 
     @property
@@ -84,6 +86,7 @@ class RGB(tuple):
     @property
     def g(self):
         "Return the green value"
+        # pylint: disable=invalid-name
         return Green(self[1])
 
     @property
@@ -94,6 +97,7 @@ class RGB(tuple):
     @property
     def b(self):
         "Return the blue value"
+        # pylint: disable=invalid-name
         return Blue(self[2])
 
     @property
@@ -115,6 +119,7 @@ class HLS(tuple):
 
     def _replace(self, **kw):
         "Return a new HLS object replacing specified fields with new values"
+        # pylint: disable=bad-builtin
         result = tuple.__new__(HLS, map(kw.pop, 'hls', self))
         if kw:
             raise ValueError('Got unexpected field names: %r' % list(kw))
@@ -135,6 +140,7 @@ class HLS(tuple):
     @property
     def h(self):
         "Return the hue value"
+        # pylint: disable=invalid-name
         return Hue(self[0])
 
     @property
@@ -145,6 +151,7 @@ class HLS(tuple):
     @property
     def l(self):
         "Return the lightness value"
+        # pylint: disable=invalid-name
         return Lightness(self[1])
 
     @property
@@ -155,6 +162,7 @@ class HLS(tuple):
     @property
     def s(self):
         "Return the saturation value"
+        # pylint: disable=invalid-name
         return Saturation(self[2])
 
     @property
@@ -175,6 +183,7 @@ class HSV(tuple):
 
     def _replace(self, **kw):
         "Return a new HSV object replacing specified fields with new values"
+        # pylint: disable=bad-builtin
         result = tuple.__new__(HSV, map(kw.pop, 'hsv', self))
         if kw:
             raise ValueError('Got unexpected field names: %r' % list(kw))
@@ -195,6 +204,7 @@ class HSV(tuple):
     @property
     def h(self):
         "Return the hue value"
+        # pylint: disable=invalid-name
         return Hue(self[0])
 
     @property
@@ -205,6 +215,7 @@ class HSV(tuple):
     @property
     def s(self):
         "Return the saturation value"
+        # pylint: disable=invalid-name
         return Saturation(self[1])
 
     @property
@@ -235,6 +246,7 @@ class YUV(tuple):
 
     def _replace(self, **kw):
         "Return a new YUV object replacing specified fields with new values"
+        # pylint: disable=bad-builtin
         result = tuple.__new__(YUV, map(kw.pop, 'yuv', self))
         if kw:
             raise ValueError('Got unexpected field names: %r' % list(kw))
@@ -255,6 +267,7 @@ class YUV(tuple):
     @property
     def y(self):
         "Return the luma value"
+        # pylint: disable=invalid-name
         return Luma(self[0])
 
     @property
@@ -265,11 +278,13 @@ class YUV(tuple):
     @property
     def u(self):
         "Return the first chroma offset"
+        # pylint: disable=invalid-name
         return self[1]
 
     @property
     def v(self):
         "Return the second chroma offset"
+        # pylint: disable=invalid-name
         return self[2]
 
 
