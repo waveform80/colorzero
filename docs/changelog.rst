@@ -1,5 +1,3 @@
-.. _changelog:
-
 ==========
 Change log
 ==========
@@ -7,11 +5,11 @@ Change log
 .. currentmodule:: colorzero
 
 
-Release 1.0 (2016-10-01)
+Release 1.0 (2018-03-10)
 ========================
 
 1.0 is the first release after breaking the library out of the `picamera`_
-project.
+project. As this is a 1.x release, API stability will be maintained.
 
 
 .. _picamera: https://github.com/waveform80/picamera

@@ -59,15 +59,15 @@ class Color(types.RGB):
     :class:`Color` can be constructed in any of the following ways::
 
         >>> Color('#f00')
-        <Color html="#ff0000" rgb=(1.0, 0.0, 0.0)>
+        <Color html='#ff0000' rgb=(1, 0, 0)>
         >>> Color('green')
-        <Color html="#008000" rgb=(0.0, XXX, 0.0)>
+        <Color html='#008000' rgb=(0.0, 0.501961, 0.0)>
         >>> Color(0, 0, 1)
-        <Color html="#0000ff" rgb=(0.0, 0.0, 1.0)>
+        <Color html='#0000ff' rgb=(0, 0, 1)>
         >>> Color(h=0, s=1, v=0.5)
-        <Color html="#7f0000">
+        <Color html='#800000' rgb=(0.5, 0, 0)>
         >>> Color(y=0.4, u=-0.05, v=0.615)
-        <Color html="#ff0f4c">
+        <Color html='#ff104c' rgb=(1, 0.0626644, 0.298394)>
 
     The specific forms that the default constructor will accept are enumerated
     below:
@@ -75,101 +75,129 @@ class Color(types.RGB):
     +------------------------------+------------------------------------------+
     | Style                        | Description                              |
     +==============================+==========================================+
-    | Single positional parameter  | Equivalent to calling                    |
-    |                              | :meth:`Color.from_string`.               |
+    | Single scalar parameter      | Equivalent to calling                    |
+    |                              | :meth:`Color.from_string`, or            |
+    |                              | :meth:`Color.from_rgb24`.                |
     +------------------------------+------------------------------------------+
     | Three positional parameters  | Equivalent to calling                    |
-    |                              | :meth:`Color.from_rgb` if all three      |
-    |                              | parameters are between 0.0 and 1.0, or   |
+    | or a 3-tuple with no field   | :meth:`Color.from_rgb` if all three      |
+    | names                        | parameters are between 0.0 and 1.0, or   |
     |                              | :meth:`Color.from_rgb_bytes` otherwise.  |
     +------------------------------+                                          |
-    | Three named parameters,      |                                          |
+    | Three named parameters, or a |                                          |
+    | 3-tuple with fields          |                                          |
     | "r", "g", "b"                |                                          |
     +------------------------------+                                          |
-    | Three named parameters,      |                                          |
+    | Three named parameters, or a |                                          |
+    | 3-tuple with fields          |                                          |
     | "red", "green", "blue"       |                                          |
     +------------------------------+------------------------------------------+
-    | Three named parameters,      | Equivalent to calling                    |
-    | "y", "u", "v"                | :meth:`Color.from_yuv` if "y" is between |
-    |                              | 0.0 and 1.0, "u" is between -0.436 and   |
+    | Three named parameters, or a | Equivalent to calling                    |
+    | 3-tuple with fields          | :meth:`Color.from_yuv` if "y" is between |
+    | "y", "u", "v"                | 0.0 and 1.0, "u" is between -0.436 and   |
     |                              | 0.436, and "v" is between -0.615 and     |
     |                              | 0.615, or :meth:`Color.from_yuv_bytes`   |
     |                              | otherwise.                               |
     +------------------------------+------------------------------------------+
-    | Three named parameters,      | Equivalent to calling                    |
-    | "y", "i", "q"                | :meth:`Color.from_yiq`.                  |
+    | Three named parameters, or a | Equivalent to calling                    |
+    | 3-tuple with fields          | :meth:`Color.from_yiq`.                  |
+    | "y", "i", "q"                |                                          |
     +------------------------------+------------------------------------------+
-    | Three named parameters,      | Equivalent to calling                    |
-    | "h", "l", "s"                | :meth:`Color.from_hls`.                  |
+    | Three named parameters, or a | Equivalent to calling                    |
+    | 3-tuple with fields          | :meth:`Color.from_hls`.                  |
+    | "h", "l", "s"                |                                          |
     +------------------------------+                                          |
-    | Three named parameters,      |                                          |
+    | Three named parameters, or a |                                          |
+    | 3-tuple with fields          |                                          |
     | "hue", "lightness",          |                                          |
     | "saturation"                 |                                          |
     +------------------------------+------------------------------------------+
-    | Three named parameters       | Equivalent to calling                    |
-    | "h", "s", "v"                | :meth:`Color.from_hsv`                   |
+    | Three named parameters, or a | Equivalent to calling                    |
+    | 3-tuple with fields          | :meth:`Color.from_hsv`                   |
+    | "h", "s", "v"                |                                          |
     +------------------------------+                                          |
-    | Three named parameters       |                                          |
+    | Three named parameters, or a |                                          |
+    | 3-tuple with fields          |                                          |
     | "hue", "saturation", "value" |                                          |
     +------------------------------+------------------------------------------+
-    | Three named parameters,      | Equivalent to calling                    |
-    | "x", "y", "z"                | :meth:`Color.from_cie_xyz`               |
+    | Three named parameters, or a | Equivalent to calling                    |
+    | 3-tuple with fields          | :meth:`Color.from_cie_xyz`               |
+    | "x", "y", "z"                |                                          |
     +------------------------------+------------------------------------------+
-    | Three named parameters,      | Equivalent to calling                    |
-    | "l", "a", "b"                | :meth:`Color.from_cie_lab`               |
+    | Three named parameters, or a | Equivalent to calling                    |
+    | 3-tuple with fields          | :meth:`Color.from_cie_lab`               |
+    | "l", "a", "b"                |                                          |
     +------------------------------+------------------------------------------+
-    | Three named parameters,      | Equivalent to calling                    |
-    | "l", "u", "v"                | :meth:`Color.from_cie_luv`               |
+    | Three named parameters, or a | Equivalent to calling                    |
+    | 3-tuple with fields          | :meth:`Color.from_cie_luv`               |
+    | "l", "u", "v"                |                                          |
     +------------------------------+------------------------------------------+
 
     If the constructor parameters do not conform to any of the variants in the
-    table above, a :exc:`ValueError` will be thrown.
+    table above, a :exc:`ValueError` will be raised.
 
-    Internally, the color is *always* represented as 3 float values
+    Internally, the color is *always* represented as 3 :class:`float` values
     corresponding to the red, green, and blue components of the color. These
     values take a value from 0.0 to 1.0 (least to full intensity). The class
     provides several attributes which can be used to convert one color system
     into another::
 
         >>> Color('#f00').hls
-        (0.0, 0.5, 1.0)
+        HLS(h=0.0, l=0.5, s=1.0)
         >>> Color.from_string('green').hue
         Hue(deg=120.0)
         >>> Color.from_rgb_bytes(0, 0, 255).yuv
-        (0.114, 0.435912, -0.099978)
+        YUV(y=0.114, u=0.436, v=-0.10001426533523537)
 
     As :class:`Color` derives from tuple, instances are immutable. While this
-    provides the advantage that they can be used as keys in a dict, it does
-    mean that colors themselves cannot be directly manipulated (e.g. by
-    reducing the red component).
+    provides the advantage that they can be used in a :class:`set` or as keys
+    of a :class:`dict`, it does mean that colors themselves cannot be
+    *directly* manipulated (e.g. by setting the red component).
 
     However, several auxilliary classes in the module provide the ability to
     perform simple transformations of colors via operators which produce a new
-    :class:`Color` instance. For example::
+    :class:`Color` instance. For example, you can add, subtract, and multiply
+    colors directly::
+
+        >>> Color('red') + Color('blue')
+        <Color html='#ff00ff' rgb=(1, 0, 1)>
+        >>> Color('magenta') - Color('red')
+        <Color html='#0000ff' rgb=(0, 0, 1)>
+
+    Values are clipped to ensure the resulting color is still valid::
+
+        >>> Color('#ff00ff') + Color('#ff0000')
+        <Color html='#ff00ff' rgb=(1, 0, 1)>
+
+    You can wrap numbers in constructors like :class:`Red` (or obtain elements
+    of existing colors), then add, subtract, or multiply them with a
+    :class:`Color`::
 
         >>> Color('red') - Red(0.5)
-        <Color "#7f0000">
-        >>> Color('green') + Red(0.5)
-        <Color "#7f8000">
-        >>> Color.from_hls(0.5, 0.5, 1.0)
-        <Color "#00feff">
-        >>> Color.from_hls(0.5, 0.5, 1.0) * Lightness(0.8)
-        <Color "#00cbcc">
-        >>> (Color.from_hls(0.5, 0.5, 1.0) * Lightness(0.8)).hls
-        (0.5, 0.4, 1.0)
+        <Color html='#800000' rgb=(0.5, 0, 0)>
+        >>> Color('green') + Color('grey').red
+        <Color html='#808000' rgb=(0.501961, 0.501961, 0)>
 
-    From the last example above one can see that even attributes not directly
-    stored by the color (such as lightness) can be manipulated in this fashion.
-    In this case a :class:`Color` instance is constructed from HLS (hue,
-    lightness, saturation) values with a lightness of 0.5. This is multiplied
-    by a :class:`Lightness` instance with a value of 0.8 which constructs a new
-    :class:`Color` with the same hue and saturation, but a lightness of 0.5 *
-    0.8 = 0.4.
+    You can even manipulate non-primary attributes like hue, saturation, and
+    lightness with standard addition, subtraction or multiplication operators::
+
+        >>> Color.from_hls(0.5, 0.5, 1.0)
+        <Color html='#00ffff' rgb=(0, 1, 1)>
+        >>> Color.from_hls(0.5, 0.5, 1.0) * Lightness(0.8)
+        <Color html='#00cccc' rgb=(0, 0.8, 0.8)>
+        >>> (Color.from_hls(0.5, 0.5, 1.0) * Lightness(0.8)).hls
+        HLS(h=0.5, l=0.4, s=1.0)
+
+    In the last example above, a :class:`Color` instance is constructed from
+    HLS (hue, lightness, saturation) values with a lightness of 0.5. This is
+    multiplied by a :class:`Lightness` a value of 0.8 which constructs a new
+    :class:`Color` with the same hue and saturation, but a lightness of 0.4
+    (0.8 * 0.5).
 
     If an instance is converted to a string (with :func:`str`) it will return a
     string containing the 7-character HTML code for the color (e.g. "#ff0000"
     for red). As can be seen in the examples above, a similar representation is
-    returned for :func:`repr`.
+    included for the output of :func:`repr`.
 
     .. _RGB: https://en.wikipedia.org/wiki/RGB_color_space
     .. _Y'UV: https://en.wikipedia.org/wiki/YUV
@@ -525,7 +553,7 @@ class Color(types.RGB):
         return self.html
 
     def __repr__(self):
-        return '<Color html=%r rgb=(r=%g, g=%g, b=%g)' % (
+        return '<Color html=%r rgb=(%g, %g, %g)>' % (
             self.html, self.r, self.g, self.b)
 
     @property
@@ -699,6 +727,8 @@ class Color(types.RGB):
         """
         Returns the `luma`_ of the color as a :class:`Luma` instance which can
         be used in operations with other :class:`Color` instances.
+
+        .. _luma: https://en.wikipedia.org/wiki/Luma_(video)
         """
         return attr.Luma(self.yuv[0])
 

@@ -1,5 +1,3 @@
-.. _install:
-
 ============
 Installation
 ============
@@ -7,33 +5,29 @@ Installation
 .. currentmodule:: colorzero
 
 
-.. _raspbian_install:
-
 Raspbian installation
 =====================
 
-On `Raspbian`_, it is best to obtain colorzero via the ``apt-get`` utility:
+On `Raspbian`_, it is best to obtain colorzero via the ``apt`` utility:
 
 .. code-block:: console
 
-    $ sudo apt-get update
-    $ sudo apt-get install python-colorzero python3-colorzero
+    $ sudo apt update
+    $ sudo apt install python-colorzero python3-colorzero
 
 The usual apt upgrade method can be used to keep your installation up to date:
 
 .. code-block:: console
 
-    $ sudo apt-get update
-    $ sudo apt-get upgrade
+    $ sudo apt update
+    $ sudo apt upgrade
 
 To remove your installation:
 
 .. code-block:: console
 
-    $ sudo apt-get remove python-colorzero python3-colorzero
+    $ sudo apt remove python-colorzero python3-colorzero
 
-
-.. _ubuntu_install:
 
 Ubuntu installation
 ===================
@@ -44,24 +38,22 @@ author's PPA:
 .. code-block:: console
 
     $ sudo add-apt-repository ppa://waveform/ppa
-    $ sudo apt-get update
-    $ sudo apt-get install python-colorzero python3-colorzero
+    $ sudo apt update
+    $ sudo apt install python-colorzero python3-colorzero
 
 The usual apt upgrade method can be used to keep your installation up to date:
 
 .. code-block:: console
 
-    $ sudo apt-get update
-    $ sudo apt-get upgrade
+    $ sudo apt update
+    $ sudo apt upgrade
 
 To remove your installation:
 
 .. code-block:: console
 
-    $ sudo apt-get remove python-colorzero python3-colorzero
+    $ sudo apt remove python-colorzero python3-colorzero
 
-
-.. _other_install:
 
 Other platforms
 ===============

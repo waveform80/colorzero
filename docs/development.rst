@@ -1,5 +1,3 @@
-.. _development:
-
 ===========
 Development
 ===========
@@ -33,7 +31,7 @@ within a virtual Python environment:
 
 .. code-block:: console
 
-    $ sudo apt-get install lsb-release build-essential git git-core \
+    $ sudo apt install lsb-release build-essential git git-core \
         exuberant-ctags virtualenvwrapper python-virtualenv python3-virtualenv
     $ cd
     $ mkvirtualenv -p /usr/bin/python3 colorzero
@@ -71,7 +69,7 @@ command should install all required dependencies:
 
 .. code-block:: console
 
-    $ sudo apt-get install texlive-latex-recommended texlive-latex-extra \
+    $ sudo apt install texlive-latex-recommended texlive-latex-extra \
         texlive-fonts-recommended graphviz inkscape
 
 Once these are installed, you can use the "doc" target to build the
@@ -83,11 +81,9 @@ documentation:
     (colorzero) $ cd ~/colorzero
     (colorzero) $ make doc
 
-The HTML output is written to :file:`docs/_build/html` while the PDF output
-goes to :file:`docs/_build/latex`.
+The HTML output is written to :file:`build/html` while the PDF output goes to
+:file:`build/latex`.
 
-
-.. _test_suite:
 
 Test suite
 ==========
@@ -100,4 +96,3 @@ If you wish to run the colorzero test suite, follow the instructions in
     $ workon colorzero
     (colorzero) $ cd ~/colorzero
     (colorzero) $ make test
-

@@ -51,9 +51,9 @@ class Red(float):
     instances. For example::
 
         >>> Color.from_rgb(0, 0, 0) + Red(0.5)
-        <Color "#7f0000">
+        <Color html='#800000' rgb=(0.5, 0, 0)>
         >>> Color('#f00') - Color('#900').red
-        <Color "#660000">
+        <Color html='#660000' rgb=(0.4, 0, 0)>
         >>> (Red(0.1) * Color('red')).red
         Red(0.1)
     """
@@ -71,11 +71,11 @@ class Green(float):
     instances. For example::
 
         >>> Color(0, 0, 0) + Green(0.1)
-        <Color "#001900">
+        <Color html='#001a00' rgb=(0, 0.1, 0)>
         >>> Color.from_yuv(1, -0.4, -0.6) - Green(1)
-        <Color "#50002f">
+        <Color html='#510030' rgb=(0.316098, 0, 0.187156)>
         >>> (Green(0.5) * Color('white')).rgb
-        (Red(1.0), Green(0.5), Blue(1.0))
+        RGB(r=1.0, g=0.5, b=1.0)
     """
 
     def __repr__(self):
@@ -91,11 +91,11 @@ class Blue(float):
     instances. For example::
 
         >>> Color(0, 0, 0) + Blue(0.2)
-        <Color "#000033">
+        <Color html='#000033' rgb=(0, 0, 0.2)>
         >>> Color.from_hls(0.5, 0.5, 1.0) - Blue(1)
-        <Color "#00fe00">
+        <Color html='#00ff00' rgb=(0, 1, 0)>
         >>> Blue(0.9) * Color('white')
-        <Color "#ffffe5">
+        <Color html='#ffffe6' rgb=(1, 1, 0.9)>
     """
 
     def __repr__(self):
@@ -119,9 +119,9 @@ class Hue(float):
     instances. For example::
 
         >>> Color(1, 0, 0).hls
-        (0.0, 0.5, 1.0)
+        HLS(h=0.0, l=0.5, s=1.0)
         >>> (Color(1, 0, 0) + Hue(deg=180)).hls
-        (0.5, 0.5, 1.0)
+        HLS(h=0.5, l=0.5, s=1.0)
 
     Note that whilst multiplication by a :class:`Hue` doesn't make much sense,
     it is still supported. However, the circular nature of a hue value can lead
@@ -129,7 +129,7 @@ class Hue(float):
     following may be observed::
 
         >>> (Hue(1.0) * Color.from_hls(0.5, 0.5, 1.0)).hls
-        (0.0, 0.5, 1.0)
+        HLS(h=0.0, l=0.5, s=1.0)
 
     .. _HSL hue wheel: https://en.wikipedia.org/wiki/Hue
     """
@@ -171,11 +171,11 @@ class Lightness(float):
     example::
 
         >>> Color(0, 0, 0) + Lightness(0.1)
-        <Color "#191919">
+        <Color html='#1a1a1a' rgb=(0.1, 0.1, 0.1)>
         >>> Color.from_rgb_bytes(0x80, 0x80, 0) - Lightness(0.2)
-        <Color "#191900">
+        <Color html='#1a1a00' rgb=(0.101961, 0.101961, 0)>
         >>> Lightness(0.9) * Color('wheat')
-        <Color "#f0cd8d">
+        <Color html='#f0ce8e' rgb=(0.94145, 0.806785, 0.555021)>
     """
 
     def __repr__(self):
@@ -191,11 +191,11 @@ class Saturation(float):
     example::
 
         >>> Color(0.9, 0.9, 0.6) + Saturation(0.1)
-        <Color "#ebeb92">
+        <Color html='#ecec93' rgb=(0.925, 0.925, 0.575)>
         >>> Color('red') - Saturation(1)
-        <Color "#7f7f7f">
+        <Color html='#808080' rgb=(0.5, 0.5, 0.5)>
         >>> Saturation(0.5) * Color('wheat')
-        <Color "#e4d9c3">
+        <Color html='#e4d9c3' rgb=(0.896078, 0.85098, 0.766667)>
     """
 
     def __repr__(self):
@@ -210,6 +210,9 @@ class Luma(float):
     multiplication are supported with :class:`Color` instances. For example::
 
         >>> Color(0, 0, 0) + Luma(0.1)
+        <Color html='#1a1a1a' rgb=(0.1, 0.1, 0.1)>
+        >>> Color('red') * Luma(0.5)
+        <Color html='#d90000' rgb=(0.8505, 0, 0)>
     """
 
     def __repr__(self):

@@ -120,7 +120,7 @@ latex_documents = [
         _setup.__author__,             # author
         'manual',                      # documentclass
         True,                          # documents ref'd from toctree only
-        ),
+    ),
 ]
 
 #latex_logo = None

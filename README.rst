@@ -24,19 +24,20 @@ as keys in dictionaries, or placed in sets.
 Manipulation of ``Color`` instances is done by typical operations with other
 classes the result of which is a new ``Color`` instance. For example::
 
-    >>> from colorzero import Color, Red
-    >>> c = Color('green')
-    >>> c
-    <Color html="#008000" rgb=(0.0, 0.5, 0.5)>
-    >>> c + Red(0.1)
-    <Color html="#198000" rgb=(0.1, 0.5, 0.0)>
-    >>> c += Red(0.1)
-    >>> c.hue
-    Hue(deg=108.046875)
-    >>> c.saturation
-    Saturation(1.0)
-    >>> c * Saturation(0.0)
-    <Color html="#404040" rgb=(0.25098, 0.25098, 0.25098)>
+    >>> Color('red') + Color('blue')
+    <Color html='#ff00ff' rgb=(1, 0, 1)>
+    >>> Color('magenta') - Color('red')
+    <Color html='#0000ff' rgb=(0, 0, 1)>
+    >>> Color('red') - Red(0.5)
+    <Color html='#800000' rgb=(0.5, 0, 0)>
+    >>> Color('green') + Color('grey').red
+    <Color html='#808000' rgb=(0.501961, 0.501961, 0)>
+    >>> Color.from_hls(0.5, 0.5, 1.0)
+    <Color html='#00ffff' rgb=(0, 1, 1)>
+    >>> Color.from_hls(0.5, 0.5, 1.0) * Lightness(0.8)
+    <Color html='#00cccc' rgb=(0, 0.8, 0.8)>
+    >>> (Color.from_hls(0.5, 0.5, 1.0) * Lightness(0.8)).hls
+    HLS(h=0.5, l=0.4, s=1.0)
 
 Links
 =====
@@ -60,4 +61,3 @@ Links
 .. _source code: https://github.com/waveform80/colorzero
 .. _bug tracker: https://github.com/waveform80/colorzero/issues
 .. _BSD license: http://opensource.org/licenses/BSD-3-Clause
-
