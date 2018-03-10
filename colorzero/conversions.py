@@ -153,12 +153,21 @@ D65 = XYZ(0.95047, 1.0, 1.08883)
 
 def rgb_to_yiq(r, g, b):
     "Convert a linear RGB color to YIQ"
-    return YIQ(*colorsys.rgb_to_yiq(r, g, b))
+    # Coefficients from Python 3.4+
+    y = 0.30 * r + 0.59 * g + 0.11 * b
+    i = 0.74 * (r - y) - 0.27 * (b - y)
+    q = 0.48 * (r - y) + 0.41 * (b - y)
+    return YIQ(y, i, q)
 
 
 def yiq_to_rgb(y, i, q):
     "Convert a YIQ color to linear RGB"
-    return RGB(*colorsys.yiq_to_rgb(y, i, q))
+    # Coefficients from Python 3.4+
+    return RGB(
+        clamp_float(y + 0.9468822170900693  * i + 0.6235565819861433 * q),
+        clamp_float(y - 0.27478764629897834 * i - 0.6356910791873801 * q),
+        clamp_float(y - 1.1085450346420322  * i + 1.7090069284064666 * q),
+    )
 
 
 def rgb_to_hls(r, g, b):
