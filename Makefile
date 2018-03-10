@@ -167,7 +167,7 @@ changelog: $(PY_SOURCES) $(DOC_SOURCES) $(DEB_SOURCES)
 	git commit debian/changelog -m "Updated changelog for release $(VER)"
 
 release: $(DIST_DEB) $(DIST_DSC) $(DIST_TAR) $(DIST_WHEEL)
-	git tag -s v$(VER) -m "Release v$(VER)"
+	git tag -s release-$(VER) -m "Release $(VER)"
 	git push --tags
 	# build a source archive and upload to PyPI
 	$(TWINE) upload $(DIST_TAR) $(DIST_WHEEL)
