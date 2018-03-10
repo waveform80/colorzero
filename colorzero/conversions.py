@@ -63,6 +63,7 @@ from collections import namedtuple
 from fractions import Fraction
 try:
     from itertools import izip as zip  # pylint: disable=redefined-builtin
+    from .compat import round  # pylint: disable=redefined-builtin
 except ImportError:
     pass
 

@@ -45,3 +45,9 @@ def isclose(a, b, rel_tol=1e-9, abs_tol=0.0):
         (diff <= abs(rel_tol * a)) or
         (diff <= abs_tol)
         )
+
+
+# Ensure round returns an int when ndigits is 0; back-ported behaviour for
+# python 2.x
+def round(number, ndigits=0, _round=round):
+    return int(_round(number)) if ndigits == 0 else _round(number, ndigits)
