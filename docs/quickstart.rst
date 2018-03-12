@@ -90,7 +90,7 @@ Methods are also provided to compare colors for similarity. The simplest
 algorithm (and the default) is "euclid" which calculates the difference as the
 distance between them by treating the r, g, b components as coordinates in a
 3-dimensional space. The same color will have a distance of 0.0, whilst the
-largest possible difference is sqrt(3) (~1.732)::
+largest possible difference is √3 (~1.732)::
 
     >>> c1 = Color('red')
     >>> c2 = Color('green')

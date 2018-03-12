@@ -74,35 +74,35 @@ class RGB(tuple):
 
     @property
     def r(self):
-        "Return the red value"
+        "Return the red value as a :class:`Red` instance"
         # pylint: disable=invalid-name
         return Red(self[0])
 
     @property
     def red(self):
-        "Return the red value"
+        "Return the red value as a :class:`Red` instance"
         return Red(self[0])
 
     @property
     def g(self):
-        "Return the green value"
+        "Return the green value as a :class:`Green` instance"
         # pylint: disable=invalid-name
         return Green(self[1])
 
     @property
     def green(self):
-        "Return the green value"
+        "Return the green value as a :class:`Green` instance"
         return Green(self[1])
 
     @property
     def b(self):
-        "Return the blue value"
+        "Return the blue value as a :class:`Blue` instance"
         # pylint: disable=invalid-name
         return Blue(self[2])
 
     @property
     def blue(self):
-        "Return the blue value"
+        "Return the blue value as a :class:`Blue` instance"
         return Blue(self[2])
 
 
@@ -139,35 +139,35 @@ class HLS(tuple):
 
     @property
     def h(self):
-        "Return the hue value"
+        "Return the hue value as a :class:`Hue` instance"
         # pylint: disable=invalid-name
         return Hue(self[0])
 
     @property
     def hue(self):
-        "Return the hue value"
+        "Return the hue value as a :class:`Hue` instance"
         return Hue(self[0])
 
     @property
     def l(self):
-        "Return the lightness value"
+        "Return the lightness value as a :class:`Lightness` instance"
         # pylint: disable=invalid-name
         return Lightness(self[1])
 
     @property
     def lightness(self):
-        "Return the lightness value"
+        "Return the lightness value as a :class:`Lightness` instance"
         return Lightness(self[1])
 
     @property
     def s(self):
-        "Return the saturation value"
+        "Return the saturation value as a :class:`Saturation` instance"
         # pylint: disable=invalid-name
         return Saturation(self[2])
 
     @property
     def saturation(self):
-        "Return the saturation value"
+        "Return the saturation value as a :class:`Saturation` instance"
         return Saturation(self[2])
 
 
@@ -203,24 +203,24 @@ class HSV(tuple):
 
     @property
     def h(self):
-        "Return the hue value"
+        "Return the hue value as a :class:`Hue` instance"
         # pylint: disable=invalid-name
         return Hue(self[0])
 
     @property
     def hue(self):
-        "Return the hue value"
+        "Return the hue value as a :class:`Hue` instance"
         return Hue(self[0])
 
     @property
     def s(self):
-        "Return the saturation value"
+        "Return the saturation value as a :class:`Saturation` instance"
         # pylint: disable=invalid-name
         return Saturation(self[1])
 
     @property
     def saturation(self):
-        "Return the saturation value"
+        "Return the saturation value as a :class:`Saturation` instance"
         return Saturation(self[1])
 
     @property
@@ -266,13 +266,13 @@ class YUV(tuple):
 
     @property
     def y(self):
-        "Return the luma value"
+        "Return the luma value as a :class:`Luma` instance"
         # pylint: disable=invalid-name
         return Luma(self[0])
 
     @property
     def luma(self):
-        "Return the luma value"
+        "Return the luma value as a :class:`Luma` instance"
         return Luma(self[0])
 
     @property

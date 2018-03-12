@@ -53,10 +53,10 @@ class Color(types.RGB):
     and blue components.
 
     The class has a flexible constructor which allows you to create an instance
-    from any registered color system (see :func:`color_conversion`). There are
-    also explicit constructors for every registered system that can convert
-    (directly or indirectly) to linear RGB. For example, an instance of
-    :class:`Color` can be constructed in any of the following ways::
+    from any built-in color system. There are also explicit constructors for
+    every known system that can convert (directly or indirectly) to linear RGB.
+    For example, an instance of :class:`Color` can be constructed in any of the
+    following ways::
 
         >>> Color('#f00')
         <Color html='#ff0000' rgb=(1, 0, 0)>
@@ -121,15 +121,15 @@ class Color(types.RGB):
     | "hue", "saturation", "value" |                                          |
     +------------------------------+------------------------------------------+
     | Three named parameters, or a | Equivalent to calling                    |
-    | 3-tuple with fields          | :meth:`Color.from_cie_xyz`               |
+    | 3-tuple with fields          | :meth:`Color.from_xyz`                   |
     | "x", "y", "z"                |                                          |
     +------------------------------+------------------------------------------+
     | Three named parameters, or a | Equivalent to calling                    |
-    | 3-tuple with fields          | :meth:`Color.from_cie_lab`               |
+    | 3-tuple with fields          | :meth:`Color.from_lab`                   |
     | "l", "a", "b"                |                                          |
     +------------------------------+------------------------------------------+
     | Three named parameters, or a | Equivalent to calling                    |
-    | 3-tuple with fields          | :meth:`Color.from_cie_luv`               |
+    | 3-tuple with fields          | :meth:`Color.from_luv`                   |
     | "l", "u", "v"                |                                          |
     +------------------------------+------------------------------------------+
 
@@ -192,7 +192,7 @@ class Color(types.RGB):
     HLS (hue, lightness, saturation) values with a lightness of 0.5. This is
     multiplied by a :class:`Lightness` a value of 0.8 which constructs a new
     :class:`Color` with the same hue and saturation, but a lightness of 0.4
-    (0.8 * 0.5).
+    (0.8 × 0.5).
 
     If an instance is converted to a string (with :func:`str`) it will return a
     string containing the 7-character HTML code for the color (e.g. "#ff0000"
@@ -204,6 +204,18 @@ class Color(types.RGB):
     .. _Y'IQ: https://en.wikipedia.org/wiki/YIQ
     .. _HLS: https://en.wikipedia.org/wiki/HSL_and_HSV
     .. _HSV: https://en.wikipedia.org/wiki/HSL_and_HSV
+
+    .. attribute:: red
+
+        Return the red value as a :class:`Red` instance
+
+    .. attribute:: green
+
+        Return the green value as a :class:`Green` instance
+
+    .. attribute:: blue
+
+        Return the blue value as a :class:`Blue` instance
     """
     # pylint: disable=too-many-public-methods
 
