@@ -49,7 +49,7 @@ release = _setup.__version__
 #language = None
 #today_fmt = '%B %d, %Y'
 exclude_patterns = ['_build']
-highlight_language='python3'
+highlight_language = 'python3'
 #default_role = None
 #add_function_parentheses = True
 #add_module_names = True
@@ -106,6 +106,8 @@ def setup(app):
 
 # -- Options for LaTeX output ---------------------------------------------
 
+#latex_engine = 'pdflatex'
+
 latex_elements = {
     'papersize': 'a4paper',
     'pointsize': '10pt',
@@ -116,7 +118,7 @@ latex_documents = [
     (
         'index',                       # source start file
         '%s.tex' % _setup.__project__, # target filename
-        '%s Documentation' % project,  # title
+        '%s %s Documentation' % (project, version), # title
         _setup.__author__,             # author
         'manual',                      # documentclass
         True,                          # documents ref'd from toctree only
@@ -155,3 +157,9 @@ texinfo_documents = []
 #texinfo_domain_indices = True
 #texinfo_show_urls = 'footnote'
 #texinfo_no_detailmenu = False
+
+# -- Options for linkcheck builder ----------------------------------------
+
+linkcheck_retries = 3
+linkcheck_workers = 20
+linkcheck_anchors = True

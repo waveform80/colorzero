@@ -9,9 +9,6 @@ export PYBUILD_NAME=colorzero
 %:
 	dh $@ --with python2,python3,sphinxdoc --buildsystem=pybuild
 
-#override_dh_auto_test:
-#	# Don't run the tests!
-
 override_dh_auto_build:
 	dh_auto_build
 	PYTHONPATH=. sphinx-build -N -bhtml docs/ build/html

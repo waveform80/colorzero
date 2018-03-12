@@ -113,7 +113,7 @@ develop: tags
 	$(PIP) install -e .[doc,test]
 
 test:
-	$(COVERAGE) run -m $(PYTEST) tests
+	$(COVERAGE) run --rcfile coverage.cfg -m $(PYTEST) tests
 	$(COVERAGE) report --rcfile coverage.cfg
 
 clean:
