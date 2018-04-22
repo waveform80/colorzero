@@ -71,7 +71,7 @@ try:
 except ImportError:
     pass
 
-from .names import NAMED_COLORS
+from .tables import NAMED_COLORS
 from .types import RGB, YIQ, YUV, CMY, CMYK, HLS, HSV, XYZ, Luv, Lab
 
 # Lots of the conversion functions use single character parameter names and
