@@ -27,20 +27,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""
-The colorzero package defines a number of classes for representation and
-manipulation of colors. The primary class of interest to users is
-:class:`Color`.  The other classes are used for manipulation of the attributes
-on this class and are:
-
-* :class:`Red`
-* :class:`Green`
-* :class:`Blue`
-* :class:`Hue`
-* :class:`Lightness`
-* :class:`Saturation`
-* :class:`Luma`
-"""
+"Defines the main :class:`Color` class of the package."
 
 from __future__ import (
     unicode_literals,
@@ -49,8 +36,28 @@ from __future__ import (
     absolute_import,
 )
 
-from .color import Color
-from .easings import linear, ease_in, ease_out, ease_in_out
-from .attr import Red, Green, Blue, Hue, Lightness, Saturation, Luma
-from .types import RGB, HLS, HSV, CMY, CMYK, YUV, YIQ, XYZ, Luv, Lab
-from .tables import NAMED_COLORS
+from collections import namedtuple
+
+
+def linear(steps):
+    "Linear easing function; yields *steps* values between 0.0 and 1.0"
+    for t in range(steps):
+        yield t / (steps - 1)
+
+
+def ease_in(steps):
+    "Quadratic ease-in function; yields *steps* values between 0.0 and 1.0"
+    for t in linear(steps):
+        yield t ** 2
+
+
+def ease_out(steps):
+    "Quadratic ease-out function; yields *steps* values between 0.0 and 1.0"
+    for t in linear(steps):
+        yield t * (2 - t)
+
+
+def ease_in_out(steps):
+    "Quadratic ease-in-out function; yields *steps* values between 0.0 and 1.0"
+    for t in linear(steps):
+        yield 2 * t * t if t < 0.5 else (4 - 2 * t) * t - 1

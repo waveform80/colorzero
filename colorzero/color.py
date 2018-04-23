@@ -36,7 +36,8 @@ from __future__ import (
     absolute_import,
 )
 
-from . import conversions as cv, types, attr, deltae
+
+from . import conversions as cv, types, attr, deltae, tables, easings
 
 # Make Py2's str and range equivalent to Py3's
 str = type('')  # pylint: disable=redefined-builtin,invalid-name
@@ -787,3 +788,25 @@ class Color(types.RGB):
                 return fn(self.lab, other.lab)
             else:
                 return fn(self, other)
+
+    def gradient(self, other, steps=10, easing=easings.linear):
+        """
+        Returns a generator which fades between this color and *other* in the
+        specified number of *steps*.
+
+        The optional *easing* parameter controls the speed of the progression.
+        If specified, it must be a function which takes a single parameter, the
+        number of *steps*, and yields a sequence of values between 0.0
+        (representing the start color) and 1.0 (representing the ending color).
+        The default is :func:`linear`.
+        """
+        if steps < 2:
+            raise ValueError('steps must be >= 2')
+        # NOTE: Can't simply subtract self from other here, as the result will
+        # be clamped and we want the actual result.
+        delta = types.RGB(*(
+            other_i - self_i
+            for self_i, other_i in zip(self, other)
+        ))
+        for t in easing(steps):
+            yield self + types.RGB(*(delta_i * t for delta_i in delta))

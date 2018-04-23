@@ -350,3 +350,26 @@ def test_color_diff():
         Color('red').difference(Color('black'), method='foo')
     with pytest.raises(ValueError):
         Color('red').difference(Color('black'), method=b'foo')
+
+
+def test_color_gradient():
+    black = Color('black')
+    white = Color('white')
+    red = Color('red')
+    assert list(black.gradient(white, 2)) == [black, white]
+    assert list(black.gradient(white, 5)) == [
+        black,
+        Color(0.25, 0.25, 0.25),
+        Color(0.5, 0.5, 0.5),
+        Color(0.75, 0.75, 0.75),
+        white,
+    ]
+    assert list(white.gradient(red, 5)) == [
+        white,
+        Color(1, 0.75, 0.75),
+        Color(1, 0.5, 0.5),
+        Color(1, 0.25, 0.25),
+        red,
+    ]
+    with pytest.raises(ValueError):
+        list(black.gradient(white, 1))

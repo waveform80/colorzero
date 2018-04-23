@@ -92,7 +92,7 @@ if sys.version_info[:2] == (3, 2):
     __extra_requires__['doc'].extend([
         'Jinja2<2.7',
         'MarkupSafe<0.16',
-        ])
+    ])
     __extra_requires__['test'][1] = 'coverage<4.0dev'
 
 __entry_points__ = {

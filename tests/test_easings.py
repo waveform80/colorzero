@@ -27,20 +27,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"""
-The colorzero package defines a number of classes for representation and
-manipulation of colors. The primary class of interest to users is
-:class:`Color`.  The other classes are used for manipulation of the attributes
-on this class and are:
-
-* :class:`Red`
-* :class:`Green`
-* :class:`Blue`
-* :class:`Hue`
-* :class:`Lightness`
-* :class:`Saturation`
-* :class:`Luma`
-"""
+"Tests for the colorzero.easings module"
 
 from __future__ import (
     unicode_literals,
@@ -49,8 +36,25 @@ from __future__ import (
     absolute_import,
 )
 
-from .color import Color
-from .easings import linear, ease_in, ease_out, ease_in_out
-from .attr import Red, Green, Blue, Hue, Lightness, Saturation, Luma
-from .types import RGB, HLS, HSV, CMY, CMYK, YUV, YIQ, XYZ, Luv, Lab
-from .tables import NAMED_COLORS
+import pytest
+from colorzero.easings import *
+
+
+def test_linear():
+    assert list(linear(2)) == [0, 1]
+    assert list(linear(5)) == [0, 1/4, 1/2, 3/4, 1]
+
+
+def test_ease_in():
+    assert list(ease_in(2)) == [0, 1]
+    assert list(ease_in(5)) == [0, 1/16, 4/16, 9/16, 1]
+
+
+def test_ease_out():
+    assert list(ease_out(2)) == [0, 1]
+    assert list(ease_out(5)) == [0, 7/16, 12/16, 15/16, 1]
+
+
+def test_ease_in_out():
+    assert list(ease_in_out(2)) == [0, 1]
+    assert list(ease_in_out(5)) == [0, 2/16, 8/16, 14/16, 1]
