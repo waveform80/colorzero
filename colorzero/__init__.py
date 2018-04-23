@@ -52,3 +52,4 @@ from __future__ import (
 from .color import Color
 from .attr import Red, Green, Blue, Hue, Lightness, Saturation, Luma
 from .types import RGB, HLS, HSV, CMY, CMYK, YUV, YIQ, XYZ, Luv, Lab
+from .tables import NAMED_COLORS
