@@ -246,6 +246,13 @@ def test_html_known():
         assert cv.rgb_bytes_to_html(*rgb) == rgb24
 
 
+def test_html_bad():
+    with pytest.raises(ValueError):
+        cv.html_to_rgb_bytes('#1')
+    with pytest.raises(ValueError):
+        cv.html_to_rgb_bytes('#11223344')
+
+
 def test_cmy_roundtrip(rgb):
     verify_floats(cv.cmy_to_rgb(*cv.rgb_to_cmy(*rgb)), rgb)
 

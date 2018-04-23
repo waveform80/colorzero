@@ -86,6 +86,10 @@ def test_color_new():
         Color()
     with pytest.raises(ValueError):
         Color(foo=1, bar=2)
+    with pytest.raises(ValueError):
+        Color((1, 0, 0, 0))
+    with pytest.raises(ValueError):
+        Color(0.1)
 
 
 def test_color_from_rgb():
@@ -237,6 +241,8 @@ def test_color_mul():
     # pylint: disable=expression-not-assigned
     with pytest.raises(TypeError):
         Color('magenta') * 1
+    with pytest.raises(TypeError):
+        1 * Color('magenta')
 
 
 def test_color_str():
@@ -350,6 +356,23 @@ def test_color_diff():
         Color('red').difference(Color('black'), method='foo')
     with pytest.raises(ValueError):
         Color('red').difference(Color('black'), method=b'foo')
+
+
+def test_color_format():
+    black = Color('black')
+    red = Color('red')
+    blue = Color('#004')
+    assert '{:0}{:0}{:0}'.format(black, red, blue) == '\x1b[0m' * 3
+    assert '{}{}{}'.format(black, red, blue) == '\x1b[30m\x1b[1;31m\x1b[34m'
+    assert '{:b}{:b}{:b}'.format(black, red, blue) == '\x1b[40m\x1b[41m\x1b[44m'
+    assert '{0:8}{0:b8}'.format(black) == '\x1b[38;5;0m\x1b[48;5;0m'
+    assert '{0:8}{0:b8}'.format(red) == '\x1b[38;5;9m\x1b[48;5;9m'
+    assert '{0:8}{0:b8}'.format(blue) == '\x1b[38;5;17m\x1b[48;5;17m'
+    assert '{0:t}{0:bt}'.format(black) == '\x1b[38;2;0;0;0m\x1b[48;2;0;0;0m'
+    assert '{0:t}{0:bt}'.format(red) == '\x1b[38;2;255;0;0m\x1b[48;2;255;0;0m'
+    assert '{0:t}{0:bt}'.format(blue) == '\x1b[38;2;0;0;68m\x1b[48;2;0;0;68m'
+    with pytest.raises(ValueError):
+        '{:foo}'.format(black)
 
 
 def test_color_gradient():

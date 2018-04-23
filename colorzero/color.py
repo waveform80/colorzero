@@ -36,6 +36,7 @@ from __future__ import (
     absolute_import,
 )
 
+import re
 
 from . import conversions as cv, types, attr, deltae, tables, easings
 
@@ -198,13 +199,63 @@ class Color(types.RGB):
     If an instance is converted to a string (with :func:`str`) it will return a
     string containing the 7-character HTML code for the color (e.g. "#ff0000"
     for red). As can be seen in the examples above, a similar representation is
-    included for the output of :func:`repr`.
+    included for the output of :func:`repr`. The output of :func:`repr` can
+    be customized by assigning values to :attr:`Color.repr_style`. Acceptable
+    values are:
+
+    * 'default' - The style shown above
+    * 'termtrue' - Similar to the default style, but instead of the HTML style
+      being included, a swatch previewing the color is output. Note that the
+      terminal must support `24-bit color ANSI codes`_ for this to work.
+    * 'term256' - Similar to 'termtrue', but uses the closest color that can
+      be found in the standard 256-color xterm palette. Note that the terminal
+      must support `8-bit color ANSI codes`_ for this to work.
+    * 'html' - Outputs a valid :class:`Color` constructor using the HTML
+      style, e.g. ``Color('#ff99bb')``
+    * 'rgb' - Outputs a valid :class:`Color` constructor using the floating
+      point RGB values, e.g. ``Color(1, 0.25, 0)``
+
+    Finally, instances of :class:`Color` can be used in format strings to
+    output ANSI escape sequences to color text. Format specifications can be
+    used to modify the output to support different terminal types. For
+    example::
+
+        >>> red = Color('red')
+        >>> green = Color('green')
+        >>> blue = Color('#47b')
+        >>> print("{red}Red{red:0} Alert!".format(red=red))
+        \x1b[31mRed\x1b[0m Alert!
+        >>> print("The grass is {green:t}greener{green:0}.".format(
+        ... green=green))
+        The grass is \x1b[38;2;0;128;0mgreener\x1b[0m.
+        >>> print("{blue:bt}Blue skies{blue:0}".format(blue=blue))
+        \x1b[48;2;68;119;187mBlue skies\x1b[0m
+
+    The format specification is an optional foreground / background specifier
+    (the letters "f" or "b") followed by an optional terminal type identifer,
+    which is one of:
+
+    * "d" - the default, indicating only the original DOS colors are supported
+    * "8" - indicates the terminal supports `8-bit color ANSI codes`_
+    * "t" - indicating the terminal supports `24-bit color ANSI codes`_ ("true
+      color")
+
+    Alternately, "0" can be specified indicating that the style should be
+    reset. If specified with the optional foreground / background specifier,
+    "0" resets only the foreground / background color. If specified alone it
+    resets all styles. More formally::
+
+        format_spec ::= [foreback][type]
+        foreback    ::= "f" | "b"
+        type        ::= "d" | "8" | "t" | "0"
 
     .. _RGB: https://en.wikipedia.org/wiki/RGB_color_space
     .. _Y'UV: https://en.wikipedia.org/wiki/YUV
     .. _Y'IQ: https://en.wikipedia.org/wiki/YIQ
     .. _HLS: https://en.wikipedia.org/wiki/HSL_and_HSV
     .. _HSV: https://en.wikipedia.org/wiki/HSL_and_HSV
+    .. _8-bit color ANSI codes: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
+    .. _24-bit color ANSI codes: https://en.wikipedia.org/wiki/ANSI_escape_code#24-bit
 
     .. attribute:: red
 
@@ -219,6 +270,8 @@ class Color(types.RGB):
         Return the blue value as a :class:`Blue` instance
     """
     # pylint: disable=too-many-public-methods
+
+    repr_style = 'default'
 
     def __new__(cls, *args, **kwargs):
         def from_rgb(r, g, b):
@@ -561,13 +614,71 @@ class Color(types.RGB):
                               attr.Hue, attr.Lightness, attr.Saturation,
                               attr.Luma)):
             return self.__mul__(other)
+        return NotImplemented
+
+    _format_re = re.compile(r'^(?P<back>[fb])?(?P<term>[d8t0])?$')
+    def __format__(self, format_spec):
+        m = Color._format_re.match(format_spec)
+        if not m:
+            raise ValueError('Invalid format %r for Color' % format_spec)
+        back = m.group('back')
+        term = m.group('term')
+        if term == '0':
+            args = ({
+                None: 0,
+                'f':  39,
+                'b':  49,
+            }[back],)
+        elif term in (None, 'd'):
+            table = tables.DOS_COLORS
+            if back == 'b':
+                code = 40
+                table = {
+                    k: (bold, index)
+                    for k, (bold, index) in table.items()
+                    if not bold
+                }
+            else:
+                code = 30
+            try:
+                bold, index = table[self.rgb_bytes]
+            except KeyError:
+                bold, index = sorted(
+                    (self.difference(Color.from_rgb_bytes(*color)), bold, index)
+                    for color, (bold, index) in table.items()
+                )[0][1:]
+            args = (1,) if bold else ()
+            args += (code + index,)
+        elif term == '8':
+            code = 48 if back == 'b' else 38
+            try:
+                index = tables.XTERM_COLORS[self.rgb_bytes]
+            except KeyError:
+                index = sorted(
+                    (self.difference(Color.from_rgb_bytes(*color)), index)
+                    for color, index in tables.XTERM_COLORS.items()
+                )[0][1]
+            args = (48 if back == 'b' else 38, 5, index)
+        elif term == 't':
+            args = (48 if back == 'b' else 38, 2) + self.rgb_bytes
+        else:
+            assert False  # pragma: no cover
+        return '\x1b[' + ';'.join(str(i) for i in args) + 'm'
 
     def __str__(self):
         return self.html
 
     def __repr__(self):
-        return '<Color html=%r rgb=(%g, %g, %g)>' % (
-            self.html, self.r, self.g, self.b)
+        try:
+            return {
+                'default':  lambda: '<Color html=%r rgb=(%g, %g, %g)>' % (self.html, self.r, self.g, self.b),
+                'termtrue': lambda: '<Color {self:t}###{self:0} rgb=({self.r:g}, {self.g:g}, {self.b:g})>'.format(self=self),
+                'term256':  lambda: '<Color {self:8}###{self:0} rgb=({self.r:g}, {self.g:g}, {self.b:g})>'.format(self=self),
+                'html':     lambda: 'Color(%r)' % self.html,
+                'rgb':      lambda: 'Color(%g, %g, %g)' % self.rgb,
+            }[Color.repr_style]()
+        except KeyError:
+            raise ValueError('invalid repr_style value: %s' % Color.repr_style)
 
     @property
     def html(self):
@@ -760,7 +871,7 @@ class Color(types.RGB):
           for calculating the difference.
         * 'cie1994t' - Use the `CIE 1994`_ forumula with the "textiles" bias
           for calculating the difference.
-        * 'cie2000' - Use the `CIEDE 2000`_ formula for calculating the
+        * 'ciede2000' - Use the `CIEDE 2000`_ formula for calculating the
           difference.
 
         Note that the Euclidian distance will be significantly different to the
