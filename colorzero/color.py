@@ -223,13 +223,13 @@ class Color(types.RGB):
         >>> red = Color('red')
         >>> green = Color('green')
         >>> blue = Color('#47b')
-        >>> print("{red}Red{red:0} Alert!".format(red=red))
-        \x1b[31mRed\x1b[0m Alert!
-        >>> print("The grass is {green:t}greener{green:0}.".format(
-        ... green=green))
-        The grass is \x1b[38;2;0;128;0mgreener\x1b[0m.
-        >>> print("{blue:bt}Blue skies{blue:0}".format(blue=blue))
-        \x1b[48;2;68;119;187mBlue skies\x1b[0m
+        >>> print(repr("{red}Red{red:0} Alert!".format(red=red)))
+        '\\x1b[1;31mRed\\x1b[0m Alert!'
+        >>> print(repr("The grass is {green:t}greener{green:0}.".format(
+        ... green=green)))
+        'The grass is \\x1b[38;2;0;128;0mgreener\\x1b[0m.'
+        >>> print(repr("{blue:bt}Blue skies{blue:0}".format(blue=blue)))
+        '\\x1b[48;2;68;119;187mBlue skies\\x1b[0m'
 
     The format specification is an optional foreground / background specifier
     (the letters "f" or "b") followed by an optional terminal type identifer,
