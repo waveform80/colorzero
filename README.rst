@@ -19,7 +19,7 @@ The major difference between colorzero and other libraries (`grapefruit`_,
 `colormath`_, etc.) is that its ``Color`` class is a ``namedtuple`` descendent.
 This means it is immutable; you cannot *directly* change the attributes of a
 ``Color`` instance. The major advantage of this is that instances can be used
-as keys in dictionaries, or placed in sets.
+as keys in dictionaries (for simple `LUTs`_), or placed in sets.
 
 Manipulation of ``Color`` instances is done by typical operations with other
 classes the result of which is a new ``Color`` instance. For example::
@@ -61,3 +61,4 @@ Links
 .. _source code: https://github.com/waveform80/colorzero
 .. _bug tracker: https://github.com/waveform80/colorzero/issues
 .. _BSD license: http://opensource.org/licenses/BSD-3-Clause
+.. _LUTs: https://en.wikipedia.org/wiki/Lookup_table#Lookup_tables_in_image_processing

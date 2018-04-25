@@ -225,29 +225,34 @@ class Color(types.RGB):
         >>> blue = Color('#47b')
         >>> print(repr("{red}Red{red:0} Alert!".format(red=red)))
         '\\x1b[1;31mRed\\x1b[0m Alert!'
-        >>> print(repr("The grass is {green:t}greener{green:0}.".format(
+        >>> print(repr("The grass is {green:16m}greener{green:0}.".format(
         ... green=green)))
         'The grass is \\x1b[38;2;0;128;0mgreener\\x1b[0m.'
-        >>> print(repr("{blue:bt}Blue skies{blue:0}".format(blue=blue)))
+        >>> print(repr("{blue:b16m}Blue skies{blue:0}".format(blue=blue)))
         '\\x1b[48;2;68;119;187mBlue skies\\x1b[0m'
 
     The format specification is an optional foreground / background specifier
     (the letters "f" or "b") followed by an optional terminal type identifer,
     which is one of:
 
-    * "d" - the default, indicating only the original DOS colors are supported
-    * "8" - indicates the terminal supports `8-bit color ANSI codes`_
-    * "t" - indicating the terminal supports `24-bit color ANSI codes`_ ("true
-      color")
+    * "8" - the default, indicating only the original 8 DOS colors are
+      supported (technically, 16 foreground colors are supported via use of the
+      "bold" style for "intense" colors)
+    * "256" - indicates the terminal supports 256 colors via `8-bit color ANSI
+      codes`_
+    * "16m" - indicating the terminal supports ≈16 million colors via `24-bit
+      color ANSI codes`_
 
     Alternately, "0" can be specified indicating that the style should be
     reset. If specified with the optional foreground / background specifier,
     "0" resets only the foreground / background color. If specified alone it
-    resets all styles. More formally::
+    resets all styles. More formally:
 
-        format_spec ::= [foreback][type]
-        foreback    ::= "f" | "b"
-        type        ::= "d" | "8" | "t" | "0"
+    .. code-block:: bnf
+
+        <fore_back>   ::= "" | "f" | "b"
+        <type>        ::= "" | "0" | "8" | "256" | "16m"
+        <format_spec> ::= <fore_back> <type>
 
     .. _RGB: https://en.wikipedia.org/wiki/RGB_color_space
     .. _Y'UV: https://en.wikipedia.org/wiki/YUV
@@ -616,7 +621,7 @@ class Color(types.RGB):
             return self.__mul__(other)
         return NotImplemented
 
-    _format_re = re.compile(r'^(?P<back>[fb])?(?P<term>[d8t0])?$')
+    _format_re = re.compile(r'^(?P<back>[fb])?(?P<term>0|8|256|16[mM])?$')
     def __format__(self, format_spec):
         m = Color._format_re.match(format_spec)
         if not m:
@@ -629,7 +634,7 @@ class Color(types.RGB):
                 'f':  39,
                 'b':  49,
             }[back],)
-        elif term in (None, 'd'):
+        elif term in (None, '8'):
             table = tables.DOS_COLORS
             if back == 'b':
                 code = 40
@@ -649,7 +654,7 @@ class Color(types.RGB):
                 )[0][1:]
             args = (1,) if bold else ()
             args += (code + index,)
-        elif term == '8':
+        elif term == '256':
             code = 48 if back == 'b' else 38
             try:
                 index = tables.XTERM_COLORS[self.rgb_bytes]
@@ -659,7 +664,7 @@ class Color(types.RGB):
                     for color, index in tables.XTERM_COLORS.items()
                 )[0][1]
             args = (48 if back == 'b' else 38, 5, index)
-        elif term == 't':
+        elif term.lower() == '16m':
             args = (48 if back == 'b' else 38, 2) + self.rgb_bytes
         else:
             assert False  # pragma: no cover

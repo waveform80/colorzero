@@ -43,3 +43,18 @@ addition, subtraction, and multiplication operators to calculate new
 .. autoclass:: Lightness
 
 .. autoclass:: Luma
+
+
+Easing Functions
+================
+
+These functions can be used with the :meth:`Color.gradient` method to control
+the progression of the fade between the two colors.
+
+.. autofunction:: linear
+
+.. autofunction:: ease_in
+
+.. autofunction:: ease_out
+
+.. autofunction:: ease_in_out
