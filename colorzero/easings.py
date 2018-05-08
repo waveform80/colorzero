@@ -27,7 +27,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-"Defines the main :class:`Color` class of the package."
+"Defines various easing functions for :meth:`Color.gradient`."
 
 from __future__ import (
     unicode_literals,
