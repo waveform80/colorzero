@@ -245,6 +245,26 @@ def test_color_mul():
         1 * Color('magenta')
 
 
+def test_color_repr():
+    save_style = Color.repr_style
+    try:
+        Color.repr_style = 'default'
+        assert repr(Color('red')) == "<Color html='#ff0000' rgb=(1, 0, 0)>"
+        Color.repr_style = 'html'
+        assert repr(Color('red')) == "Color('#ff0000')"
+        Color.repr_style = 'rgb'
+        assert repr(Color('red')) == "Color(1, 0, 0)"
+        Color.repr_style = 'term16m'
+        assert repr(Color('red')) == "<Color \x1b[38;2;255;0;0m###\x1b[0m rgb=(1, 0, 0)>"
+        Color.repr_style = 'term256'
+        assert repr(Color('red')) == "<Color \x1b[38;5;9m###\x1b[0m rgb=(1, 0, 0)>"
+        Color.repr_style = 'foo'
+        with pytest.raises(ValueError):
+            repr(Color('red'))
+    finally:
+        Color.repr_style = save_style
+
+
 def test_color_str():
     assert str(Color('black')) == '#000000'
     assert str(Color('red')) == '#ff0000'

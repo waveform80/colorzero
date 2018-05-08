@@ -59,7 +59,7 @@ class Red(float):
     """
 
     def __repr__(self):
-        return "Red(%s)" % self
+        return "Red(%g)" % self
 
 
 class Green(float):
@@ -79,7 +79,7 @@ class Green(float):
     """
 
     def __repr__(self):
-        return "Green(%s)" % self
+        return "Green(%g)" % self
 
 
 class Blue(float):
@@ -99,7 +99,7 @@ class Blue(float):
     """
 
     def __repr__(self):
-        return "Blue(%s)" % self
+        return "Blue(%g)" % self
 
 
 class Hue(float):
@@ -145,7 +145,7 @@ class Hue(float):
             raise ValueError('You must specify a value, or deg or rad')
 
     def __repr__(self):
-        return "Hue(deg=%s)" % self.deg
+        return "Hue(deg=%g)" % self.deg
 
     @property
     def deg(self):
@@ -179,7 +179,7 @@ class Lightness(float):
     """
 
     def __repr__(self):
-        return "Lightness(%s)" % self
+        return "Lightness(%g)" % self
 
 
 class Saturation(float):
@@ -199,7 +199,7 @@ class Saturation(float):
     """
 
     def __repr__(self):
-        return "Saturation(%s)" % self
+        return "Saturation(%g)" % self
 
 
 class Luma(float):
@@ -216,4 +216,4 @@ class Luma(float):
     """
 
     def __repr__(self):
-        return "Luma(%s)" % self
+        return "Luma(%g)" % self

@@ -40,7 +40,7 @@ from math import pi
 
 # pylint: disable=import-error,missing-docstring
 import pytest
-from colorzero import Hue
+from colorzero import *
 
 
 def test_hue_init():
@@ -58,6 +58,18 @@ def test_hue_init():
         Hue()
 
 
+def test_red_repr():
+    assert repr(Red(0.5)) == 'Red(0.5)'
+
+
+def test_green_repr():
+    assert repr(Green(1.0)) == 'Green(1)'
+
+
+def test_blue_repr():
+    assert repr(Blue(0.75)) == 'Blue(0.75)'
+
+
 def test_hue_attr():
     assert Hue(0).deg == 0
     assert Hue(0.5).deg == 180
@@ -65,3 +77,21 @@ def test_hue_attr():
     assert Hue(0).rad == 0
     assert Hue(0.5).rad == pi
     assert Hue(1 / 3).rad == (2 / 3) * pi
+
+
+def test_hue_repr():
+    assert repr(Hue(0)) == 'Hue(deg=0)'
+    assert repr(Hue(0.5)) == 'Hue(deg=180)'
+    assert repr(Hue(1/3)) == 'Hue(deg=120)'
+
+
+def test_sat_repr():
+    assert repr(Saturation(1.0)) == 'Saturation(1)'
+
+
+def test_light_repr():
+    assert repr(Lightness(0.25)) == 'Lightness(0.25)'
+
+
+def test_luma_repr():
+    assert repr(Luma(0.0)) == 'Luma(0)'

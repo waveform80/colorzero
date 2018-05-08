@@ -204,7 +204,7 @@ class Color(types.RGB):
     values are:
 
     * 'default' - The style shown above
-    * 'termtrue' - Similar to the default style, but instead of the HTML style
+    * 'term16m' - Similar to the default style, but instead of the HTML style
       being included, a swatch previewing the color is output. Note that the
       terminal must support `24-bit color ANSI codes`_ for this to work.
     * 'term256' - Similar to 'termtrue', but uses the closest color that can
@@ -676,11 +676,11 @@ class Color(types.RGB):
     def __repr__(self):
         try:
             return {
-                'default':  lambda: '<Color html=%r rgb=(%g, %g, %g)>' % (self.html, self.r, self.g, self.b),
-                'termtrue': lambda: '<Color {self:t}###{self:0} rgb=({self.r:g}, {self.g:g}, {self.b:g})>'.format(self=self),
-                'term256':  lambda: '<Color {self:8}###{self:0} rgb=({self.r:g}, {self.g:g}, {self.b:g})>'.format(self=self),
-                'html':     lambda: 'Color(%r)' % self.html,
-                'rgb':      lambda: 'Color(%g, %g, %g)' % self.rgb,
+                'default': lambda: '<Color html=%r rgb=(%g, %g, %g)>' % (self.html, self.r, self.g, self.b),
+                'term16m': lambda: '<Color {self:16m}###{self:0} rgb=({self.r:g}, {self.g:g}, {self.b:g})>'.format(self=self),
+                'term256': lambda: '<Color {self:256}###{self:0} rgb=({self.r:g}, {self.g:g}, {self.b:g})>'.format(self=self),
+                'html':    lambda: 'Color(%r)' % self.html,
+                'rgb':     lambda: 'Color(%g, %g, %g)' % self.rgb,
             }[Color.repr_style]()
         except KeyError:
             raise ValueError('invalid repr_style value: %s' % Color.repr_style)

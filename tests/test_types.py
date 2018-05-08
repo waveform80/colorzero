@@ -52,6 +52,7 @@ def test_rgb():
     assert v.g == v.green == 0.5
     assert v.b == v.blue == 0
     assert v.__getnewargs__() == (1, 0.5, 0)
+    assert repr(v) == 'RGB(r=1, g=0.5, b=0)'
 
 
 def test_hls():
@@ -66,6 +67,7 @@ def test_hls():
     assert v.s == v.saturation == 1
     assert v.__getnewargs__() == (0, 0.5, 1)
     assert v._asdict() == {'h': 0, 'l': 0.5, 's': 1}
+    assert repr(v) == 'HLS(h=0, l=0.5, s=1)'
 
 
 def test_hsv():
@@ -80,6 +82,7 @@ def test_hsv():
     assert v.v == v.value == 1
     assert v.__getnewargs__() == (0, 0.5, 1)
     assert v._asdict() == {'h': 0, 's': 0.5, 'v': 1}
+    assert repr(v) == 'HSV(h=0, s=0.5, v=1)'
 
 
 def test_yuv():
@@ -94,6 +97,7 @@ def test_yuv():
     assert v.v == 1
     assert v.__getnewargs__() == (0, 0.5, 1)
     assert v._asdict() == {'y': 0, 'u': 0.5, 'v': 1}
+    assert repr(v) == 'YUV(y=0, u=0.5, v=1)'
 
 
 def test_cmy():
