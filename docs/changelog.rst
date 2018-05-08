@@ -5,6 +5,19 @@ Change log
 .. currentmodule:: colorzero
 
 
+Release 1.1 (2018-05-??)
+========================
+
+* Added ability to generate ANSI codes with :ref:`format`.
+
+* Added :meth:`Color.gradient` method.
+
+* Exposed the various difference functions in the API (:func:`euclid`,
+  :func:`cie1976`, etc).
+
+* Various doc fixes and enhancements.
+
+
 Release 1.0 (2018-03-10)
 ========================
 

@@ -9,8 +9,8 @@ Table of Contents
 
     install
     quickstart
-    development
     api_color
+    development
     changelog
     license
 

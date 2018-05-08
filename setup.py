@@ -52,7 +52,7 @@ except ImportError:
     pass
 
 __project__      = 'colorzero'
-__version__      = '1.0'
+__version__      = '1.1'
 __author__       = 'Dave Jones'
 __author_email__ = 'dave@waveform.org.uk'
 __url__          = 'http://colorzero.readthedocs.io/'
