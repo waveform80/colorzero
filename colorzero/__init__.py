@@ -51,6 +51,7 @@ from __future__ import (
 
 from .color import Color
 from .easings import linear, ease_in, ease_out, ease_in_out
+from .deltae import euclid, cie1976, cie1994g, cie1994t, ciede2000
 from .attr import Red, Green, Blue, Hue, Lightness, Saturation, Luma
 from .types import RGB, HLS, HSV, CMY, CMYK, YUV, YIQ, XYZ, Luv, Lab
 from .tables import NAMED_COLORS

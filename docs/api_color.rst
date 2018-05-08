@@ -45,6 +45,20 @@ addition, subtraction, and multiplication operators to calculate new
 .. autoclass:: Luma
 
 
+Difference Functions
+====================
+
+.. autofunction:: euclid
+
+.. autofunction:: cie1976
+
+.. autofunction:: cie1994g
+
+.. autofunction:: cie1994t
+
+.. autofunction:: ciede2000
+
+
 Easing Functions
 ================
 

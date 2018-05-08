@@ -200,20 +200,7 @@ class Color(types.RGB):
     string containing the 7-character HTML code for the color (e.g. "#ff0000"
     for red). As can be seen in the examples above, a similar representation is
     included for the output of :func:`repr`. The output of :func:`repr` can
-    be customized by assigning values to :attr:`Color.repr_style`. Acceptable
-    values are:
-
-    * 'default' - The style shown above
-    * 'term16m' - Similar to the default style, but instead of the HTML style
-      being included, a swatch previewing the color is output. Note that the
-      terminal must support `24-bit color ANSI codes`_ for this to work.
-    * 'term256' - Similar to 'termtrue', but uses the closest color that can
-      be found in the standard 256-color xterm palette. Note that the terminal
-      must support `8-bit color ANSI codes`_ for this to work.
-    * 'html' - Outputs a valid :class:`Color` constructor using the HTML
-      style, e.g. ``Color('#ff99bb')``
-    * 'rgb' - Outputs a valid :class:`Color` constructor using the floating
-      point RGB values, e.g. ``Color(1, 0.25, 0)``
+    be customized by assigning values to :attr:`Color.repr_style`.
 
     Finally, instances of :class:`Color` can be used in format strings to
     output ANSI escape sequences to color text. Format specifications can be
@@ -254,6 +241,10 @@ class Color(types.RGB):
         <type>        ::= "" | "0" | "8" | "256" | "16m"
         <format_spec> ::= <fore_back> <type>
 
+    .. versionadded:: 1.1
+        The ability to output ANSI codes via format strings, and the
+        customization of :func:`repr` output.
+
     .. _RGB: https://en.wikipedia.org/wiki/RGB_color_space
     .. _Y'UV: https://en.wikipedia.org/wiki/YUV
     .. _Y'IQ: https://en.wikipedia.org/wiki/YIQ
@@ -273,8 +264,37 @@ class Color(types.RGB):
     .. attribute:: blue
 
         Return the blue value as a :class:`Blue` instance
+
+    .. attribute:: repr_style
+
+        Specifies the style of output returned when using :func:`repr` against
+        a :class:`Color` instance. This is an attribute of the class, not of
+        instances. For example::
+
+            >>> Color('#f00')
+            <Color html='#ff0000' rgb=(1, 0, 0)>
+            >>> Color.repr_style = 'html'
+            >>> Color('#f00')
+            Color('#ff0000')
+
+        The following values are valid:
+
+        * 'default' - The style shown above
+        * 'term16m' - Similar to the default style, but instead of the HTML
+          style being included, a swatch previewing the color is output. Note
+          that the terminal must support `24-bit color ANSI codes`_ for this to
+          work.
+        * 'term256' - Similar to 'termtrue', but uses the closest color that
+          can be found in the standard 256-color xterm palette. Note that the
+          terminal must support `8-bit color ANSI codes`_ for this to work.
+        * 'html' - Outputs a valid :class:`Color` constructor using the HTML
+          style, e.g. ``Color('#ff99bb')``
+        * 'rgb' - Outputs a valid :class:`Color` constructor using the floating
+          point RGB values, e.g. ``Color(1, 0.25, 0)``
     """
     # pylint: disable=too-many-public-methods
+
+    __slots__ = ()
 
     repr_style = 'default'
 
@@ -864,27 +884,57 @@ class Color(types.RGB):
     def difference(self, other, method='euclid'):
         """
         Determines the difference between this color and *other* using the
-        specified *method*. The *method* is specified as a string, and the
-        following methods are valid:
+        specified *method*.
 
-        * 'euclid' - This is the default method. Calculate the `Euclidian
-          distance`_. This is by far the fastest method, but also the least
-          accurate in terms of human perception.
-        * 'cie1976' - Use the `CIE 1976`_ formula for calculating the
-          difference between two colors in CIE Lab space.
-        * 'cie1994g' - Use the `CIE 1994`_ formula with the "graphic arts" bias
-          for calculating the difference.
-        * 'cie1994t' - Use the `CIE 1994`_ forumula with the "textiles" bias
-          for calculating the difference.
-        * 'ciede2000' - Use the `CIEDE 2000`_ formula for calculating the
-          difference.
+        :param Color other:
+            The color to compare this color to.
 
-        Note that the Euclidian distance will be significantly different to the
-        other calculations; effectively this just measures the distance between
-        the two colors by treating them as coordinates in a three dimensional
-        Euclidian space. All other methods are means of calculating a `Delta
-        E`_ value in which 2.3 is considered a `just-noticeable difference`_
-        (JND).
+        :param str method:
+            The algorithm to use in the comparison. Valid values are:
+
+            * 'euclid' - This is the default method. Calculate the `Euclidian
+              distance`_. This is by far the fastest method, but also the least
+              accurate in terms of human perception.
+            * 'cie1976' - Use the `CIE 1976`_ formula for calculating the
+              difference between two colors in CIE Lab space.
+            * 'cie1994g' - Use the `CIE 1994`_ formula with the "graphic arts"
+              bias for calculating the difference.
+            * 'cie1994t' - Use the `CIE 1994`_ forumula with the "textiles"
+              bias for calculating the difference.
+            * 'ciede2000' - Use the `CIEDE 2000`_ formula for calculating the
+              difference.
+
+        :returns:
+            A :class:`float` indicating how different the two colors are. Note
+            that the Euclidian distance will be significantly different to the
+            other calculations; effectively this just measures the distance
+            between the two colors by treating them as coordinates in a three
+            dimensional Euclidian space. All other methods are means of
+            calculating a `Delta E`_ value in which 2.3 is considered a
+            `just-noticeable difference`_ (JND).
+
+        For example::
+
+            >>> Color('red').difference(Color('red'))
+            0.0
+            >>> Color('red').difference(Color('red'), method='cie1976')
+            0.0
+            >>> Color('red').difference(Color('#900'))
+            0.4
+            >>> Color('red').difference(Color('#900'), method='cie1976')
+            40.17063087142142
+            >>> Color('red').difference(Color('#900'), method='ciede2000')
+            21.078146289272155
+            >>> Color('red').difference(Color('blue'))
+            1.4142135623730951
+            >>> Color('red').difference(Color('blue'), method='cie1976')
+            176.31403908880046
+
+        .. note::
+
+            Instead of using this method, you may wish to simply use the
+            various difference functions (:func:`euclid`, :func:`cie1976`,
+            etc.) directly.
 
         .. _Delta E: https://en.wikipedia.org/wiki/Color_difference
         .. _just-noticeable difference: https://en.wikipedia.org/wiki/Just-noticeable_difference
@@ -910,11 +960,44 @@ class Color(types.RGB):
         Returns a generator which fades between this color and *other* in the
         specified number of *steps*.
 
-        The optional *easing* parameter controls the speed of the progression.
-        If specified, it must be a function which takes a single parameter, the
-        number of *steps*, and yields a sequence of values between 0.0
-        (representing the start color) and 1.0 (representing the ending color).
-        The default is :func:`linear`.
+        :param Color other:
+            The color that will end the gradient (with the color the method is
+            called upon starting the gradient)
+
+        :param int steps:
+            The unqiue number of colors to include in the generated gradient.
+            Defaults to 10 if unspecified.
+
+        :param callable easing:
+            A function which controls the speed of the progression. If
+            specified, if must be a function which takes a single parameter,
+            the number of *steps*, and yields a sequence of values between 0.0
+            (representing the start of the gradient) and 1.0 (representing the
+            end). The default is :func:`linear`.
+
+        :return:
+            A generator yielding *steps* :class:`Color` instances which fade
+            from this color to *other*.
+
+        For example::
+
+            >>> Color.repr_style = 'html'
+            >>> print('\\n'.join(
+            ... repr(c) for c in
+            ... Color('red').gradient(Color('green'))
+            ... ))
+            Color('#ff0000')
+            Color('#e30e00')
+            Color('#c61c00')
+            Color('#aa2b00')
+            Color('#8e3900')
+            Color('#714700')
+            Color('#555500')
+            Color('#396400')
+            Color('#1c7200')
+            Color('#008000')
+
+        .. versionadded:: 1.1
         """
         if steps < 2:
             raise ValueError('steps must be >= 2')
