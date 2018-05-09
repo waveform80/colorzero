@@ -197,7 +197,7 @@ def hsv_to_rgb(h, s, v):
 
 def rgb_to_rgb_bytes(r, g, b):
     "Convert a linear RGB color to RGB888"
-    return RGB(round(r * 255), round(g * 255), round(b * 255))
+    return RGB(int(round(r * 255)), int(round(g * 255)), int(round(b * 255)))
 
 
 def rgb_bytes_to_rgb(r, g, b):
