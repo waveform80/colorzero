@@ -5,7 +5,7 @@ Change log
 .. currentmodule:: colorzero
 
 
-Release 1.1 (2018-05-??)
+Release 1.1 (2018-05-15)
 ========================
 
 * Added ability to generate ANSI codes with :ref:`format`.
