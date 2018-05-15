@@ -249,9 +249,9 @@ def test_color_repr():
     save_style = Color.repr_style
     try:
         Color.repr_style = 'default'
-        assert repr(Color('red')) == "<Color html='#ff0000' rgb=(1, 0, 0)>"
+        assert repr(Color('red')) == "<Color html=%r rgb=(1, 0, 0)>" % '#ff0000'
         Color.repr_style = 'html'
-        assert repr(Color('red')) == "Color('#ff0000')"
+        assert repr(Color('red')) == "Color(%r)" % '#ff0000'
         Color.repr_style = 'rgb'
         assert repr(Color('red')) == "Color(1, 0, 0)"
         Color.repr_style = 'term16m'
