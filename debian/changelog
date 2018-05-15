@@ -1,3 +1,9 @@
+colorzero (1.1ubuntu1) xenial; urgency=medium
+
+  * Ubuntu PPA release
+
+ -- Dave Jones <dave@waveform.org.uk>  Tue, 15 May 2018 22:50:59 +0100
+
 colorzero (1.1) stable; urgency=medium
 
   * Added ability to generate ANSI codes with "format".
