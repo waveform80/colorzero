@@ -20,17 +20,17 @@ endif
 # Calculate the base names of the distribution, the location of all source,
 # documentation, packaging, icon, and executable script files
 NAME:=$(shell $(PYTHON) $(PYFLAGS) setup.py --name)
+PKG_DIR:=$(subst -,_,$(NAME))
 VER:=$(shell $(PYTHON) $(PYFLAGS) setup.py --version)
+DEB_ARCH:=$(shell dpkg --print-architecture)
 ifeq ($(shell lsb_release -si),Ubuntu)
 DEB_SUFFIX:=ubuntu1
 else
 DEB_SUFFIX:=
 endif
-DEB_ARCH:=$(shell dpkg --print-architecture)
-PYVER:=$(shell $(PYTHON) $(PYFLAGS) -c "import sys; print('py%d.%d' % sys.version_info[:2])")
 PY_SOURCES:=$(shell \
 	$(PYTHON) $(PYFLAGS) setup.py egg_info >/dev/null 2>&1 && \
-	grep -v "\.egg-info" $(NAME).egg-info/SOURCES.txt)
+	grep -v "\.egg-info" $(PKG_DIR).egg-info/SOURCES.txt)
 DEB_SOURCES:=debian/changelog \
 	debian/control \
 	debian/copyright \

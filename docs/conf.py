@@ -38,6 +38,15 @@ import setup as _setup
 # -- General configuration ------------------------------------------------
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.intersphinx']
+if on_rtd:
+    needs_sphinx = '1.4.0'
+    extensions.append('sphinx.ext.imgmath')
+    imgmath_image_format = 'svg'
+    tags.add('rtd')
+else:
+    extensions.append('sphinx.ext.mathjax')
+    mathjax_path = '/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_HTML'
+
 templates_path = ['_templates']
 source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
@@ -67,12 +76,13 @@ autodoc_default_flags = ['members']
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3.5', None),
-    }
+}
 
 # -- Options for HTML output ----------------------------------------------
 
 if on_rtd:
     html_theme = 'sphinx_rtd_theme'
+    pygments_style = 'default'
     #html_theme_options = {}
     #html_sidebars = {}
 else:
@@ -106,7 +116,7 @@ def setup(app):
 
 # -- Options for LaTeX output ---------------------------------------------
 
-latex_engine = 'xelatex'
+#latex_engine = 'xelatex'
 
 latex_elements = {
     'papersize': 'a4paper',

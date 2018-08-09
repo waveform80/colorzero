@@ -30,7 +30,9 @@ Format Strings
 
 Instances of :class:`Color` can be used in format strings to output ANSI escape
 sequences to color text. Format specifications can be used to modify the output
-to support different terminal types. For example::
+to support different terminal types. For example:
+
+.. code-block:: pycon
 
     >>> red = Color('red')
     >>> green = Color('green')
@@ -54,7 +56,7 @@ one of:
 * "256" - indicates the terminal supports 256 colors via `8-bit color ANSI
   codes`_
 
-* "16m" - indicating the terminal supports ≈16 million colors via `24-bit color
+* "16m" - indicating the terminal supports ~16 million colors via `24-bit color
   ANSI codes`_
 
 Alternately, "0" can be specified indicating that the style should be
