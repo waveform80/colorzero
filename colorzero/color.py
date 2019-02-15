@@ -596,54 +596,70 @@ class Color(types.RGB):
             return self.__mul__(other)
         return NotImplemented
 
-    _format_re = re.compile(r'^(?P<back>[fb])?(?P<term>0|8|256|16[mM])?$')
+    _format_re = re.compile(
+        r'^('
+        r'(?P<html>html)|'
+        r'(?P<css>css(?P<cssfmt>rgb|hsl)?)|'
+        r'(?P<back>[fb])?(?P<term>0|8|256|16[mM])?'
+        r')$')
     def __format__(self, format_spec):
         m = Color._format_re.match(format_spec)
         if not m:
             raise ValueError('Invalid format %r for Color' % format_spec)
-        back = m.group('back')
-        term = m.group('term')
-        if term == '0':
-            args = ({
-                None: 0,
-                'f':  39,
-                'b':  49,
-            }[back],)
-        elif term in (None, '8'):
-            table = tables.DOS_COLORS
-            if back == 'b':
-                code = 40
-                table = {
-                    k: (bold, index)
-                    for k, (bold, index) in table.items()
-                    if not bold
-                }
-            else:
-                code = 30
-            try:
-                bold, index = table[self.rgb_bytes]
-            except KeyError:
-                bold, index = sorted(
-                    (self.difference(Color.from_rgb_bytes(*color)), bold, index)
-                    for color, (bold, index) in table.items()
-                )[0][1:]
-            args = (1,) if bold else ()
-            args += (code + index,)
-        elif term == '256':
-            code = 48 if back == 'b' else 38
-            try:
-                index = tables.XTERM_COLORS[self.rgb_bytes]
-            except KeyError:
-                index = sorted(
-                    (self.difference(Color.from_rgb_bytes(*color)), index)
-                    for color, index in tables.XTERM_COLORS.items()
-                )[0][1]
-            args = (48 if back == 'b' else 38, 5, index)
-        elif term.lower() == '16m':
-            args = (48 if back == 'b' else 38, 2) + self.rgb_bytes
+        if m.group('html'):
+            return self.html
+        elif m.group('css'):
+            return {
+                None:  lambda self: 'rgb(%d, %d, %d)' % self.rgb_bytes,
+                'rgb': lambda self: 'rgb(%d, %d, %d)' % self.rgb_bytes,
+                'hsl': lambda self: 'hsl(%gdeg, %g%%, %g%%)' % (
+                    self.hls.hue.deg, self.hls.saturation * 100,
+                    self.hls.lightness * 100),
+            }[m.group('cssfmt')](self)
         else:
-            assert False  # pragma: no cover
-        return '\x1b[' + ';'.join(str(i) for i in args) + 'm'
+            back = m.group('back')
+            term = m.group('term')
+            if term == '0':
+                args = ({
+                    None: 0,
+                    'f':  39,
+                    'b':  49,
+                }[back],)
+            elif term in (None, '8'):
+                table = tables.DOS_COLORS
+                if back == 'b':
+                    code = 40
+                    table = {
+                        k: (bold, index)
+                        for k, (bold, index) in table.items()
+                        if not bold
+                    }
+                else:
+                    code = 30
+                try:
+                    bold, index = table[self.rgb_bytes]
+                except KeyError:
+                    bold, index = sorted(
+                        (self.difference(Color.from_rgb_bytes(*color)), bold, index)
+                        for color, (bold, index) in table.items()
+                    )[0][1:]
+                args = (1,) if bold else ()
+                args += (code + index,)
+            elif term == '256':
+                code = 48 if back == 'b' else 38
+                try:
+                    index = tables.XTERM_COLORS[self.rgb_bytes]
+                except KeyError:
+                    index = sorted(
+                        (self.difference(Color.from_rgb_bytes(*color)), index)
+                        for color, index in tables.XTERM_COLORS.items()
+                    )[0][1]
+                args = (48 if back == 'b' else 38, 5, index)
+            elif term.lower() == '16m':
+                args = (48 if back == 'b' else 38, 2) + self.rgb_bytes
+            else:
+                assert False  # pragma: no cover
+            return '\x1b[' + ';'.join(str(i) for i in args) + 'm'
 
     def __str__(self):
         return self.html

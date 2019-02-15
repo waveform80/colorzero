@@ -391,6 +391,10 @@ def test_color_format():
     assert '{0:16m}{0:b16m}'.format(black) == '\x1b[38;2;0;0;0m\x1b[48;2;0;0;0m'
     assert '{0:16m}{0:b16m}'.format(red) == '\x1b[38;2;255;0;0m\x1b[48;2;255;0;0m'
     assert '{0:16m}{0:b16m}'.format(blue) == '\x1b[38;2;0;0;68m\x1b[48;2;0;0;68m'
+    assert '{0:html}{1:html}'.format(red, blue) == '#ff0000#000044'
+    assert '{0:css}'.format(red) == 'rgb(255, 0, 0)'
+    assert '{0:cssrgb}'.format(blue) == 'rgb(0, 0, 68)'
+    assert '{0:csshsl}'.format(blue) == 'hsl(240deg, 100%, 13.3333%)'
     with pytest.raises(ValueError):
         '{:foo}'.format(black)
 

@@ -28,15 +28,18 @@ systems.
 Format Strings
 ==============
 
-Instances of :class:`Color` can be used in format strings to output ANSI escape
-sequences to color text. Format specifications can be used to modify the output
-to support different terminal types. For example:
+Instances of :class:`Color` can be used in format strings to output various
+representations of a color, including HTML sequences and ANSI escape sequences
+to color terminal output. Format specifications can be used to modify the
+output to support different terminal types. For example:
 
 .. code-block:: pycon
 
     >>> red = Color('red')
     >>> green = Color('green')
     >>> blue = Color('#47b')
+    >>> print("{red:html}".format(red=red))
+    #ff0000
     >>> print(repr("{red}Red{red:0} Alert!".format(red=red)))
     '\\x1b[1;31mRed\\x1b[0m Alert!'
     >>> print(repr("The grass is {green:16m}greener{green:0}.".format(
@@ -45,19 +48,33 @@ to support different terminal types. For example:
     >>> print(repr("{blue:b16m}Blue skies{blue:0}".format(blue=blue)))
     '\\x1b[48;2;68;119;187mBlue skies\\x1b[0m'
 
-The format specification is an optional foreground / background specifier (the
-letters "f" or "b") followed by an optional terminal type identifer, which is
-one of:
+The format specification is one of:
 
-* "8" - the default, indicating only the original 8 DOS colors are supported
-  (technically, 16 foreground colors are supported via use of the "bold" style
-  for "intense" colors)
+* "html" - the color will be output as the common 7-character HTML represention
+  of #RRGGBB where RR, GG, and BB are the red, green and blue components
+  expressed as a single hexidecimal byte
 
-* "256" - indicates the terminal supports 256 colors via `8-bit color ANSI
-  codes`_
+* "css" or "cssrgb" - the color will be output in CSS' functional notation
+  rgb(*r*, *g*, *b*) where *r*, *g*, and *b* are decimal representations of the
+  red, green, and blue components in the range 0 to 255
 
-* "16m" - indicating the terminal supports ~16 million colors via `24-bit color
-  ANSI codes`_
+* "csshsl" - the color will be output in CSS' function notation hue(*h*\deg,
+  *s*\%, *l*\%) where *h*, *s*, and *l* are the hue (expressed in degrees),
+  saturation, and lightness (expressed as percentages)
+
+* One of the ANSI format specifications which consist of an optional foreground
+  / background specifier (the letters "f" or "b") followed by an optional
+  terminal type identifer, which is one of:
+
+  - "8" - the default, indicating only the original 8 DOS colors are supported
+    (technically, 16 foreground colors are supported via use of the "bold"
+    style for "intense" colors)
+
+  - "256" - indicates the terminal supports 256 colors via `8-bit color ANSI
+    codes`_
+
+  - "16m" - indicating the terminal supports ~16 million colors via `24-bit
+    color ANSI codes`_
 
 Alternately, "0" can be specified indicating that the style should be
 reset. If specified with the optional foreground / background specifier,
@@ -66,13 +83,19 @@ resets all styles. More formally:
 
 .. code-block:: bnf
 
-    <fore_back>   ::= "" | "f" | "b"
-    <type>        ::= "" | "0" | "8" | "256" | "16m"
-    <format_spec> ::= <fore_back> <type>
+    <term_fore_back> ::= "" | "f" | "b"
+    <term_type>      ::= "" | "0" | "8" | "256" | "16m"
+    <term>           ::= <term_fore_back> <term_type>
+    <html>           ::= "html"
+    <css>            ::= "css" ("rgb" | "hsl")?
+    <format_spec>    ::= <html> | <css> | <term>
 
 .. versionadded:: 1.1
     The ability to output ANSI codes via format strings, and the
     customization of :func:`repr` output.
+
+.. versionadded:: 1.2
+    The ability to output HTML and CSS representations via format strings
 
 .. _8-bit color ANSI codes: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
 .. _24-bit color ANSI codes: https://en.wikipedia.org/wiki/ANSI_escape_code#24-bit
