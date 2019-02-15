@@ -92,8 +92,13 @@ if sys.version_info[:2] == (3, 2):
     __extra_requires__['doc'].extend([
         'Jinja2<2.7',
         'MarkupSafe<0.16',
-    ])
+        ])
+    __extra_requires__['test'][0] = 'pytest<3.0dev'
     __extra_requires__['test'][1] = 'coverage<4.0dev'
+elif sys.version_info[:2] == (3, 3):
+    __extra_requires__['test'][0] = 'pytest<3.3dev'
+elif sys.version_info[:2] == (3, 4):
+    __extra_requires__['test'][0] = 'pytest<5.0dev'
 
 __entry_points__ = {
 }
