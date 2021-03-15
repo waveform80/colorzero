@@ -52,10 +52,10 @@ def get_config(args: List[str]) -> Namespace:
             'spdx_prefix': SPDX_PREFIX,
             'copy_prefix': COPYRIGHT_PREFIX,
         },
-        delimiters=('=',), default_section='settings',
+        delimiters=('=',), default_section='copyrights:settings',
         empty_lines_in_values=False, interpolation=None,
         converters={'list': lambda s: s.strip().splitlines() })
-    config.read('copyrights.cfg')
+    config.read('setup.cfg')
     sect = config[config.default_section]
 
     parser = ArgumentParser(description=__doc__)
