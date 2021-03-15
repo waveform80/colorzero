@@ -30,10 +30,13 @@
 
 import sys
 import os
+import pkginfo
 from datetime import datetime
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-import setup as _setup
+info = pkginfo.Installed('colorzero')
+if info.version is None:
+    raise RuntimeError('Failed to load distro info')
 
 # -- General configuration ------------------------------------------------
 
@@ -51,10 +54,10 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 master_doc = 'index'
-project = _setup.__project__.title()
-copyright = '2016-%s %s' % (datetime.now().year, _setup.__author__)
-version = _setup.__version__
-release = _setup.__version__
+project = info.name
+copyright = '2016-{now:%Y} {info.author}'.format(now=datetime.now(), info=info)
+version = info.version
+#release = None
 #language = None
 #today_fmt = '%B %d, %Y'
 exclude_patterns = ['_build']
@@ -77,19 +80,13 @@ autodoc_default_flags = ['members']
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3.5', None),
 }
+intersphinx_cache_limit = 7
 
 # -- Options for HTML output ----------------------------------------------
 
-if on_rtd:
-    html_theme = 'sphinx_rtd_theme'
-    pygments_style = 'default'
-    #html_theme_options = {}
-    #html_sidebars = {}
-else:
-    html_theme = 'default'
-    #html_theme_options = {}
-    #html_sidebars = {}
-html_title = '%s %s Documentation' % (project, version)
+html_theme = 'sphinx_rtd_theme'
+pygments_style = 'default'
+html_title = '{info.name} {info.version} Documentation'.format(info=info)
 #html_theme_path = []
 #html_short_title = None
 #html_logo = None
@@ -107,7 +104,7 @@ html_static_path = ['_static']
 #html_show_copyright = True
 #html_use_opensearch = ''
 #html_file_suffix = None
-htmlhelp_basename = '%sdoc' % _setup.__project__
+htmlhelp_basename = '{info.name}doc'.format(info=info)
 
 # Hack to make wide tables work properly in RTD
 # See https://github.com/snide/sphinx_rtd_theme/issues/117 for details
@@ -126,12 +123,12 @@ latex_elements = {
 
 latex_documents = [
     (
-        'index',                       # source start file
-        '%s.tex' % _setup.__project__, # target filename
-        '%s %s Documentation' % (project, version), # title
-        _setup.__author__,             # author
-        'manual',                      # documentclass
-        True,                          # documents ref'd from toctree only
+        'index',            # source start file
+        project + '.tex',   # target filename
+        html_title,         # title
+        info.author,        # author
+        'manual',           # documentclass
+        True,               # documents ref'd from toctree only
     ),
 ]
 
@@ -144,11 +141,11 @@ latex_show_urls = 'footnote'
 
 # -- Options for epub output ----------------------------------------------
 
-epub_basename = _setup.__project__
+epub_basename = project
 #epub_theme = 'epub'
 #epub_title = html_title
-epub_author = _setup.__author__
-epub_identifier = 'https://colorzero.readthedocs.io/'
+epub_author = info.author
+epub_identifier = 'https://{info.name}.readthedocs.io/'.format(info=info)
 #epub_tocdepth = 3
 epub_show_urls = 'no'
 #epub_use_index = True
