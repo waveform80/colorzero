@@ -8,8 +8,6 @@
 
 "Defines various easing functions for :meth:`Color.gradient`."
 
-from collections import namedtuple
-
 
 def linear(steps):
     "Linear easing function; yields *steps* values between 0.0 and 1.0"

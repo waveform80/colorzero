@@ -25,7 +25,7 @@ def euclid(color1, color2):
 
         This function will return considerably different values to the other
         difference functions. In particular, the maximum "difference" will be
-        :math:`\sqrt{3}` which is much smaller than the output of the CIE
+        :math:`\\sqrt{3}` which is much smaller than the output of the CIE
         functions.
 
     .. _Euclidean distance: https://en.wikipedia.org/wiki/Euclidean_distance

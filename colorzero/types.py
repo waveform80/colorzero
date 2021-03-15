@@ -27,7 +27,6 @@ class RGB(tuple):
 
     def _replace(self, **kw):
         "Return a new RGB object replacing specified fields with new values"
-        # pylint: disable=bad-builtin
         result = tuple.__new__(RGB, map(kw.pop, 'rgb', self))
         if kw:
             raise ValueError(
@@ -96,7 +95,6 @@ class HLS(tuple):
 
     def _replace(self, **kw):
         "Return a new HLS object replacing specified fields with new values"
-        # pylint: disable=bad-builtin
         result = tuple.__new__(HLS, map(kw.pop, 'hls', self))
         if kw:
             raise ValueError('Got unexpected field names: {!r}'.format(list(kw)))
@@ -163,7 +161,6 @@ class HSV(tuple):
 
     def _replace(self, **kw):
         "Return a new HSV object replacing specified fields with new values"
-        # pylint: disable=bad-builtin
         result = tuple.__new__(HSV, map(kw.pop, 'hsv', self))
         if kw:
             raise ValueError(
@@ -230,7 +227,6 @@ class YUV(tuple):
 
     def _replace(self, **kw):
         "Return a new YUV object replacing specified fields with new values"
-        # pylint: disable=bad-builtin
         result = tuple.__new__(YUV, map(kw.pop, 'yuv', self))
         if kw:
             raise ValueError(
