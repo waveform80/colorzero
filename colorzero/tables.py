@@ -35,13 +35,6 @@ XTerm colors (for :func:`format` output).
 .. _CSS Color Module: http://www.w3.org/TR/css3-color/#svg-color
 """
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 
 def _transpose(table):
     # Swap keys and values in a dict, but in the case of duplicated keys, use

@@ -32,13 +32,6 @@ Defines the classes for manipulating the attributes of the :class:`Color`
 class through the standard binary operators.
 """
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 from math import pi
 
 
@@ -59,7 +52,7 @@ class Red(float):
     """
 
     def __repr__(self):
-        return "Red(%g)" % self
+        return "Red({:g})".format(self)
 
 
 class Green(float):
@@ -79,7 +72,7 @@ class Green(float):
     """
 
     def __repr__(self):
-        return "Green(%g)" % self
+        return "Green({:g})".format(self)
 
 
 class Blue(float):
@@ -99,7 +92,7 @@ class Blue(float):
     """
 
     def __repr__(self):
-        return "Blue(%g)" % self
+        return "Blue({:g})".format(self)
 
 
 class Hue(float):
@@ -136,16 +129,16 @@ class Hue(float):
 
     def __new__(cls, n=None, deg=None, rad=None):
         if n is not None:
-            return super(Hue, cls).__new__(cls, n % 1.0)
+            return super().__new__(cls, n % 1.0)
         elif deg is not None:
-            return super(Hue, cls).__new__(cls, (deg / 360.0) % 1.0)
+            return super().__new__(cls, (deg / 360.0) % 1.0)
         elif rad is not None:
-            return super(Hue, cls).__new__(cls, (rad / (2 * pi)) % 1.0)
+            return super().__new__(cls, (rad / (2 * pi)) % 1.0)
         else:
             raise ValueError('You must specify a value, or deg or rad')
 
     def __repr__(self):
-        return "Hue(deg=%g)" % self.deg
+        return "Hue(deg={self.deg:g})".format(self=self)
 
     @property
     def deg(self):
@@ -179,7 +172,7 @@ class Lightness(float):
     """
 
     def __repr__(self):
-        return "Lightness(%g)" % self
+        return "Lightness({:g})".format(self)
 
 
 class Saturation(float):
@@ -199,7 +192,7 @@ class Saturation(float):
     """
 
     def __repr__(self):
-        return "Saturation(%g)" % self
+        return "Saturation({:g})".format(self)
 
 
 class Luma(float):
@@ -216,4 +209,4 @@ class Luma(float):
     """
 
     def __repr__(self):
-        return "Luma(%g)" % self
+        return "Luma({:g})".format(self)

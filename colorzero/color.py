@@ -29,19 +29,9 @@
 
 "Defines the main :class:`Color` class of the package."
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 import re
 
 from . import conversions as cv, types, attr, deltae, tables, easings
-
-# Make Py2's str and range equivalent to Py3's
-str = type('')  # pylint: disable=redefined-builtin,invalid-name
 
 # Lots of the methods below use single character parameter names (r for red, y
 # for luma, etc.); this is is normal and in keeping with most of the referenced
@@ -345,10 +335,10 @@ class Color(types.RGB):
         Construct a :class:`Color` from three linear `RGB`_ float values
         between 0.0 and 1.0.
         """
-        return super(Color, cls).__new__(cls,
-                                         cv.clamp_float(r),
-                                         cv.clamp_float(g),
-                                         cv.clamp_float(b))
+        return super().__new__(cls,
+                               cv.clamp_float(r),
+                               cv.clamp_float(g),
+                               cv.clamp_float(b))
 
     @classmethod
     def from_rgb24(cls, n):
@@ -605,14 +595,15 @@ class Color(types.RGB):
     def __format__(self, format_spec):
         m = Color._format_re.match(format_spec)
         if not m:
-            raise ValueError('Invalid format %r for Color' % format_spec)
+            raise ValueError(
+                'Invalid format {:r} for Color'.format(format_spec))
         if m.group('html'):
             return self.html
         elif m.group('css'):
             return {
-                None:  lambda self: 'rgb(%d, %d, %d)' % self.rgb_bytes,
-                'rgb': lambda self: 'rgb(%d, %d, %d)' % self.rgb_bytes,
-                'hsl': lambda self: 'hsl(%gdeg, %g%%, %g%%)' % (
+                None:  lambda self: 'rgb({0:d}, {1:d}, {2:d})'.format(*self.rgb_bytes),
+                'rgb': lambda self: 'rgb({0:d}, {1:d}, {2:d})'.format(*self.rgb_bytes),
+                'hsl': lambda self: 'hsl({0:g}deg, {1:g}%, {2:g}%)'.format(
                     self.hls.hue.deg, self.hls.saturation * 100,
                     self.hls.lightness * 100),
             }[m.group('cssfmt')](self)
@@ -667,14 +658,18 @@ class Color(types.RGB):
     def __repr__(self):
         try:
             return {
-                'default': lambda: '<Color html=%r rgb=(%g, %g, %g)>' % (self.html, self.r, self.g, self.b),
-                'term16m': lambda: '<Color {self:16m}###{self:0} rgb=({self.r:g}, {self.g:g}, {self.b:g})>'.format(self=self),
-                'term256': lambda: '<Color {self:256}###{self:0} rgb=({self.r:g}, {self.g:g}, {self.b:g})>'.format(self=self),
-                'html':    lambda: 'Color(%r)' % self.html,
-                'rgb':     lambda: 'Color(%g, %g, %g)' % self.rgb,
-            }[Color.repr_style]()
+                'default': '<Color html={self.html!r} '
+                           'rgb=({self.r:g}, {self.g:g}, {self.b:g})>',
+                'term16m': '<Color {self:16m}###{self:0} '
+                           'rgb=({self.r:g}, {self.g:g}, {self.b:g})>',
+                'term256': '<Color {self:256}###{self:0} '
+                           'rgb=({self.r:g}, {self.g:g}, {self.b:g})>',
+                'html':    'Color({self.html!r})',
+                'rgb':     'Color({self.r:g}, {self.g:g}, {self.b:g})',
+            }[Color.repr_style].format(self=self)
         except KeyError:
-            raise ValueError('invalid repr_style value: %s' % Color.repr_style)
+            raise ValueError(
+                'invalid repr_style value: {}'.format(Color.repr_style))
 
     @property
     def html(self):
@@ -919,7 +914,7 @@ class Color(types.RGB):
         try:
             fn = getattr(deltae, method)
         except AttributeError:
-            raise ValueError('invalid method: %s' % method)
+            raise ValueError('invalid method: {}'.format(method))
         else:
             if method.startswith('cie'):
                 return fn(self.lab, other.lab)

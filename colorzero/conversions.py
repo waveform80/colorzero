@@ -51,25 +51,9 @@ routines are as follows:
 .. _Bruce Lindbloom's Color Equations: https://www.brucelindbloom.com/
 """
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 import colorsys
 from collections import namedtuple
 from fractions import Fraction
-try:
-    from itertools import izip as zip  # pylint: disable=redefined-builtin
-    def round(number, ndigits=0, _round=round):
-        # Ensure round returns an int when ndigits is 0; back-ported behaviour
-        # for python 2.x
-        # pylint: disable=redefined-builtin,missing-docstring
-        return _round(number, ndigits) if ndigits else int(_round(number))
-except ImportError:
-    pass
 
 from .tables import NAMED_COLORS
 from .types import RGB, YIQ, YUV, CMY, CMYK, HLS, HSV, XYZ, Luv, Lab
@@ -127,7 +111,7 @@ class YUVCoefficients(namedtuple('YUVCoefficients', (
             Wb = kwargs['Wb']
         except KeyError as e:
             raise TypeError('YUVCoefficients() missing required keyword '
-                            'argument: %s' % str(e))
+                            'argument: {e:s}'.format(e=e))
         Wg = (1 - Wr - Wb)
         U = Umax / (1 - Wb)
         V = Vmax / (1 - Wr)
@@ -207,7 +191,7 @@ def rgb_bytes_to_rgb(r, g, b):
 
 def rgb_bytes_to_html(r, g, b):
     "Convert RGB888 to the HTML representation"
-    return '#%02x%02x%02x' % (r, g, b)
+    return '#{0:02x}{1:02x}{2:02x}'.format(r, g, b)
 
 
 def rgb_bytes_to_rgb24(r, g, b):
@@ -238,7 +222,8 @@ def html_to_rgb_bytes(html):
                 )
         except ValueError:
             pass
-    raise ValueError('%s is not a valid HTML color specification' % html)
+    raise ValueError(
+        '{:s} is not a valid HTML color specification'.format(html))
 
 
 def name_to_html(name):
@@ -246,7 +231,7 @@ def name_to_html(name):
     try:
         return NAMED_COLORS[name]
     except KeyError:
-        raise ValueError('invalid color name %s' % name)
+        raise ValueError('invalid color name {:s}'.format(name))
 
 
 def rgb_to_rgb565(r, g, b):

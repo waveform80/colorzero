@@ -29,13 +29,6 @@
 
 "Defines various easing functions for :meth:`Color.gradient`."
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 from collections import namedtuple
 
 

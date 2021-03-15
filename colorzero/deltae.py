@@ -29,13 +29,6 @@
 
 "Defines the various algorithms for :meth:`Color.difference`."
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 from math import sqrt, atan2, degrees, radians, sin, cos, exp
 
 # Lots of the delta-e functions use single character parameter names and

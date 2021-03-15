@@ -42,13 +42,6 @@ on this class and are:
 * :class:`Luma`
 """
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 from .color import Color
 from .easings import linear, ease_in, ease_out, ease_in_out
 from .deltae import euclid, cie1976, cie1994g, cie1994t, ciede2000
