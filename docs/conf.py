@@ -38,9 +38,11 @@ info = pkginfo.Installed('colorzero')
 if info.version is None:
     # Probably a git check-out; treat it as a development repo and ask git
     # for the path to the root of the check-out
-    from subprocess import run
-    info = pkginfo.Develop(
-        run('git rev-parse --show-cdup', shell=True, text=True).stdout)
+    import subprocess as sp
+    root = sp.run(['git', 'rev-parse', '--show-cdup'],
+                  stdout=sp.PIPE, stderr=sp.STDOUT,
+                  text=True, check=True).stdout.strip()
+    info = pkginfo.Develop(root)
 if info.version is None:
     raise RuntimeError('Failed to load distro info')
 
