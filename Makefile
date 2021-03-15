@@ -4,7 +4,6 @@
 PYTHON=python3
 PIP=pip
 PYTEST=pytest
-COVERAGE=coverage
 TWINE=twine
 PYFLAGS=
 DEST_DIR=/
@@ -73,8 +72,7 @@ develop: tags
 	$(PIP) install -e .[doc,test]
 
 test:
-	$(COVERAGE) run -m $(PYTEST) tests
-	$(COVERAGE) report
+	$(PYTEST) tests
 
 clean:
 	rm -fr dist/ $(NAME).egg-info/ tags
