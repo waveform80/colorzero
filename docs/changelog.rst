@@ -16,9 +16,8 @@ Release 2.0 (2021-03-15)
 
 * Dropped Python 2.x support. Current Python support level is 3.5 and above.
 
-* No other major changes within the library (all other changes have been to
-  make packaging a bit easier, and update doc builds and CI integration to
-  current practices)
+* Added html and css format specifications to the :class:`Color` class'
+  string-formatting capabilities.
 
 
 Release 1.1 (2018-05-15)
