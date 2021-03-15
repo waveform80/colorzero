@@ -1,4 +1,3 @@
-prune debian
 prune docs
 include README.rst
 include LICENSE.txt
