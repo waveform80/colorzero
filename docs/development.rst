@@ -31,7 +31,7 @@ within a virtual Python environment:
 
 .. code-block:: console
 
-    $ sudo apt install lsb-release build-essential git git-core \
+    $ sudo apt install build-essential git \
         exuberant-ctags virtualenvwrapper python-virtualenv python3-virtualenv
     $ cd
     $ mkvirtualenv -p /usr/bin/python3 colorzero
@@ -70,7 +70,7 @@ command should install all required dependencies:
 .. code-block:: console
 
     $ sudo apt install texlive-latex-recommended texlive-latex-extra \
-        texlive-fonts-recommended graphviz inkscape
+        texlive-fonts-recommended texlive-xetex graphviz inkscape xindy
 
 Once these are installed, you can use the "doc" target to build the
 documentation:
