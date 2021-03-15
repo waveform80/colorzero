@@ -32,7 +32,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          apt install exuberant-ctags
+          sudo apt install exuberant-ctags
           make develop
       - name: Run tests
         run: make test
