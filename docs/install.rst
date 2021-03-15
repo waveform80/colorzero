@@ -13,7 +13,7 @@ On `Raspbian`_, it is best to obtain colorzero via the ``apt`` utility:
 .. code-block:: console
 
     $ sudo apt update
-    $ sudo apt install python-colorzero python3-colorzero
+    $ sudo apt install python3-colorzero
 
 The usual apt upgrade method can be used to keep your installation up to date:
 
@@ -26,7 +26,7 @@ To remove your installation:
 
 .. code-block:: console
 
-    $ sudo apt remove python-colorzero python3-colorzero
+    $ sudo apt remove python3-colorzero
 
 
 Ubuntu installation
@@ -39,7 +39,7 @@ author's PPA:
 
     $ sudo add-apt-repository ppa://waveform/ppa
     $ sudo apt update
-    $ sudo apt install python-colorzero python3-colorzero
+    $ sudo apt install python3-colorzero
 
 The usual apt upgrade method can be used to keep your installation up to date:
 
@@ -52,7 +52,7 @@ To remove your installation:
 
 .. code-block:: console
 
-    $ sudo apt remove python-colorzero python3-colorzero
+    $ sudo apt remove python3-colorzero
 
 
 Other platforms
@@ -63,21 +63,18 @@ utility:
 
 .. code-block:: console
 
-    $ sudo pip install colorzero
     $ sudo pip3 install colorzero
 
 To upgrade your installation:
 
 .. code-block:: console
 
-    $ sudo pip install -U colorzero
     $ sudo pip3 install -U colorzero
 
 To remove your installation:
 
 .. code-block:: console
 
-    $ sudo pip remove colorzero
     $ sudo pip3 remove colorzero
 
 

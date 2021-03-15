@@ -87,11 +87,11 @@ Equivalent constructors exist for all these systems:
     <Color html='#804000' rgb=(0.501961, 0.25098, 0)>
     >>> Color.from_rgb565(31200)
     <Color html='#7b3d00' rgb=(0.483871, 0.238095, 0)>
-    >>> Color.from_hls(\*c.hls)
+    >>> Color.from_hls(*c.hls)
     <Color html='#804000' rgb=(0.5, 0.25, 0)>
-    >>> Color.from_xyz(\*c.xyz)
+    >>> Color.from_xyz(*c.xyz)
     <Color html='#7f4000' rgb=(0.5, 0.25, 0)>
-    >>> Color.from_lab(\*c.lab)
+    >>> Color.from_lab(*c.lab)
     <Color html='#7f4000' rgb=(0.5, 0.25, 0)>
 
 Note that some conversions lose a certain amount of precision.

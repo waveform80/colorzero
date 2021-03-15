@@ -64,6 +64,8 @@ class Color(types.RGB):
     The specific forms that the default constructor will accept are enumerated
     below:
 
+    .. tabularcolumns:: |p{60mm}|p{70mm}|
+
     +------------------------------+------------------------------------------+
     | Style                        | Description                              |
     +==============================+==========================================+
