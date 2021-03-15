@@ -1,3 +1,9 @@
+.. The colorzero color library
+..
+.. Copyright (c) 2016-2018 Dave Jones <dave@waveform.org.uk>
+..
+.. SPDX-License-Identifier: BSD-3-Clause
+
 .. include:: ../README.rst
 
 Table of Contents

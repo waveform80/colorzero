@@ -1,3 +1,9 @@
+.. The colorzero color library
+..
+.. Copyright (c) 2016-2019 Dave Jones <dave@waveform.org.uk>
+..
+.. SPDX-License-Identifier: BSD-3-Clause
+
 .. _api_color:
 
 ===
