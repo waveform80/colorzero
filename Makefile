@@ -73,8 +73,8 @@ develop: tags
 	$(PIP) install -e .[doc,test]
 
 test:
-	$(COVERAGE) run --rcfile coverage.cfg -m $(PYTEST) tests
-	$(COVERAGE) report --rcfile coverage.cfg
+	$(COVERAGE) run -m $(PYTEST) tests
+	$(COVERAGE) report
 
 clean:
 	rm -fr dist/ $(NAME).egg-info/ tags
