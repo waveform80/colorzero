@@ -36,6 +36,12 @@ from datetime import datetime
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 info = pkginfo.Installed('colorzero')
 if info.version is None:
+    # Probably a git check-out; treat it as a development repo and ask git
+    # for the path to the root of the check-out
+    from subprocess import run
+    info = pkginfo.Develop(
+        run('git rev-parse --show-cdup', shell=True, text=True).stdout)
+if info.version is None:
     raise RuntimeError('Failed to load distro info')
 
 # -- General configuration ------------------------------------------------
