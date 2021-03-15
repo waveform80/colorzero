@@ -75,7 +75,7 @@ test:
 	$(PYTEST) tests
 
 clean:
-	rm -fr dist/ $(NAME).egg-info/ tags
+	rm -fr dist/ build/ .pytest_cache/ $(NAME).egg-info/ tags .coverage
 	for dir in $(SUBDIRS); do \
 		$(MAKE) -C $$dir clean; \
 	done
