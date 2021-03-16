@@ -94,15 +94,16 @@ $(DIST_ZIP): $(PY_SOURCES) $(SUBDIRS)
 	$(PYTHON) $(PYFLAGS) setup.py sdist --formats zip
 
 $(DIST_WHEEL): $(PY_SOURCES) $(SUBDIRS)
-	$(PYTHON) $(PYFLAGS) setup.py bdist_wheel --universal
+	$(PYTHON) $(PYFLAGS) setup.py bdist_wheel
 
 release:
 	$(MAKE) clean
 	test -z "$(shell git status --porcelain)"
 	git tag -s release-$(VER) -m "Release $(VER)"
 	git push origin release-$(VER)
-	$(MAKE) $(DIST_TAR) $(DIST_WHEEL)
+
+upload: $(DIST_TAR) $(DIST_WHEEL)
 	$(TWINE) check $(DIST_TAR) $(DIST_WHEEL)
 	$(TWINE) upload $(DIST_TAR) $(DIST_WHEEL)
 
-.PHONY: all install develop test doc source egg wheel zip tar dist clean tags release upload $(SUBDIRS)
+.PHONY: all install develop test doc source wheel zip tar dist clean tags release upload $(SUBDIRS)
