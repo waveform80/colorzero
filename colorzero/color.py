@@ -652,7 +652,8 @@ class Color(types.RGB):
             }[Color.repr_style].format(self=self)
         except KeyError:
             raise ValueError(
-                'invalid repr_style value: {}'.format(Color.repr_style))
+                'invalid repr_style value: {}'.format(Color.repr_style)
+            ) from None
 
     @property
     def html(self):
@@ -897,7 +898,7 @@ class Color(types.RGB):
         try:
             fn = getattr(deltae, method)
         except AttributeError:
-            raise ValueError('invalid method: {}'.format(method))
+            raise ValueError('invalid method: {}'.format(method)) from None
         else:
             if method.startswith('cie'):
                 return fn(self.lab, other.lab)
