@@ -577,7 +577,7 @@ class Color(types.RGB):
         m = Color._format_re.match(format_spec)
         if not m:
             raise ValueError(
-                'Invalid format {:r} for Color'.format(format_spec))
+                'Invalid format {!r} for Color'.format(format_spec))
         if m.group('html'):
             return self.html
         elif m.group('css'):
