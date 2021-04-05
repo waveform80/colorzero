@@ -22,6 +22,7 @@ on this class and are:
 """
 
 from .color import Color
+from .style import Style, Styles, Reset, Default
 from .easings import linear, ease_in, ease_out, ease_in_out
 from .deltae import euclid, cie1976, cie1994g, cie1994t, ciede2000
 from .attr import Red, Green, Blue, Hue, Lightness, Saturation, Luma
