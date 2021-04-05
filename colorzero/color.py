@@ -604,16 +604,12 @@ class Color(types.RGB):
                 'b':  49,
             }[back],)
         elif term in (None, '8'):
-            table = tables.DOS_COLORS
             if back == 'b':
                 code = 40
-                table = {
-                    k: (bold, index)
-                    for k, (bold, index) in table.items()
-                    if not bold
-                }
+                table = tables.DOS_BACK_COLORS
             else:
                 code = 30
+                table = tables.DOS_FORE_COLORS
             try:
                 bold, index = table[self.rgb_bytes]
             except KeyError:
