@@ -621,7 +621,7 @@ class Color(types.RGB):
                     (self.difference(Color.from_rgb_bytes(*color)), bold, index)
                     for color, (bold, index) in table.items()
                 )[0][1:]
-            args = (1,) if bold else ()
+            args = () if back == 'b' else (1,) if bold else (22,)
             args += (code + index,)
         elif term == '256':
             code = 48 if back == 'b' else 38
