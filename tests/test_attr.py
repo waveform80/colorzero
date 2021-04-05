@@ -8,13 +8,6 @@
 
 "Tests for the colorzero.attr module"
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 from math import pi
 
 # pylint: disable=import-error,missing-docstring

@@ -8,18 +8,7 @@
 
 "Tests for the colorzero.color module"
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
-try:
-    from math import sqrt, isclose
-except ImportError:
-    from math import sqrt
-    from compat import isclose
+from math import sqrt, isclose
 
 # pylint: disable=wrong-import-order,import-error,missing-docstring
 import pytest
