@@ -1,5 +1,12 @@
 #!/usr/bin/python3
 
+# A trivial script for updating copyright headers within a project from its git
+# commit history
+#
+# Copyright (c) 2020-2021 Dave Jones <dave@waveform.org.uk>
+#
+# SPDX-License-Identifier: BSD-3-Clause
+
 """
 A script for updating the copyright headers on all files project-wide. It
 derives the authorship and copyright years information from the git history
