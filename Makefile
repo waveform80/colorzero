@@ -2,7 +2,7 @@
 
 # External utilities
 PYTHON=python3
-PIP=pip
+PIP=pip3
 PYTEST=pytest
 TWINE=twine
 PYFLAGS=
@@ -27,7 +27,7 @@ DOC_SOURCES:=docs/conf.py \
 SUBDIRS:=
 
 # Calculate the name of all outputs
-DIST_WHEEL=dist/$(NAME)-$(VER)-py2.py3-none-any.whl
+DIST_WHEEL=dist/$(NAME)-$(VER)-py3-none-any.whl
 DIST_TAR=dist/$(NAME)-$(VER).tar.gz
 DIST_ZIP=dist/$(NAME)-$(VER).zip
 
@@ -75,8 +75,9 @@ test:
 	$(PYTEST) tests
 
 clean:
-	rm -fr dist/ build/ .pytest_cache/ $(NAME).egg-info/ tags .coverage
-	for dir in $(SUBDIRS); do \
+	$(PYTHON) $(PYFLAGS) setup.py clean
+	rm -fr build/ dist/ .pytest_cache/ .mypy_cache/ $(NAME).egg-info/ tags .coverage
+	for dir in docs $(SUBDIRS); do \
 		$(MAKE) -C $$dir clean; \
 	done
 	find $(CURDIR) -name "*.pyc" -delete
@@ -94,7 +95,7 @@ $(DIST_ZIP): $(PY_SOURCES) $(SUBDIRS)
 	$(PYTHON) $(PYFLAGS) setup.py sdist --formats zip
 
 $(DIST_WHEEL): $(PY_SOURCES) $(SUBDIRS)
-	$(PYTHON) $(PYFLAGS) setup.py bdist_wheel --universal
+	$(PYTHON) $(PYFLAGS) setup.py bdist_wheel
 
 release:
 	$(MAKE) clean
@@ -105,4 +106,4 @@ release:
 	$(TWINE) check $(DIST_TAR) $(DIST_WHEEL)
 	$(TWINE) upload $(DIST_TAR) $(DIST_WHEEL)
 
-.PHONY: all install develop test doc source egg wheel zip tar dist clean tags release upload $(SUBDIRS)
+.PHONY: all install develop test doc source wheel zip tar dist clean tags release upload $(SUBDIRS)
