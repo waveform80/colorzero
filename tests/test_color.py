@@ -351,7 +351,7 @@ def test_color_format():
     red = Color('red')
     blue = Color('#004')
     assert '{:0}{:0}{:0}'.format(black, red, blue) == '\x1b[0m' * 3
-    assert '{}{}{}'.format(black, red, blue) == '\x1b[30m\x1b[1;31m\x1b[34m'
+    assert '{}{}{}'.format(black, red, blue) == '\x1b[22;30m\x1b[1;31m\x1b[22;34m'
     assert '{:b}{:b8}{:b8}'.format(black, red, blue) == '\x1b[40m\x1b[41m\x1b[44m'
     assert '{0:256}{0:b256}'.format(black) == '\x1b[38;5;0m\x1b[48;5;0m'
     assert '{0:256}{0:b256}'.format(red) == '\x1b[38;5;9m\x1b[48;5;9m'
