@@ -90,7 +90,7 @@ class YUVCoefficients(namedtuple('YUVCoefficients', (
             Wb = kwargs['Wb']
         except KeyError as e:
             raise TypeError('YUVCoefficients() missing required keyword '
-                            'argument: {e:s}'.format(e=e))
+                            'argument: {e:s}'.format(e=e)) from None
         Wg = (1 - Wr - Wb)
         U = Umax / (1 - Wb)
         V = Vmax / (1 - Wr)
@@ -210,7 +210,7 @@ def name_to_html(name):
     try:
         return NAMED_COLORS[name]
     except KeyError:
-        raise ValueError('invalid color name {:s}'.format(name))
+        raise ValueError('invalid color name {:s}'.format(name)) from None
 
 
 def rgb_to_rgb565(r, g, b):
@@ -253,7 +253,6 @@ def yuv_to_rgb(y, u, v, std=BT601):
 
 def rgb_bytes_to_yuv_bytes(r, g, b):
     "Convert RGB888 to YUV444 bytes using studio swing from BT.601"
-    # pylint: disable=bad-whitespace
     return YUV(
         (( 66 * r + 129 * g +  25 * b + 128) >> 8) + 16,
         ((-38 * r -  74 * g + 112 * b + 128) >> 8) + 128,
@@ -317,7 +316,6 @@ def xyz_to_rgb(x, y, z):
     Convert CIE XYZ representation to linear RGB. sRGB is used as the output
     color space, and D65 as reference white.
     """
-    # pylint: disable=bad-whitespace
     m = matrix_mult(
         (( 3.2404542, -1.5371385, -0.4985314),
          (-0.9692660,  1.8760108,  0.0415560),

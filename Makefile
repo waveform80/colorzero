@@ -102,7 +102,8 @@ release:
 	test -z "$(shell git status --porcelain)"
 	git tag -s release-$(VER) -m "Release $(VER)"
 	git push origin release-$(VER)
-	$(MAKE) $(DIST_TAR) $(DIST_WHEEL)
+
+upload: $(DIST_TAR) $(DIST_WHEEL)
 	$(TWINE) check $(DIST_TAR) $(DIST_WHEEL)
 	$(TWINE) upload $(DIST_TAR) $(DIST_WHEEL)
 

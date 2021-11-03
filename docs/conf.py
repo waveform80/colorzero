@@ -9,21 +9,13 @@
 
 import sys
 import os
-import pkginfo
+from setuptools.config import read_configuration
 from datetime import datetime
+from pathlib import Path
 
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-info = pkginfo.Installed('colorzero')
-if info.version is None:
-    # Probably a git check-out; treat it as a development repo and ask git
-    # for the path to the root of the check-out
-    import subprocess as sp
-    root = sp.run(['git', 'rev-parse', '--show-cdup'],
-                  stdout=sp.PIPE, stderr=sp.STDOUT,
-                  text=True, check=True).stdout.strip()
-    info = pkginfo.Develop(root)
-if info.version is None:
-    raise RuntimeError('Failed to load distro info')
+on_rtd = os.environ.get('READTHEDOCS', '').lower() == 'true'
+config = read_configuration(str(Path(__file__).parent / '..' / 'setup.cfg'))
+info = config['metadata']
 
 # -- General configuration ------------------------------------------------
 
@@ -41,9 +33,9 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 master_doc = 'index'
-project = info.name
-copyright = '2016-{now:%Y} {info.author}'.format(now=datetime.now(), info=info)
-version = info.version
+project = info['name']
+copyright = '2016-{now:%Y} {info[author]}'.format(now=datetime.now(), info=info)
+version = info['version']
 #release = None
 #language = None
 #today_fmt = '%B %d, %Y'
@@ -73,7 +65,7 @@ intersphinx_cache_limit = 7
 
 html_theme = 'sphinx_rtd_theme'
 pygments_style = 'default'
-html_title = '{info.name} {info.version} Documentation'.format(info=info)
+html_title = '{info[name]} {info[version]} Documentation'.format(info=info)
 #html_theme_path = []
 #html_short_title = None
 #html_logo = None
@@ -91,7 +83,7 @@ html_static_path = ['_static']
 #html_show_copyright = True
 #html_use_opensearch = ''
 #html_file_suffix = None
-htmlhelp_basename = '{info.name}doc'.format(info=info)
+htmlhelp_basename = '{info[name]}doc'.format(info=info)
 
 # Hack to make wide tables work properly in RTD
 # See https://github.com/snide/sphinx_rtd_theme/issues/117 for details
@@ -113,7 +105,7 @@ latex_documents = [
         'index',            # source start file
         project + '.tex',   # target filename
         html_title,         # title
-        info.author,        # author
+        info['author'],     # author
         'manual',           # documentclass
         True,               # documents ref'd from toctree only
     ),
@@ -131,8 +123,8 @@ latex_show_urls = 'footnote'
 epub_basename = project
 #epub_theme = 'epub'
 #epub_title = html_title
-epub_author = info.author
-epub_identifier = 'https://{info.name}.readthedocs.io/'.format(info=info)
+epub_author = info['author']
+epub_identifier = 'https://{info[name]}.readthedocs.io/'.format(info=info)
 #epub_tocdepth = 3
 epub_show_urls = 'no'
 #epub_use_index = True

@@ -14,9 +14,6 @@ XTerm colors (for :func:`format` output).
 .. _CSS Color Module: http://www.w3.org/TR/css3-color/#svg-color
 """
 
-# I like my spacing, dammit!
-# pylint: disable=bad-whitespace,bad-continuation
-
 
 def _transpose(table):
     # Swap keys and values in a dict, but in the case of duplicated keys, use
@@ -27,7 +24,7 @@ def _transpose(table):
     return result
 
 
-DOS_COLORS = _transpose({
+DOS_FORE_COLORS = _transpose({
 #    Bold,  Index: (R,   G,   B),
     (False, 0):    (0,   0,   0),
     (False, 1):    (128, 0,   0),
@@ -46,6 +43,12 @@ DOS_COLORS = _transpose({
     (True,  6):    (0,   255, 255),
     (True,  7):    (255, 255, 255),
 })
+
+DOS_BACK_COLORS = {
+    RGB: (bold, index)
+    for RGB, (bold, index) in DOS_FORE_COLORS.items()
+    if not bold
+}
 
 
 XTERM_COLORS = _transpose({

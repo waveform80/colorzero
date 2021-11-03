@@ -8,17 +8,7 @@
 
 "Tests for the colorzero.conversions module"
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
-try:
-    from math import isclose
-except ImportError:
-    from compat import isclose
+from math import isclose
 
 # pylint: disable=wrong-import-order,import-error,missing-docstring
 import pytest

@@ -577,7 +577,7 @@ class Color(types.RGB):
         m = Color._format_re.match(format_spec)
         if not m:
             raise ValueError(
-                'Invalid format {:r} for Color'.format(format_spec))
+                'Invalid format {!r} for Color'.format(format_spec))
         if m.group('html'):
             return self.html
         elif m.group('css'):
@@ -604,16 +604,12 @@ class Color(types.RGB):
                 'b':  49,
             }[back],)
         elif term in (None, '8'):
-            table = tables.DOS_COLORS
             if back == 'b':
                 code = 40
-                table = {
-                    k: (bold, index)
-                    for k, (bold, index) in table.items()
-                    if not bold
-                }
+                table = tables.DOS_BACK_COLORS
             else:
                 code = 30
+                table = tables.DOS_FORE_COLORS
             try:
                 bold, index = table[self.rgb_bytes]
             except KeyError:
@@ -621,7 +617,7 @@ class Color(types.RGB):
                     (self.difference(Color.from_rgb_bytes(*color)), bold, index)
                     for color, (bold, index) in table.items()
                 )[0][1:]
-            args = (1,) if bold else ()
+            args = () if back == 'b' else (1,) if bold else (22,)
             args += (code + index,)
         elif term == '256':
             code = 48 if back == 'b' else 38
@@ -656,7 +652,8 @@ class Color(types.RGB):
             }[Color.repr_style].format(self=self)
         except KeyError:
             raise ValueError(
-                'invalid repr_style value: {}'.format(Color.repr_style))
+                'invalid repr_style value: {}'.format(Color.repr_style)
+            ) from None
 
     @property
     def html(self):
@@ -901,7 +898,7 @@ class Color(types.RGB):
         try:
             fn = getattr(deltae, method)
         except AttributeError:
-            raise ValueError('invalid method: {}'.format(method))
+            raise ValueError('invalid method: {}'.format(method)) from None
         else:
             if method.startswith('cie'):
                 return fn(self.lab, other.lab)

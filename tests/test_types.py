@@ -8,13 +8,6 @@
 
 "Tests for the colorzero.types module."
 
-from __future__ import (
-    unicode_literals,
-    print_function,
-    division,
-    absolute_import,
-)
-
 # pylint: disable=import-error,missing-docstring
 import pytest
 from colorzero import RGB, YUV, HLS, HSV, CMY, CMYK
