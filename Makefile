@@ -37,6 +37,7 @@ all:
 	@echo "make develop - Install symlinks for development"
 	@echo "make test - Run tests"
 	@echo "make doc - Generate HTML and PDF documentation"
+	@echo "make preview - Preview HTML documentation with local server"
 	@echo "make source - Create source package"
 	@echo "make wheel - Generate a PyPI wheel package"
 	@echo "make zip - Generate a source zip package"
