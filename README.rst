@@ -22,7 +22,9 @@ This means it is immutable; you cannot *directly* change the attributes of a
 as keys in dictionaries (for simple `LUTs`_), or placed in sets.
 
 Manipulation of ``Color`` instances is done by typical operations with other
-classes the result of which is a new ``Color`` instance. For example::
+classes the result of which is a new ``Color`` instance. For example:
+
+.. code:: pycon
 
     >>> Color('red') + Color('blue')
     <Color html='#ff00ff' rgb=(1, 0, 1)>
@@ -38,6 +40,35 @@ classes the result of which is a new ``Color`` instance. For example::
     <Color html='#00cccc' rgb=(0, 0.8, 0.8)>
     >>> (Color.from_hls(0.5, 0.5, 1.0) * Lightness(0.8)).hls
     HLS(h=0.5, l=0.4, s=1.0)
+
+Another interesting facility is the custom format strings that ``Color``
+instances support, making them convenient for direct use in HTML or CSS
+templating:
+
+.. code:: pycon
+
+    >>> red = Color('red')
+    >>> black = Color('black')
+    >>> stylesheet = f"""\
+    .warning {{ color: {red:css}; }}
+    .table {{ border: 1px solid {black:html}; }}
+    """
+    >>> print(stylesheet)
+    .warning { color: rgb(255, 0, 0); }
+    .table { border: 1px solid #000000; }
+
+Or for in colorful terminal output:
+
+.. code:: pycon
+
+    >>> print(f'This is a {red:8}warning!{red:0}')
+    This is a warning!
+    >>> print(repr(f'This is a {red:8}warning!{red:0}'))
+    'This is a \x1b[1;31mwarning!\x1b[0m'
+
+(on supported terminals, the first line of output above will print "warning!"
+in red)
+
 
 Links
 =====
