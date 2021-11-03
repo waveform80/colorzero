@@ -9,88 +9,74 @@
 
 import sys
 import os
-from setuptools.config import read_configuration
+import configparser
 from datetime import datetime
 from pathlib import Path
 
 on_rtd = os.environ.get('READTHEDOCS', '').lower() == 'true'
-config = read_configuration(str(Path(__file__).parent / '..' / 'setup.cfg'))
-info = config['metadata']
+config = configparser.ConfigParser()
+config.read([Path(__file__).parent / '..' / 'setup.cfg'])
+metadata = config['metadata']
 
-# -- General configuration ------------------------------------------------
+# -- Project information -----------------------------------------------------
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', 'sphinx.ext.intersphinx']
+project = metadata['name'].title()
+author = metadata['author']
+copyright = '2016-{now:%Y} {author}'.format(now=datetime.now(), author=author)
+release = metadata['version']
+version = release
+
+# -- General configuration ---------------------------------------------------
+
+needs_sphinx = '1.4.0'
+
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.imgmath',
+]
+
 if on_rtd:
-    needs_sphinx = '1.4.0'
-    extensions.append('sphinx.ext.imgmath')
-    imgmath_image_format = 'svg'
     tags.add('rtd')
-else:
-    extensions.append('sphinx.ext.mathjax')
-    mathjax_path = '/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_HTML'
+
+imgmath_image_format = 'svg'
 
 templates_path = ['_templates']
-source_suffix = '.rst'
-#source_encoding = 'utf-8-sig'
 master_doc = 'index'
-project = info['name']
-copyright = '2016-{now:%Y} {info[author]}'.format(now=datetime.now(), info=info)
-version = info['version']
-#release = None
-#language = None
-#today_fmt = '%B %d, %Y'
-exclude_patterns = ['_build']
-highlight_language = 'python3'
-#default_role = None
-#add_function_parentheses = True
-#add_module_names = True
-#show_authors = False
-pygments_style = 'sphinx'
-#modindex_common_prefix = []
-#keep_warnings = False
 
-# -- Autodoc configuration ------------------------------------------------
+exclude_patterns = ['_build']
+pygments_style = 'sphinx'
+
+# -- Autodoc options ---------------------------------------------------------
 
 autodoc_member_order = 'groupwise'
-autodoc_default_flags = ['members']
+autodoc_default_options = {
+    'members': True,
+}
+autodoc_mock_imports = []
 
-# -- Intersphinx configuration --------------------------------------------
+# -- Intersphinx options -----------------------------------------------------
 
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3.5', None),
+    'python': ('http://docs.python.org/3.9', None),
 }
-intersphinx_cache_limit = 7
 
 # -- Options for HTML output ----------------------------------------------
 
 html_theme = 'sphinx_rtd_theme'
 pygments_style = 'default'
-html_title = '{info[name]} {info[version]} Documentation'.format(info=info)
-#html_theme_path = []
-#html_short_title = None
-#html_logo = None
-#html_favicon = None
+html_title = '{project} {version} Documentation'.format(
+    project=project, version=version)
 html_static_path = ['_static']
-#html_extra_path = []
-#html_last_updated_fmt = '%b %d, %Y'
-#html_use_smartypants = True
-#html_additional_pages = {}
-#html_domain_indices = True
-#html_use_index = True
-#html_split_index = False
-#html_show_sourcelink = True
-#html_show_sphinx = True
-#html_show_copyright = True
-#html_use_opensearch = ''
-#html_file_suffix = None
-htmlhelp_basename = '{info[name]}doc'.format(info=info)
+manpages_url = 'https://manpages.ubuntu.com/manpages/focal/en/man{section}/{page}.{section}.html'
 
 # Hack to make wide tables work properly in RTD
 # See https://github.com/snide/sphinx_rtd_theme/issues/117 for details
 def setup(app):
-    app.add_stylesheet('style_override.css')
+    app.add_css_file('style_override.css')
 
-# -- Options for LaTeX output ---------------------------------------------
+# -- Options for LaTeX output ------------------------------------------------
 
 latex_engine = 'xelatex'
 
@@ -105,46 +91,29 @@ latex_documents = [
         'index',            # source start file
         project + '.tex',   # target filename
         html_title,         # title
-        info['author'],     # author
+        author,             # author
         'manual',           # documentclass
         True,               # documents ref'd from toctree only
     ),
 ]
 
-#latex_logo = None
-#latex_use_parts = False
 latex_show_pagerefs = True
 latex_show_urls = 'footnote'
-#latex_appendices = []
-#latex_domain_indices = True
 
-# -- Options for epub output ----------------------------------------------
+# -- Options for epub output -------------------------------------------------
 
 epub_basename = project
-#epub_theme = 'epub'
-#epub_title = html_title
-epub_author = info['author']
-epub_identifier = 'https://{info[name]}.readthedocs.io/'.format(info=info)
-#epub_tocdepth = 3
+epub_author = author
+epub_identifier = 'https://{metadata[name]}.readthedocs.io/'.format(metadata=metadata)
 epub_show_urls = 'no'
-#epub_use_index = True
 
-# -- Options for manual page output ---------------------------------------
+# -- Options for manual page output ------------------------------------------
 
 man_pages = []
 
 man_show_urls = True
 
-# -- Options for Texinfo output -------------------------------------------
-
-texinfo_documents = []
-
-#texinfo_appendices = []
-#texinfo_domain_indices = True
-#texinfo_show_urls = 'footnote'
-#texinfo_no_detailmenu = False
-
-# -- Options for linkcheck builder ----------------------------------------
+# -- Options for linkcheck builder -------------------------------------------
 
 linkcheck_retries = 3
 linkcheck_workers = 20

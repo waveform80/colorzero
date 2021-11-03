@@ -1,21 +1,21 @@
 # vim: set noet sw=4 ts=4 fileencoding=utf-8:
 
 # External utilities
-PYTHON=python3
-PIP=pip3
-PYTEST=pytest
-TWINE=twine
-PYFLAGS=
-DEST_DIR=/
+PYTHON ?= python3
+PIP ?= pip3
+PYTEST ?= pytest
+TWINE ?= twine
+PYFLAGS ?=
+DEST_DIR ?= /
 
 # Calculate the base names of the distribution, the location of all source,
 # documentation, packaging, icon, and executable script files
 NAME:=$(shell $(PYTHON) $(PYFLAGS) setup.py --name)
-PKG_DIR:=$(subst -,_,$(NAME))
+WHEEL_NAME:=$(subst -,_,$(NAME))
 VER:=$(shell $(PYTHON) $(PYFLAGS) setup.py --version)
 PY_SOURCES:=$(shell \
 	$(PYTHON) $(PYFLAGS) setup.py egg_info >/dev/null 2>&1 && \
-	grep -v "\.egg-info" $(PKG_DIR).egg-info/SOURCES.txt)
+	cat $(WHEEL_NAME).egg-info/SOURCES.txt | grep -v "\.egg-info"  | grep -v "\.mo$$")
 DOC_SOURCES:=docs/conf.py \
 	$(wildcard docs/*.png) \
 	$(wildcard docs/*.svg) \
@@ -27,7 +27,7 @@ DOC_SOURCES:=docs/conf.py \
 SUBDIRS:=
 
 # Calculate the name of all outputs
-DIST_WHEEL=dist/$(NAME)-$(VER)-py3-none-any.whl
+DIST_WHEEL=dist/$(WHEEL_NAME)-$(VER)-py3-none-any.whl
 DIST_TAR=dist/$(NAME)-$(VER).tar.gz
 DIST_ZIP=dist/$(NAME)-$(VER).zip
 
@@ -55,6 +55,9 @@ doc: $(DOC_SOURCES)
 	$(MAKE) -C docs epub
 	$(MAKE) -C docs latexpdf
 
+preview:
+	$(MAKE) -C docs preview
+
 source: $(DIST_TAR) $(DIST_ZIP)
 
 wheel: $(DIST_WHEEL)
@@ -65,25 +68,30 @@ tar: $(DIST_TAR)
 
 dist: $(DIST_WHEEL) $(DIST_TAR) $(DIST_ZIP)
 
-develop: tags
+develop:
 	@# These have to be done separately to avoid a cockup...
 	$(PIP) install -U setuptools
 	$(PIP) install -U pip
+	$(PIP) install -U twine
+	$(PIP) install -U tox
 	$(PIP) install -e .[doc,test]
 
 test:
-	$(PYTEST) tests
+	$(PYTEST)
 
 clean:
-	$(PYTHON) $(PYFLAGS) setup.py clean
-	rm -fr build/ dist/ .pytest_cache/ .mypy_cache/ $(NAME).egg-info/ tags .coverage
+	rm -fr build/ dist/ .pytest_cache/ .mypy_cache/ $(WHEEL_NAME).egg-info/ tags .coverage*
 	for dir in docs $(SUBDIRS); do \
 		$(MAKE) -C $$dir clean; \
 	done
 	find $(CURDIR) -name "*.pyc" -delete
+	find $(CURDIR) -name "__pycache__" -delete
 
 tags: $(PY_SOURCES)
-	ctags -R --exclude="build/*" --exclude="docs/*" --languages="Python"
+	ctags -R --languages="Python" $(PY_SOURCES)
+
+lint: $(PY_SOURCES)
+	pylint $(WHEEL_NAME)
 
 $(SUBDIRS):
 	$(MAKE) -C $@
