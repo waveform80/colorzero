@@ -52,9 +52,7 @@ pygments_style = 'sphinx'
 
 autodoc_member_order = 'groupwise'
 autodoc_inherit_docstrings = False
-autodoc_default_options = {
-    'members': True,
-}
+autodoc_default_options = { 'members': None, }
 autodoc_mock_imports = []
 
 # -- Intersphinx options -----------------------------------------------------
