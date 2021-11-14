@@ -10,12 +10,9 @@
 
 from math import sqrt, isclose
 
-# pylint: disable=wrong-import-order,import-error,missing-docstring
 import pytest
-from colorzero import (
-    Color, RGB, YUV, YIQ, HLS, HSV, CMY, CMYK, XYZ, Lab, Luv,
-    Red, Green, Blue, Hue, Lightness, Saturation, Luma
-)
+
+from colorzero import *
 
 
 def verify_color(color1, color2, abs_tol=1e-7):
@@ -168,7 +165,6 @@ def test_color_add():
     verify_color(Color('red') + Saturation(1), Color('red'))
     verify_color(Color('red') + Luma(1), Color('white'))
     verify_color(Green(1) + Color('red'), Color('yellow'))
-    # pylint: disable=expression-not-assigned
     with pytest.raises(TypeError):
         Color('red') + 1
     with pytest.raises(TypeError):
@@ -188,7 +184,6 @@ def test_color_sub():
     verify_color(Red(1) - Color('magenta'), Color(0, 0, 0))
     verify_color(Green(1) - Color('magenta'), Color(0, 1, 0))
     verify_color(Blue(1) - Color('magenta'), Color(0, 0, 0))
-    # pylint: disable=expression-not-assigned
     with pytest.raises(TypeError):
         Color('magenta') - 1
     with pytest.raises(TypeError):
@@ -206,7 +201,6 @@ def test_color_mul():
     verify_color(Color('magenta') * Saturation(0), Color(0.5, 0.5, 0.5))
     verify_color(Color('magenta') * Luma(1), Color('magenta'))
     verify_color(Red(0.5) * Color('magenta'), Color(0.5, 0, 1))
-    # pylint: disable=expression-not-assigned
     with pytest.raises(TypeError):
         Color('magenta') * 1
     with pytest.raises(TypeError):
@@ -350,7 +344,8 @@ def test_color_format():
     black = Color('black')
     red = Color('red')
     blue = Color('#004')
-    assert '{:0}{:0}{:0}'.format(black, red, blue) == '\x1b[0m' * 3
+    with pytest.warns(DeprecationWarning):
+        assert '{:0}'.format(black) == '\x1b[0m'
     assert '{}{}{}'.format(black, red, blue) == '\x1b[22;30m\x1b[1;31m\x1b[22;34m'
     assert '{:b}{:b8}{:b8}'.format(black, red, blue) == '\x1b[40m\x1b[41m\x1b[44m'
     assert '{0:256}{0:b256}'.format(black) == '\x1b[38;5;0m\x1b[48;5;0m'
@@ -388,3 +383,17 @@ def test_color_gradient():
     ]
     with pytest.raises(ValueError):
         list(black.gradient(white, 1))
+
+
+def test_default_repr():
+    assert repr(Default) == '<Color Default>'
+
+
+def test_default_formats():
+    assert '{}'.format(Default) == '\x1b[0m'
+    assert '{:f}'.format(Default) == '\x1b[39m'
+    assert '{:b8}'.format(Default) == '\x1b[49m'
+    assert '{:css}'.format(Default) == 'inherit'
+    assert '{:html}'.format(Default) == ''
+    with pytest.raises(ValueError):
+        '{:foo}'.format(Default)

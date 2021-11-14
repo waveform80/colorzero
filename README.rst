@@ -26,6 +26,7 @@ classes the result of which is a new ``Color`` instance. For example:
 
 .. code:: pycon
 
+    >>> from colorzero import *
     >>> Color('red') + Color('blue')
     <Color html='#ff00ff' rgb=(1, 0, 1)>
     >>> Color('magenta') - Color('red')
@@ -61,9 +62,9 @@ Or for in colorful terminal output:
 
 .. code:: pycon
 
-    >>> print(f'This is a {red:8}warning!{red:0}')
+    >>> print(f'This is a {red:8}warning!{Default}')
     This is a warning!
-    >>> print(repr(f'This is a {red:8}warning!{red:0}'))
+    >>> f'This is a {red:8}warning!{Default}'
     'This is a \x1b[1;31mwarning!\x1b[0m'
 
 (on supported terminals, the first line of output above will print "warning!"

@@ -6,9 +6,9 @@
 
 .. _api_color:
 
-===
-API
-===
+===========
+API - Color
+===========
 
 .. currentmodule:: colorzero
 
@@ -44,14 +44,13 @@ output to support different terminal types. For example:
     >>> red = Color('red')
     >>> green = Color('green')
     >>> blue = Color('#47b')
-    >>> print("{red:html}".format(red=red))
+    >>> print(f"{red:html}")
     #ff0000
-    >>> print(repr("{red}Red{red:0} Alert!".format(red=red)))
+    >>> print(repr(f"{red}Red{red:0} Alert!"))
     '\\x1b[1;31mRed\\x1b[0m Alert!'
-    >>> print(repr("The grass is {green:16m}greener{green:0}.".format(
-    ... green=green)))
+    >>> print(repr(f"The grass is {green:16m}greener{green:0}."))
     'The grass is \\x1b[38;2;0;128;0mgreener\\x1b[0m.'
-    >>> print(repr("{blue:b16m}Blue skies{blue:0}".format(blue=blue)))
+    >>> print(repr(f"{blue:b16m}Blue skies{blue:0}"))
     '\\x1b[48;2;68;119;187mBlue skies\\x1b[0m'
 
 The format specification is one of:
@@ -72,9 +71,10 @@ The format specification is one of:
   / background specifier (the letters "f" or "b") followed by an optional
   terminal type identifer, which is one of:
 
-  - "8" - the default, indicating only the original 8 DOS colors are supported
-    (technically, 16 foreground colors are supported via use of the "bold"
-    style for "intense" colors)
+  - "8" - the default, indicating only the original 8 DOS colors (black, red,
+    green, yellow, blue, magenta, cyan, and white) are supported. Technically,
+    16 foreground colors are supported via use of the "bold" style for
+    "intense" colors, if the terminal supports this.
 
   - "256" - indicates the terminal supports 256 colors via `8-bit color ANSI
     codes`_
@@ -82,10 +82,10 @@ The format specification is one of:
   - "16m" - indicating the terminal supports ~16 million colors via `24-bit
     color ANSI codes`_
 
-Alternately, "0" can be specified indicating that the style should be
-reset. If specified with the optional foreground / background specifier,
-"0" resets only the foreground / background color. If specified alone it
-resets all styles. More formally:
+"0" can also be specified to indicate that the style should be reset, but this
+is deprecated. If specified with the optional foreground / background
+specifier, "0" resets only the foreground / background color. If specified
+alone it resets all styles. More formally:
 
 .. code-block:: bnf
 
@@ -103,8 +103,26 @@ resets all styles. More formally:
 .. versionadded:: 1.2
     The ability to output HTML and CSS representations via format strings
 
+.. deprecated:: 2.1
+    Use of "0" as a reset indicator; use the new :data:`Default` singleton
+   instead
+
 .. _8-bit color ANSI codes: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
 .. _24-bit color ANSI codes: https://en.wikipedia.org/wiki/ANSI_escape_code#24-bit
+
+
+Default Singleton
+=================
+
+The :data:`Default` singleton exists as a color which represents the "default"
+for whatever environment it's rendered in. For example, when using in a format
+string for CSS, it renders as "inherit" (which is the CSS keyword indicating
+that a block should inherit its color from its enclosing parent, which is the
+default). Alternatively, when used with the terminal format strings ("8",
+"256", "16m") it outputs the ANSI sequence to reset colors to the terminal's
+default (whatever that may be).
+
+.. autodata:: Default
 
 
 Manipulation Classes

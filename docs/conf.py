@@ -51,6 +51,7 @@ pygments_style = 'sphinx'
 # -- Autodoc options ---------------------------------------------------------
 
 autodoc_member_order = 'groupwise'
+autodoc_inherit_docstrings = False
 autodoc_default_options = {
     'members': True,
 }

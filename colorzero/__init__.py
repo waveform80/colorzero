@@ -21,7 +21,8 @@ on this class and are:
 * :class:`Luma`
 """
 
-from .color import Color
+from .color import Color, Default
+from .style import Style, BaseStyles, StripStyles, HTMLStyles, TermStyles
 from .easings import linear, ease_in, ease_out, ease_in_out
 from .deltae import euclid, cie1976, cie1994g, cie1994t, ciede2000
 from .attr import Red, Green, Blue, Hue, Lightness, Saturation, Luma

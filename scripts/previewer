@@ -149,7 +149,7 @@ def get_stats(config: Namespace) -> t.Dict[Path, os.stat_result]:
     return {
         path: path.stat()
         for watch_pattern in config.watch
-        for path in Path('.').glob(watch_pattern)
+        for path in Path(watch_pattern).parent.glob(Path(watch_pattern).name)
         if not any(path.match(ignore_pattern)
                    for ignore_pattern in config.ignore)
     }

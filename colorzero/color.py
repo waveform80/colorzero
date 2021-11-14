@@ -9,13 +9,14 @@
 "Defines the main :class:`Color` class of the package."
 
 import re
+import warnings
 
 from . import conversions as cv, types, attr, deltae, tables, easings
 
 # Lots of the methods below use single character parameter names (r for red, y
 # for luma, etc.); this is is normal and in keeping with most of the referenced
 # sources
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,too-many-lines
 
 
 class Color(types.RGB):
@@ -210,7 +211,7 @@ class Color(types.RGB):
           style being included, a swatch previewing the color is output. Note
           that the terminal must support `24-bit color ANSI codes`_ for this to
           work.
-        * 'term256' - Similar to 'termtrue', but uses the closest color that
+        * 'term256' - Similar to 'term16m', but uses the closest color that
           can be found in the standard 256-color xterm palette. Note that the
           terminal must support `8-bit color ANSI codes`_ for this to work.
         * 'html' - Outputs a valid :class:`Color` constructor using the HTML
@@ -571,10 +572,10 @@ class Color(types.RGB):
         r'^('
         r'(?P<html>html)|'
         r'(?P<css>css(?P<cssfmt>rgb|hsl)?)|'
-        r'(?P<back>[fb])?(?P<term>0|8|256|16[mM])?'
+        r'(?P<back>[fb])?(?P<term>0|8|256|16m)?'
         r')$')
     def __format__(self, format_spec):
-        m = Color._format_re.match(format_spec)
+        m = Color._format_re.match(format_spec.lower())
         if not m:
             raise ValueError(
                 'Invalid format {!r} for Color'.format(format_spec))
@@ -598,6 +599,10 @@ class Color(types.RGB):
 
     def _format_term(self, back, term):
         if term == '0':
+            warnings.warn(
+                DeprecationWarning(
+                    "Use of 0 as a format spec is deprecated; please use an "
+                    "instance of the Default class instead"))
             args = ({
                 None: 0,
                 'f':  39,
@@ -643,13 +648,13 @@ class Color(types.RGB):
             return {
                 'default': '<Color html={self.html!r} '
                            'rgb=({self.r:g}, {self.g:g}, {self.b:g})>',
-                'term16m': '<Color {self:16m}###{self:0} '
+                'term16m': '<Color {self:16m}###{Default} '
                            'rgb=({self.r:g}, {self.g:g}, {self.b:g})>',
-                'term256': '<Color {self:256}###{self:0} '
+                'term256': '<Color {self:256}###{Default} '
                            'rgb=({self.r:g}, {self.g:g}, {self.b:g})>',
                 'html':    'Color({self.html!r})',
                 'rgb':     'Color({self.r:g}, {self.g:g}, {self.b:g})',
-            }[Color.repr_style].format(self=self)
+            }[Color.repr_style.lower()].format(self=self, Default=Default)
         except KeyError:
             raise ValueError(
                 'invalid repr_style value: {}'.format(Color.repr_style)
@@ -959,3 +964,40 @@ class Color(types.RGB):
         ))
         for t in easing(steps):
             yield self + types.RGB(*(delta_i * t for delta_i in delta))
+
+
+class _Default:
+    """
+    The Default singleton is a special value representing the default color for
+    whatever context it is used within. Typically this is only useful in
+    combination with a :class:`Style`.
+    """
+    __slots__ = ()
+
+    def __new__(cls):
+        try:
+            return Default
+        except NameError:
+            return super().__new__(cls)
+
+    def __repr__(self):
+        return '<Color Default>'
+
+    def __format__(self, format_spec):
+        m = Color._format_re.match(format_spec)
+        if not m:
+            raise ValueError(
+                'Invalid format {!r} for Default'.format(format_spec))
+        if m.group('html'):
+            return ''
+        elif m.group('css'):
+            return 'inherit'
+        else:
+            return {
+                None: '\x1b[0m',
+                '':   '\x1b[0m',
+                'f':  '\x1b[39m',
+                'b':  '\x1b[49m',
+            }[m.group('back')]
+Default = _Default()
+del _Default
