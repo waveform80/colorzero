@@ -10,12 +10,9 @@
 
 from math import sqrt, isclose
 
-# pylint: disable=wrong-import-order,import-error,missing-docstring
 import pytest
-from colorzero import (
-    Color, RGB, YUV, YIQ, HLS, HSV, CMY, CMYK, XYZ, Lab, Luv,
-    Red, Green, Blue, Hue, Lightness, Saturation, Luma
-)
+
+from colorzero import *
 
 
 def verify_color(color1, color2, abs_tol=1e-7):
@@ -168,7 +165,6 @@ def test_color_add():
     verify_color(Color('red') + Saturation(1), Color('red'))
     verify_color(Color('red') + Luma(1), Color('white'))
     verify_color(Green(1) + Color('red'), Color('yellow'))
-    # pylint: disable=expression-not-assigned
     with pytest.raises(TypeError):
         Color('red') + 1
     with pytest.raises(TypeError):
@@ -188,7 +184,6 @@ def test_color_sub():
     verify_color(Red(1) - Color('magenta'), Color(0, 0, 0))
     verify_color(Green(1) - Color('magenta'), Color(0, 1, 0))
     verify_color(Blue(1) - Color('magenta'), Color(0, 0, 0))
-    # pylint: disable=expression-not-assigned
     with pytest.raises(TypeError):
         Color('magenta') - 1
     with pytest.raises(TypeError):
@@ -206,7 +201,6 @@ def test_color_mul():
     verify_color(Color('magenta') * Saturation(0), Color(0.5, 0.5, 0.5))
     verify_color(Color('magenta') * Luma(1), Color('magenta'))
     verify_color(Red(0.5) * Color('magenta'), Color(0.5, 0, 1))
-    # pylint: disable=expression-not-assigned
     with pytest.raises(TypeError):
         Color('magenta') * 1
     with pytest.raises(TypeError):

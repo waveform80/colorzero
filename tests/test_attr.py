@@ -10,8 +10,8 @@
 
 from math import pi
 
-# pylint: disable=import-error,missing-docstring
 import pytest
+
 from colorzero import *
 
 

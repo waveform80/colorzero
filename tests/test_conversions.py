@@ -10,8 +10,8 @@
 
 from math import isclose
 
-# pylint: disable=wrong-import-order,import-error,missing-docstring
 import pytest
+
 from colorzero import conversions as cv
 
 
@@ -34,8 +34,6 @@ def verify_ints(color1, color2, abs_tol=1):
         assert abs(elem1 - elem2) <= abs_tol
 
 
-# Stop pylint warning about pytest fixtures
-# pylint: disable=redefined-outer-name
 @pytest.fixture(params=(
     (r, g, b)
     for r in frange(0.0, 1.0, 0.2)
@@ -58,7 +56,6 @@ def rgb_bytes(request):
 
 @pytest.fixture()
 def html7(request, rgb_bytes):
-    # pylint: disable=unused-argument
     return '#%02x%02x%02x' % rgb_bytes
 
 
@@ -77,7 +74,6 @@ def test_yiq_roundtrip(rgb):
 
 
 def test_yiq_knowns():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, yiq
         ((0.0, 0.0, 0.0), (0.0,   0.0,     0.0)),     # black
@@ -100,7 +96,6 @@ def test_hls_roundtrip(rgb):
 
 
 def test_hls_knowns(rgb):
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, hls
         ((0.0, 0.0, 0.0), (  0, 0.0, 0.0)),  # black
@@ -123,7 +118,6 @@ def test_hsv_roundtrip(rgb):
 
 
 def test_hsv_knowns():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, hsv
         ((0.0, 0.0, 0.0), (  0, 0.0, 0.0)),  # black
@@ -146,7 +140,6 @@ def test_rgb_bytes_roundtrip(rgb):
 
 
 def test_rgb_bytes_known():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, bytes
         ((0.0, 0.0, 0.0), (0,   0,   0)),    # black
@@ -169,7 +162,6 @@ def test_rgb24_roundtrip(rgb_bytes):
 
 
 def test_rgb24_known():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, rgb24
         ((0,   0,   0),   0),         # black
@@ -197,7 +189,6 @@ def test_rgb_html3_roundtrip(html3):
 
 
 def test_html_known():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, html
         ((0,   0,   0),   '#000000'),  # black
@@ -227,7 +218,6 @@ def test_cmy_roundtrip(rgb):
 
 
 def test_cmy_known():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, cmy
         ((0.0, 0.0, 0.0), (1.0, 1.0, 1.0)),  # black
@@ -254,7 +244,6 @@ def test_cmyk_roundtrip(rgb):
 
 
 def test_cmyk_known():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, cmyk
         ((0.0, 0.0, 0.0), (0.0, 0.0, 0.0, 1.0)),  # black
@@ -277,7 +266,6 @@ def test_yuv_roundtrip(rgb):
 
 
 def test_yuv_knowns():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, yuv
         ((0.0, 0.0, 0.0), (0.0,    0.0,      0.0)),      # black
@@ -303,7 +291,6 @@ def test_yuv_bytes_roundtrip(rgb_bytes):
 
 
 def test_yuv_bytes_knowns():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, yuv
         ((0,   0,   0),   (16,  128, 128)),  # black
@@ -333,7 +320,6 @@ def test_xyz_roundtrip(rgb):
 
 
 def test_xyz_known():
-    # pylint: disable=bad-whitespace
     values = [
         # rgb, xyz
         ((0.0, 0.0, 0.0), (0.0,    0.0,      0.0)),      # black

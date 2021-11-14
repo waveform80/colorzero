@@ -10,14 +10,12 @@
 
 from math import isclose
 
-# pylint: disable=wrong-import-order,import-error,missing-docstring
 from colorzero import Lab, deltae as de
 
 
 def test_cie1976_known():
     # XXX Test values from current implementation; if anyone can point me at
     # a source of "known" test values for CIE1976 I'd be most grateful!
-    # pylint: disable=bad-whitespace
     values = [
         # color1, color2, delta-e (graphics), delta-e (textiles)
         (Lab(50.0000,   2.6772, -79.7751), Lab(50.0000,   0.0000, -82.7485),  4.0011),
@@ -62,7 +60,6 @@ def test_cie1976_known():
 def test_cie1994_known():
     # XXX Test values from current implementation; if anyone can point me at
     # a source of "known" test values for CIE1994 I'd be most grateful!
-    # pylint: disable=bad-whitespace
     values = [
         # color1, color2, delta-e (graphics), delta-e (textiles)
         (Lab(50.0000,   2.6772, -79.7751), Lab(50.0000,   0.0000, -82.7485),  1.3950,  1.4230),
@@ -108,7 +105,6 @@ def test_cie1994_known():
 def test_ciede2000_known():
     # Test values from Sharma 2005:
     # http://www.ece.rochester.edu/~gsharma/ciede2000/ciede2000noteCRNA.pdf
-    # pylint: disable=bad-whitespace
     values = [
         # color1, color2, delta-e
         (Lab(50.0000,   2.6772, -79.7751), Lab(50.0000,   0.0000, -82.7485),  2.0425),

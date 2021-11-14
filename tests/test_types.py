@@ -8,9 +8,9 @@
 
 "Tests for the colorzero.types module."
 
-# pylint: disable=import-error,missing-docstring
 import pytest
-from colorzero import RGB, YUV, HLS, HSV, CMY, CMYK
+
+from colorzero import *
 
 
 def test_rgb():
