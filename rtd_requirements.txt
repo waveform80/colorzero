@@ -1,1 +1,1 @@
-pkginfo
+sphinx>=2.0dev
