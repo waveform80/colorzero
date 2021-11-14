@@ -16,7 +16,7 @@ from . import conversions as cv, types, attr, deltae, tables, easings
 # Lots of the methods below use single character parameter names (r for red, y
 # for luma, etc.); this is is normal and in keeping with most of the referenced
 # sources
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,too-many-lines
 
 
 class Color(types.RGB):

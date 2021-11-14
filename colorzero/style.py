@@ -105,6 +105,8 @@ class StripStyles(BaseStyles):
     A degenerate stylesheet class that always returns the empty string for
     all formatting operations, and the :meth:`reset` method.
     """
+    # pylint: disable=too-many-ancestors
+
     def reset(self):
         super().reset()
         return ''
@@ -128,6 +130,8 @@ class HTMLStyles(BaseStyles):
 
     .. _HTML elements: https://developer.mozilla.org/en-US/docs/Glossary/Element
     """
+    # pylint: disable=too-many-ancestors
+
     def __init__(self, styles=None, *, tag='span', **kwargs):
         super().__init__(styles=styles, **kwargs)
         self.tag = tag
@@ -236,6 +240,8 @@ class TermStyles(BaseStyles):
     .. _8-bit color ANSI codes: https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit
     .. _24-bit color ANSI codes: https://en.wikipedia.org/wiki/ANSI_escape_code#24-bit
     """
+    # pylint: disable=too-many-ancestors
+
     def __init__(self, styles=None, *, term_colors='8', **kwargs):
         super().__init__(styles=styles, **kwargs)
         self.term_colors = term_colors
