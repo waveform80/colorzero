@@ -71,9 +71,10 @@ The format specification is one of:
   / background specifier (the letters "f" or "b") followed by an optional
   terminal type identifer, which is one of:
 
-  - "8" - the default, indicating only the original 8 DOS colors are supported
-    (technically, 16 foreground colors are supported via use of the "bold"
-    style for "intense" colors)
+  - "8" - the default, indicating only the original 8 DOS colors (black, red,
+    green, yellow, blue, magenta, cyan, and white) are supported. Technically,
+    16 foreground colors are supported via use of the "bold" style for
+    "intense" colors, if the terminal supports this.
 
   - "256" - indicates the terminal supports 256 colors via `8-bit color ANSI
     codes`_

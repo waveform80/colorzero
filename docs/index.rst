@@ -16,6 +16,7 @@ Table of Contents
     install
     quickstart
     api_color
+    api_style
     development
     changelog
     license
