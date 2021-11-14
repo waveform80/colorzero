@@ -211,7 +211,7 @@ class Color(types.RGB):
           style being included, a swatch previewing the color is output. Note
           that the terminal must support `24-bit color ANSI codes`_ for this to
           work.
-        * 'term256' - Similar to 'termtrue', but uses the closest color that
+        * 'term256' - Similar to 'term16m', but uses the closest color that
           can be found in the standard 256-color xterm palette. Note that the
           terminal must support `8-bit color ANSI codes`_ for this to work.
         * 'html' - Outputs a valid :class:`Color` constructor using the HTML
@@ -572,10 +572,10 @@ class Color(types.RGB):
         r'^('
         r'(?P<html>html)|'
         r'(?P<css>css(?P<cssfmt>rgb|hsl)?)|'
-        r'(?P<back>[fb])?(?P<term>0|8|256|16[mM])?'
+        r'(?P<back>[fb])?(?P<term>0|8|256|16m)?'
         r')$')
     def __format__(self, format_spec):
-        m = Color._format_re.match(format_spec)
+        m = Color._format_re.match(format_spec.lower())
         if not m:
             raise ValueError(
                 'Invalid format {!r} for Color'.format(format_spec))
@@ -654,7 +654,7 @@ class Color(types.RGB):
                            'rgb=({self.r:g}, {self.g:g}, {self.b:g})>',
                 'html':    'Color({self.html!r})',
                 'rgb':     'Color({self.r:g}, {self.g:g}, {self.b:g})',
-            }[Color.repr_style].format(self=self, Default=Default)
+            }[Color.repr_style.lower()].format(self=self, Default=Default)
         except KeyError:
             raise ValueError(
                 'invalid repr_style value: {}'.format(Color.repr_style)
