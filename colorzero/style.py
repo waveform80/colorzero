@@ -12,6 +12,7 @@ import re
 import sys
 from collections import namedtuple
 from collections.abc import Mapping, MutableMapping
+from html import escape
 
 from .color import Color, Default
 
@@ -138,7 +139,7 @@ class HTMLStyles(BaseStyles):
 
     def _open_tag(self, class_name):
         return '<{self.tag} class="{class_name}">'.format(
-            self=self, class_name=class_name)
+            self=self, class_name=escape(class_name))
 
     def _close_tag(self):
         return '</{self.tag}>'.format(self=self)
