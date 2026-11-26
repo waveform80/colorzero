@@ -8,6 +8,8 @@
 
 "Tests for the colorzero.style module"
 
+from html.parser import HTMLParser
+
 import pytest
 
 from colorzero import *
@@ -99,6 +101,24 @@ def test_html_tags(styles):
     styles = HTMLStyles(styles, tag='div')
     assert '{styles:info}Hello!{styles:reset}'.format(styles=styles) == (
         '<div class="info">Hello!</div>')
+
+
+@pytest.mark.parametrize('name', [
+    'a"b', 'a&copy;b', 'a&#34;b', "a'b", 'a<b>', 'normal', 'αβγ',
+])
+def test_html_class_name_roundtrip(name):
+    tags = []
+
+    class Parser(HTMLParser):
+        def handle_starttag(self, tag, attrs):
+            tags.append((tag, attrs))
+
+    styles = HTMLStyles({name: 'red'})
+    output = '{}text{}'.format(format(styles, name), styles.reset())
+    Parser().feed(output)
+    assert tags == [('span', [('class', name)])]
+    assert output.endswith('text</span>')
+    assert styles.reset() == ''
 
 
 def test_html_escape_css():
